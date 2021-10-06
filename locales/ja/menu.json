@@ -1,0 +1,53 @@
+{
+    "ABOUT": "{{name}} について...",
+    "SERVICE": "サービス",
+    "HIDE": "{{name}} を隠す",
+    "HIDEOTHERS": "ほかを隠す",
+    "UNHIDE": "すべて表示",
+    "QUIT-MAC": "{{name}} を終了",
+  
+    "FILE": "ファイル",
+    "OPEN-MOVIE": "動画/音声ファイルを開く...",
+    "ADD-LOG": "ログを追加する...",
+    "OVERWRITE": "上書き保存",
+    "AUTOSAVE": "自動上書き",
+    "SAVE-AS": "名前を付けて書き出し...",
+    "EXPORT-LITE": "動画眼Lite形式で書き出し...",
+    "SETTINGS": "設定...",
+    "CLOSE": "ウィンドウを閉じる",
+    "QUIT": "終了",
+  
+    "EDIT": "編集",
+    "CUT": "切り取り",
+    "COPY": "コピー",
+    "PASTE": "貼り付け",
+    "REPLACE": "置換...",
+  
+    "PLAYBACK-CONTROL": "再生操作",
+    "PLAY-PAUSE": "再生/一時停止",
+    "JUMP_F": "前へジャンプ",
+    "JUMP_R": "後ろへジャンプ",
+    "JUMP_F_SEC": "前ジャンプ秒数",
+    "JUMP_R_SEC": "後ジャンプ秒数",
+    "SEC_3": "3秒",
+    "SEC_5": "5秒",
+    "SEC_10": "10秒",
+    "SEC_15": "15秒",
+    "SEC_30": "30秒",
+    "SEC_60": "60秒",
+    "SEC_90": "90秒",
+    "SEC_120": "2分",
+    "SEC_180": "3分",
+    "SEC_300": "5分",
+    "SEC_600": "10分",
+
+    "VIEW": "表示",
+    "NEW-MEMO": "新規メモ欄",
+
+
+    "HELP": "ヘルプ",
+    "GOTO-SUPPORT-PAGE": "サポートページ",
+    "VERSION-INFO": "バージョン情報"
+
+  }
+  

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <link rel="stylesheet" href="style.css">
+        <title>動画眼</title>
+     </head>
+    <body>
+        <div id="main">
+            <div id="top">
+                <div id="top-left">
+                    <div id="player-box"></div>
+                    <div id="player-controls">
+                        <button id="Btn_ScreenShot">📷</button>
+                        <button id="Btn_JumpBackward" class="webdings">7</button>
+                        <button id="Btn_PlayPause" class="calibri">▶/II</button>
+                        <button id="Btn_JumpForward" class="webdings">8</button>
+                    </div>
+                </div>
+                <div id="top-right">
+                    <div id="search-box">
+                        <div id="search-box1"><span id="Lbl_Search" class="label"></span></div>
+                        <div id="search-box2"><input id="Txt_Search" name="Txt_Search" type="text"></div>
+                        <div id="search-box3"><button id="Btn_SearchClear"></button></div>
+                    </div>
+                    <div id="memolist-box"></div>
+                    <div id="right-bottom">
+                        <input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" /><span id="Lbl_ShowHideNewMemo" class="label"></span>
+                    </div>
+                </div>
+            </div>
+            <div id="bottom">
+                bottom
+            </div>
+        </div>
+    </body>
+    <script>
+        // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
+        //const i18n = window.requires.i18n;
+        (async ()=>{
+            const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
+            //const locale = 'en';
+            const _ = window.requires;
+            document.querySelector("#Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
+            document.querySelector("#Btn_SearchClear").textContent = _.t('CLEAR',locale);
+            document.querySelector("#player-box").innerHTML = '<div id="placeholderWrapper"><div id="#placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
+            document.querySelector("#Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
+        })()
+
+    </script>
+</html>
+

@@ -1,0 +1,135 @@
+body {
+    background-color: #fff;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+#main {
+    display: flex;
+    background-color: #3aa;
+    flex-direction: column;
+    width: 100%;
+    height:100%;
+}
+
+#top {
+    background-color: rgb(117, 36, 36);
+
+    flex-grow:8;
+    align-self:stretch;
+
+    display: flex;
+    flex-direction: row;
+}
+
+#top-left {
+    background-color: rgb(68, 68, 68);
+
+    flex-grow:6;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#player-box {
+    color:#aaa;
+    background-color: #000;
+
+    align-self:stretch;
+    flex-grow: 1;
+
+    display: flex;
+    align-items: stretch;
+    justify-content: center;
+}
+
+#placeholderWrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#placeholderInPlayer {
+    color:#ccc;
+}
+#player-controls {
+    height: 40px;
+}
+
+#player-controls button{
+    height: 100%;
+    width : 4em;
+}
+
+
+#top-right {
+    background-color: #44f;
+    min-width:250px;
+
+    display: flex;
+    flex-direction: column;    
+    flex-grow:4;
+}
+#search-box {
+    background-color:seagreen;
+    height: 40px;
+
+    display: flex;
+    align-items: center;
+}
+
+#search-box1, #search-box3 {
+    flex-grow: 1;
+    align-self: center;
+
+    display: flex;
+    justify-content: center;
+}
+
+#search-box2 {
+    flex-grow: 10;
+}
+
+#Txt_Search {
+    width:100%;
+}
+
+#memolist-box {
+    background-color:orange;
+    flex-grow: 1;
+    align-self:stretch;
+}
+
+#right-bottom {
+    background-color:aqua;
+    height: 40px;
+    padding-right:0.5em;
+
+    display: flex;
+    align-items: center;
+    justify-content: end;
+}
+
+
+#bottom {
+    display: flex;
+    background-color: #ce4;
+    flex-grow:2;
+    width: 100%;
+}
+
+
+.webdings {
+    font-family: Webdings;
+}
+
+.calibri {
+    font-family: Calibri;
+}
+
+.label {
+    font-size:1.0em;
+    color:black;
+}

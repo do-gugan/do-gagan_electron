@@ -1,0 +1,52 @@
+{
+  "ABOUT": "About {{name}}",
+  "SERVICE": "Services",
+  "HIDE": "Hide {{name}}",
+  "HIDEOTHERS": "Hide Others",
+  "UNHIDE": "Show All",
+  "QUIT-MAC": "Quit {{name}}",
+
+  "FILE": "File",
+  "OPEN-MOVIE": "Open Movie/Audio File...",
+  "ADD-LOG": "Add Log...",
+  "OVERWRITE": "Save",
+  "AUTOSAVE": "Auto Save",
+  "SAVE-AS": "Save as...",
+  "EXPORT-LITE": "Export as Do-gagan Lite Format...",
+  "SETTINGS": "Settings...",
+  "CLOSE": "Close",
+  "QUIT": "Quit",
+
+  "EDIT": "Edit",
+  "CUT": "Cut",
+  "COPY": "Copy",
+  "PASTE": "Paste",
+  "REPLACE": "Replace...",
+
+  "PLAYBACK-CONTROL": "Playback",
+  "PLAY-PAUSE": "Play/Pause",
+  "JUMP_F": "Jump Fowrward",
+  "JUMP_R": "Jump Backward",
+  "JUMP_F_SEC": "Forward Duration",
+  "JUMP_R_SEC": "Backword Duration",
+  "SEC_3": "3 sec",
+  "SEC_5": "5 sec",
+  "SEC_10": "10 sec",
+  "SEC_15": "15 sec",
+  "SEC_30": "30 sec",
+  "SEC_60": "60 sec",
+  "SEC_90": "90 sec",
+  "SEC_120": "2 min",
+  "SEC_180": "3 min",
+  "SEC_300": "5 min",
+  "SEC_600": "10 min",
+
+  "VIEW": "View",
+  "NEW-MEMO": "New Record",
+
+
+  "HELP": "Help",
+  "GOTO-SUPPORT-PAGE": "Support Page",
+  "VERSION-INFO": "Version Info."
+
+}
