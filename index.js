@@ -1,7 +1,8 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
-const menu = require('./menu')
-const config = require('./config')
-const dialog = require('./dialog')
+const common = require('./common');
+const menu = require('./menu');
+const config = require('./config');
+const dialog = require('./dialog');
 const path = require('path');
 const i18n = require('./i18n');
 
@@ -17,8 +18,8 @@ let player;
 
 function createWindow() {
     mainWin = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1600,
+        height: 800,
         backgroundColor: 'white',
         webPreferences: {
             nodeIntegration: false,
@@ -31,6 +32,11 @@ function createWindow() {
     mainWin.setMinimumSize(640,400);
     mainWin.loadFile('./index.html');
     mainWin.webContents.openDevTools(); //Devツールを開く
+
+    //common下に参照を渡す
+    common.mainWin = mainWin;
+
+    common.updateWindowTitle(); //ウインドウタイトルを初期値でセット
 
     //グローバル変数にHTML要素オブジェクトをセット
     // playerBox = mainWin.webContents.document.querySelector("#player-box");
@@ -47,6 +53,7 @@ app.whenReady().then(()=>{
  
   // ウィンドウを開く
   createWindow();
+ 
 });
 
 //------------------------------------
@@ -84,11 +91,3 @@ app.on('window-all-closed', () => {
     dialog.reboot(mainWin)      // 再起動する？
   });
 
-  //----------------------------------------
-  // 表示周り
-  //----------------------------------------
-  // プレイヤー部分にプレースホルダーを表示
-  // function showPlaceholderInPlayer() {
-  //   playerBox.innerHTML = '<div id="#placehlderInPlayer">動画、音声ファイルを「ファイル」メニューから読み込むか、<br>ここにドラッグ＆ドロップしてください。</div>';
-  // }
-  

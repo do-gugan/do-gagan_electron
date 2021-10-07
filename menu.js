@@ -1,5 +1,6 @@
 const { app, Menu } = require('electron');
 const i18n = require('./i18n')
+const dialog = require('./dialog')
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -174,6 +175,7 @@ const setTemplate = (lang='ja') => {
                 }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
                     console.log('VERSION-INFO');
+                    dialog.openAboutDialog();
                 }}
             ]
         }

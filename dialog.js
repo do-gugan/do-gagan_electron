@@ -6,15 +6,18 @@
 //--------------------------------
 // モジュール
 //--------------------------------
-const { app, dialog } = require('electron')
-const config = require('./config')
-const i18n = require('./i18n')
+const { app, dialog, remote } = require('electron');
+const common = require('./common');
+const config = require('./config');
+const i18n = require('./i18n');
 
 //--------------------------------
 // グローバル変数
 //--------------------------------
 const locale = config.get('locale')       // 「言語」の設定情報を取得
 const _ = new i18n(locale, 'dialog')      // ダイアログ用のテキスト情報をロード
+const _d = new i18n(locale, 'default')     // デフォルトのテキスト情報をロード
+
 
 /**
  * 「今すぐ再起動しますか」ダイアログ
@@ -38,9 +41,25 @@ const reboot = function(win){
   })
 }
 
+/**
+ * アバウト画面を表示
+ */
+const openAboutDialog = function() {
+  p = require('./package.json');
+  let re = dialog.showMessageBox(common.mainWin, {
+    title:_.t('ABOUT'),
+    message: _d.t('APPNAME') + '3' ,
+    detail: 'Ver.'+ p.version + '\r©' + _d.t('AUTHOR')
+  });
+  //console.log(re);
+}
+
+
+
 //--------------------------------
 // exports
 //--------------------------------
 module.exports = {
-  reboot: reboot
+  reboot: reboot,
+  openAboutDialog: openAboutDialog,
 }

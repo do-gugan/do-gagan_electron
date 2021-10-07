@@ -13,7 +13,7 @@ contextBridge.exposeInMainWorld(
     //   return fs.existsSync(setting_path) ? fs.readFileSync(setting_path, 'utf8') : '{}'
     // }
 
-    //i18nクラス経由でローカライズテキストを取得
+    //レンダラーがi18nクラス経由でローカライズテキストを取得
     t : (label, lang) => {
         const _ = new i18n(lang, 'default');
         return _.t(label);
