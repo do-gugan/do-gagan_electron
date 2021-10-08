@@ -40,15 +40,39 @@
         // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
         //const i18n = window.requires.i18n;
         (async ()=>{
-            const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
+            //const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
+            const locale = await window.api.getConfig('locale');
             //const locale = 'en';
-            const _ = window.requires;
+            const _ = window.api;
             document.querySelector("#Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
             document.querySelector("#Btn_SearchClear").textContent = _.t('CLEAR',locale);
             document.querySelector("#player-box").innerHTML = '<div id="placeholderWrapper"><div id="#placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
             document.querySelector("#Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
-        })()
 
+            //初期ウインドウタイトル（バージョン表示）
+            document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
+        })();
+
+        //メインプロセスからのプッシュでメディアファイルを開く
+        window.api.openVideo((event, path)=>{
+            const videotag = '<video id="player" autoplay controls><source src="' + path + '"></video>';
+            document.querySelector("#player-box").innerHTML = videotag;
+            //ファイル名をウインドウタイトルに
+            changeWindowTitle(path);
+        });
+        window.api.openAudio((event, path)=>{
+            const audiotag = '<audio id="player" autoplay controls><source src="' + path + '"></audio>';
+            document.querySelector("#player-box").innerHTML = audiotag;
+            changeWindowTitle(path);
+        });
+
+        async function changeWindowTitle(path) {
+            const filename = path.substring(path.lastIndexOf('\\') + 1); //macOSだとどうなる？
+            const locale = await window.api.getConfig('locale');
+            const _ = window.api;
+            document.title = _.t("APPNAME",locale) + "3 | " + filename;
+        }
+        
     </script>
 </html>
 

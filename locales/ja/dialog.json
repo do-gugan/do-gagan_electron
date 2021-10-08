@@ -1,5 +1,8 @@
 {
   "ABOUT": "このアプリについて",
+  "OPEN_VIDEO_TITLE":"開く動画／音声ファイルを選択してください。",
+  "MEDIAFILES": "メディアファイル",
+  "ALLFILES": "すべてのファイル",
   
   "BUTTON-REBOOT": "再起動",
   "BUTTON-LATER": "あとで",

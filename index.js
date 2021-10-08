@@ -36,7 +36,7 @@ function createWindow() {
     //common下に参照を渡す
     common.mainWin = mainWin;
 
-    common.updateWindowTitle(); //ウインドウタイトルを初期値でセット
+    //common.updateWindowTitle(); //ウインドウタイトルを初期値でセット
 
     //グローバル変数にHTML要素オブジェクトをセット
     // playerBox = mainWin.webContents.document.querySelector("#player-box");

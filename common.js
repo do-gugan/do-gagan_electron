@@ -15,18 +15,29 @@ const lang = null;
  *   updateWindowTitle(); //ファイル名なし
  *   updateWindowTitle(filename); //ファイル名あり
  */
-function updateWindowTitle(fileName = null) {
-    const _ = new i18n(this.lang, 'default');
-    p = require('./package.json');
-    const fix = _.t('APPNAME') + "3 Ver." + p.version;
-    if (fileName === null){
-        this.mainWin.title = fix;
-    } else {
-        this.mainWin.title = fileName + " | " + fix;
-    }
+// function updateWindowTitle(fileName = null) {
+//     const _ = new i18n(this.lang, 'default');
+//     p = require('./package.json');
+//     const fix = _.t('APPNAME') + "3 Ver." + p.version;
+//     if (fileName === null){
+//         this.mainWin.title = fix;
+//     } else {
+//         this.mainWin.title = fileName + " | " + fix;
+//     }
+// }
+
+/**
+ * Playerにvideo/audioタグをセット
+ * @param {string} path メディアファイルのフルパス
+ * @example
+ *   openMediaFile(path);
+ */
+function openVideoFile(path) {
+    this.mainWin.webContents.send('open-video', path);
 }
-
-
+function openAudioFile(path) {
+    this.mainWin.webContents.send('open-audio', path);
+}
 
 
 //--------------------------------
@@ -34,6 +45,8 @@ function updateWindowTitle(fileName = null) {
 //--------------------------------
 module.exports = {
     mainWin: mainWin,
-    updateWindowTitle: updateWindowTitle,
+    //updateWindowTitle: updateWindowTitle,
+    openVideoFile: openVideoFile,
+    openAudioFile: openAudioFile,
 }
 

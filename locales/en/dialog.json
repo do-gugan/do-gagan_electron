@@ -1,5 +1,10 @@
 {
   "ABOUT": "About this App.",
+
+  "OPEN_VIDEO_TITLE":"Choose Video/Audio file to open...",
+  "MEDIAFILES": "Media Files",
+  "ALLFIES": "All Files",
+
   "BUTTON-REBOOT": "Reboot",
   "BUTTON-LATER": "Later",
   "REBOOT_CONFIRM_TITLE": "Confirm Reboot",

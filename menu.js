@@ -32,28 +32,29 @@ const setTemplate = (lang='ja') => {
             label: _.t('FILE'),
             submenu: [
                 {label: _.t('OPEN-MOVIE'), click: ()=>{
-                    console.log('動画/音声ファイルを開く');
+                    console.log('OPEN-MOVIE');
+                    dialog.openVideoDialog();
                 }},
                 {type: 'separator'},
                 {label: _.t('ADD-LOG'), click: ()=>{
-                    console.log('ログを追加する');
+                    console.log('ADD-LOG');
                 }},
                 {type: 'separator'},
                 {label: _.t('OVERWRITE'), click: ()=>{
-                    console.log('上書き保存');
+                    console.log('OVERWRITE');
                 }},
                 {label: _.t('AUTOSAVE'), click: ()=>{
-                    console.log('自動上書き');
+                    console.log('AUTOSAVE');
                 }},
                 {label: _.t('SAVE-AS'), click: ()=>{
-                    console.log('名前を付けて書き出し');
+                    console.log('SAVE-AS');
                 }},
                 {label: _.t('EXPORT-LITE'), click: ()=>{
-                    console.log('動画眼Lite形式で書き出し');
+                    console.log('EXPORT-LITE');
                 }},
                 {type: 'separator'},
                 {label: _.t('SETTINGS'), click: ()=>{
-                    console.log('設定...');
+                    console.log('SETTINGS...');
                 }},
                 {label: _.t('QUIT'), role: 'quit'}
             ]
@@ -66,7 +67,7 @@ const setTemplate = (lang='ja') => {
                 {label: _.t('PASTE'), role: 'paste'},
                 {type: 'separator'},
                 {label: _.t('REPLACE'), click: ()=>{
-                    console.log('置換');
+                    console.log('REPLACE');
                 }}
             ]
         },
@@ -75,7 +76,7 @@ const setTemplate = (lang='ja') => {
             label: _.t('PLAYBACK-CONTROL'),
             submenu: [
                 {label: _.t('PLAY-PAUSE'), click: ()=>{
-                    console.log('置換');
+                    console.log('PLAY-PAUSE');
                 }},
                 {label: _.t('JUMP_F'), click: ()=>{
                     console.log('JUMP_F');

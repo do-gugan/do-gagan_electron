@@ -10,6 +10,7 @@ const { app, dialog, remote } = require('electron');
 const common = require('./common');
 const config = require('./config');
 const i18n = require('./i18n');
+const path = require('path');
 
 //--------------------------------
 // グローバル変数
@@ -54,6 +55,36 @@ const openAboutDialog = function() {
   //console.log(re);
 }
 
+/**
+ * 動画／音声を開くファイルダイアログを表示
+ */
+const openVideoDialog = function() {
+  p = require('./package.json');
+  let result = dialog.showOpenDialogSync(common.mainWin, {
+    title: _.t('OPEN_VIDEO_TITLE'),
+    //defaultPath:"",
+    //message: "", //masOS only 
+    properties: ['openFile'],
+    filters: [
+      { name: _.t('MEDIAFILES'), extensions: ['mp4','mp3','wav','webm','ogv','ogg'] },
+      //{ name: _.t('ALLFILES'), extensions: ['*'] },
+    ]
+  });
+  if (result != undefined) {
+    var re = '';
+    let pth = result[0];
+    const ext = path.extname(pth).toLowerCase();
+    if (ext == '.mp4' || ext == '.webm' || ext == '.ogv') {
+      //動画ファイル
+      common.openVideoFile(pth);
+    } else {
+      //音声ファイル
+      common.openAudioFile(pth);
+    }
+
+  }
+}
+
 
 
 //--------------------------------
@@ -62,4 +93,5 @@ const openAboutDialog = function() {
 module.exports = {
   reboot: reboot,
   openAboutDialog: openAboutDialog,
+  openVideoDialog: openVideoDialog,
 }
