@@ -79,10 +79,12 @@ app.on('window-all-closed', () => {
   //----------------------------------------
   // IPC通信
   //----------------------------------------
+
+  //レンダラー -> メイン
   // 設定情報を取得
   ipcMain.handle('getConfig', (event, data) => {
-    //return( config.get(data) )
-    return 'ja';
+    return( config.get(data) )
+    //return 'en'; //英語環境テスト用
   });
 
   // 言語設定を保存
@@ -91,7 +93,13 @@ app.on('window-all-closed', () => {
     dialog.reboot(mainWin)      // 再起動する？
   });
 
-   
+  //「新規メモ欄」メニューのチェック状態を更新   
   ipcMain.handle('toggleNewMemoBlockMenu', async (event, data) => {
     menu.toggleNewMemoBlockMenu(data);
+  });
+
+  //ドロップされたメディアファイルを開く
+  ipcMain.handle('openDroppedFile', (event, path) => {
+    console.log(path);
+    common.openMediaFile(path);
   });

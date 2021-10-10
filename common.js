@@ -2,6 +2,8 @@
  * 共通オブジェクト、データ
 **/
 const i18n = require('./i18n');
+const path = require('path');
+
 
 //グローバルオブジェクト
 const mainWin = null; //メインウインドウハンドル
@@ -27,18 +29,22 @@ const lang = null;
 // }
 
 /**
- * Playerにvideo/audioタグをセット
+ * レンダラーのPlayerにvideo/audioタグをセット
  * @param {string} path メディアファイルのフルパス
  * @example
  *   openMediaFile(path);
  */
-function openVideoFile(path) {
-    this.mainWin.webContents.send('open-video', path);
-}
-function openAudioFile(path) {
-    this.mainWin.webContents.send('open-audio', path);
-}
+function openMediaFile(pth) {
+    const ext = path.extname(pth).toLowerCase();
+    if (ext == '.mp4' || ext == '.webm' || ext == '.ogv') {
+      //動画ファイル
+      this.mainWin.webContents.send('open-video', pth);
+    } else {
+      //音声ファイル
+      this.mainWin.webContents.send('open-audio', pth);
+    }
 
+}
 
 /**
  * レンダラーに下部UIの表示トグルイベントを伝え、結果を取得
@@ -57,8 +63,7 @@ function toggleNewMemoBlockFromMenu(result) {
 module.exports = {
     mainWin: mainWin,
     //updateWindowTitle: updateWindowTitle,
-    openVideoFile: openVideoFile,
-    openAudioFile: openAudioFile,
+    openMediaFile: openMediaFile,
     toggleNewMemoBlockFromMenu: toggleNewMemoBlockFromMenu,
 }
 

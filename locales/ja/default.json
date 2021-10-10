@@ -5,5 +5,9 @@
   "DROP_HERE": "動画、音声ファイルを「ファイル」メニューから読み込むか、<br>ここにドラッグ＆ドロップしてください。",
   "SEARCH": "検索",
   "CLEAR": "クリア",
-  "NEW_MEMO_FIELD": "新規メモ欄"
+  "NEW_MEMO_FIELD": "新規メモ欄",
+
+  "DROP_ONLY_SINGLE_FILE": "複数のファイルをドロップできません。",
+  "INVALID_FILETYPE": "非対応のファイル形式です。",
+  "DROP_AND_OPEN": "ドロップすると開きます。"
 }

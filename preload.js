@@ -13,6 +13,14 @@ contextBridge.exposeInMainWorld(
     //   return fs.existsSync(setting_path) ? fs.readFileSync(setting_path, 'utf8') : '{}'
     // }
 
+    //メインプロセスからレンダラー
+    //on: (callback) => ipcRenderer.on(channel, (event, argv)=>callback(event, argv)), //汎用（危険？）
+    openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
+    openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
+    toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
+
+    
+    //レンダラーからメインプロセス
     // 指定されたキーの設定を取得する
     getConfig:(key) => ipcRenderer.invoke('getConfig', key),
 
@@ -22,11 +30,6 @@ contextBridge.exposeInMainWorld(
         return _.t(label);
     },
 
-    //on: (callback) => ipcRenderer.on(channel, (event, argv)=>callback(event, argv)), //汎用（危険？）
-    openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
-    openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
-    toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
-    
     getAppVersion: () => {
       const _ = new i18n(this.lang, 'default');
       p = require('./package.json');
@@ -35,6 +38,10 @@ contextBridge.exposeInMainWorld(
 
     toggleNewMemoBlockMenu : (result) => {
       ipcRenderer.invoke('toggleNewMemoBlockMenu', result)
-    }
+    },
+
+    //ドロップされたファイルを開く
+    openDroppedFile: (path) => ipcRenderer.invoke('openDroppedFile', path),
+
   }
 );

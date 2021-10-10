@@ -11,7 +11,7 @@
         <div id="main">
             <div id="top">
                 <div id="top-left">
-                    <div id="player-box"></div>
+                    <div id="player-box" draggable="true" id="drag"></div>
                     <div id="player-controls">
                         <button id="Btn_ScreenShot">📷</button>
                         <button id="Btn_JumpBackward" class="webdings">7</button>
@@ -37,16 +37,21 @@
         </div>
     </body>
     <script>
+        //グローバルオブジェクト
+        let locale;
+        let _; //ローカライズ文字列取得用
+
+
         // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
         //const i18n = window.requires.i18n;
         (async ()=>{
             //const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
-            const locale = await window.api.getConfig('locale');
+            locale = await window.api.getConfig('locale');
             //const locale = 'en';
-            const _ = window.api;
+            _ = window.api;
             document.querySelector("#Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
             document.querySelector("#Btn_SearchClear").textContent = _.t('CLEAR',locale);
-            document.querySelector("#player-box").innerHTML = '<div id="placeholderWrapper"><div id="#placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
+            document.querySelector("#player-box").innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
             document.querySelector("#Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
 
             //初期ウインドウタイトル（バージョン表示）
@@ -68,8 +73,6 @@
 
         async function changeWindowTitle(path) {
             const filename = path.substring(path.lastIndexOf('\\') + 1); //macOSだとどうなる？
-            const locale = await window.api.getConfig('locale');
-            const _ = window.api;
             document.title = _.t("APPNAME",locale) + "3 | " + filename;
         }
         
@@ -111,24 +114,55 @@
 
         });
 
+        //ファイルのドラッグ&ドロップを受け付ける
+        //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
+        //標準動作をキャンセル
+        document.querySelector("#player-box").ondragover = document.ondrop = function (e) {
+            e.preventDefault();
+        }
+        //dragEnterエフェクト開始
+        document.querySelector("#player-box").ondragenter = document.ondrop = function (e) {
+            const ph = document.querySelector("#placeholderInPlayer");
+            //既にメディアファイルを開いている場合はphが消滅しているのでundefinedになる
+            if (ph != undefined) {
+                document.querySelector("#player-box").classList.add("dragging");
+                //const locale = window.api.getConfig('locale'); //非同期でとれない
+                //対応形式
+                const validTypes = [
+                    'video/mp4',
+                    'video/webm',
+                    'video/ogg', //ogv
+                    'audio/mpeg', //mp3
+                    'audio/wav',
+                    'audio/ogg'
+                    ];           
+                if (e.dataTransfer.items.length > 1) {
+                    ph.innerText = _.t('DROP_ONLY_SINGLE_FILE',locale);
+                } else if (!validTypes.includes(e.dataTransfer.items[0].type)) {
+                    ph.innerHTML = _.t('INVALID_FILETYPE',locale);
+                } else {
+                    ph.innerHTML = _.t('DROP_AND_OPEN',locale);
+                }
+            }
+
+        }
+        //dragLeaveでエフェクトを解除
+        document.querySelector("#player-box").ondragleave = document.ondrop = function (e) {
+            document.querySelector("#player-box").classList.remove("dragging");
+            const ph = document.querySelector("#placeholderInPlayer");
+            if (ph != undefined) {
+                ph.innerHTML = window.api.t('DROP_HERE',locale);
+            }
+
+        }
+        //ドロップされたファイルを開く
+        document.body.addEventListener('drop', function (e) {
+            //console.log('file dropped:', e.dataTransfer.files[0].path);
+            window.api.openDroppedFile(e.dataTransfer.files[0].path);
+        });
 
 
 
-        // const showNewMemoBlock = function () {
-        //     const bottom = document.querySelector("#bottom");
-        //     console.log(bottom.style.display);
-        //     bottom.style.display = 'block';
-        //     console.log(bottom.style.display);
-        //     return false;
-        // }
-
-        // const hideNewMemoBlock = function () {
-        //     const bottom = document.querySelector("#bottom");
-        //     console.log(bottom.style.display);
-        //     bottom.style.display = 'hide';
-        //     console.log(bottom.style.display);
-        //     return false;
-        // }
     </script>
 </html>
 

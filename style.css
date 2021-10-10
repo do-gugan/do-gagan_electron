@@ -50,6 +50,13 @@ body {
     justify-content: center;
 }
 
+#player-box.dragging {
+    background-color: #333;
+}
+
+/* 子要素にドラッグイベントを無視させる */
+#player-box * {pointer-events: none;}
+
 #player {
     display: block;
     width: 100%;
@@ -64,6 +71,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-grow: 1;
 }
 
 #placeholderInPlayer {

@@ -10,7 +10,6 @@ const { app, dialog, remote } = require('electron');
 const common = require('./common');
 const config = require('./config');
 const i18n = require('./i18n');
-const path = require('path');
 
 //--------------------------------
 // グローバル変数
@@ -71,17 +70,7 @@ const openVideoDialog = function() {
     ]
   });
   if (result != undefined) {
-    var re = '';
-    let pth = result[0];
-    const ext = path.extname(pth).toLowerCase();
-    if (ext == '.mp4' || ext == '.webm' || ext == '.ogv') {
-      //動画ファイル
-      common.openVideoFile(pth);
-    } else {
-      //音声ファイル
-      common.openAudioFile(pth);
-    }
-
+    common.openMediaFile(result[0]);
   }
 }
 
