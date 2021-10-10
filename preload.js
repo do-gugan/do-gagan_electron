@@ -14,11 +14,9 @@ contextBridge.exposeInMainWorld(
     // }
 
     //メインプロセスからレンダラー
-    //on: (callback) => ipcRenderer.on(channel, (event, argv)=>callback(event, argv)), //汎用（危険？）
     openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
     openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
     toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
-
     
     //レンダラーからメインプロセス
     // 指定されたキーの設定を取得する
