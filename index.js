@@ -91,3 +91,7 @@ app.on('window-all-closed', () => {
     dialog.reboot(mainWin)      // 再起動する？
   });
 
+   
+  ipcMain.handle('toggleNewMemoBlockMenu', async (event, data) => {
+    menu.toggleNewMemoBlockMenu(data);
+  });

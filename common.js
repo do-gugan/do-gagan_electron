@@ -40,6 +40,17 @@ function openAudioFile(path) {
 }
 
 
+/**
+ * レンダラーに下部UIの表示トグルイベントを伝え、結果を取得
+ * @param {string} path メディアファイルのフルパス
+ * @example
+ *   openMediaFile(path);
+ */
+function toggleNewMemoBlockFromMenu(result) {
+    this.mainWin.webContents.send('toggle-new-memo-block');
+}
+
+
 //--------------------------------
 // exports
 //--------------------------------
@@ -48,5 +59,6 @@ module.exports = {
     //updateWindowTitle: updateWindowTitle,
     openVideoFile: openVideoFile,
     openAudioFile: openAudioFile,
+    toggleNewMemoBlockFromMenu: toggleNewMemoBlockFromMenu,
 }
 

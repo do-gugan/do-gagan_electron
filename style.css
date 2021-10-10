@@ -4,6 +4,10 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
+
+    overflow-y: hidden; /* Hide vertical scrollbar */
+    overflow-x: hidden; /* Hide horizontal scrollbar */
+  
 }
 
 #main {

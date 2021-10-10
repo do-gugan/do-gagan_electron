@@ -27,7 +27,7 @@
                     </div>
                     <div id="memolist-box"></div>
                     <div id="right-bottom">
-                        <input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" /><span id="Lbl_ShowHideNewMemo" class="label"></span>
+                        <label for="Chk_ShowHideNewMemo"><input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" onchange="toglleNewMemoBlock();" checked/><span id="Lbl_ShowHideNewMemo" class="label"></span><label>
                     </div>
                 </div>
             </div>
@@ -73,6 +73,62 @@
             document.title = _.t("APPNAME",locale) + "3 | " + filename;
         }
         
+        /**
+         * 新規メモ欄の表示／非表示を切り替え
+        */
+        const toglleNewMemoBlock = function () {
+            const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
+            const bottom = document.querySelector("#bottom");
+
+            if (checkbox.checked == true) {
+                bottom.style.display = 'block';
+                window.api.toggleNewMemoBlockMenu(true);
+            } else {
+                bottom.style.display = 'none';
+                window.api.toggleNewMemoBlockMenu(false);
+            }
+        }
+
+        /**
+         * メインプロセスからのプッシュで新規メモ欄の表示／非表示を切り替え、結果をboolで返す
+        */
+        window.api.toggleNewMemoBlockFromMenu((event, result)=>{
+            const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
+            const bottom = document.querySelector("#bottom");
+
+            if (bottom.style.display == 'none') {
+                //非表示だったら表示
+                bottom.style.display = 'block';
+                checkbox.checked = true;
+                return true;
+            } else {
+                //表示だったら非表示
+                bottom.style.display = 'none';
+                checkbox.checked = false;
+                return false;
+            }
+
+
+        });
+
+
+
+
+        // const showNewMemoBlock = function () {
+        //     const bottom = document.querySelector("#bottom");
+        //     console.log(bottom.style.display);
+        //     bottom.style.display = 'block';
+        //     console.log(bottom.style.display);
+        //     return false;
+        // }
+
+        // const hideNewMemoBlock = function () {
+        //     const bottom = document.querySelector("#bottom");
+        //     console.log(bottom.style.display);
+        //     bottom.style.display = 'hide';
+        //     console.log(bottom.style.display);
+        //     return false;
+        // }
     </script>
 </html>
 

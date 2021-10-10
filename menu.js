@@ -1,6 +1,7 @@
 const { app, Menu } = require('electron');
 const i18n = require('./i18n')
-const dialog = require('./dialog')
+const dialog = require('./dialog');
+const common = require('./common');
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -163,8 +164,9 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('VIEW'),
             submenu: [
-                {label: _.t('NEW-MEMO'), click: ()=>{
-                    console.log('NEW-MEMO');
+                {id:'MN_SHOW_NEW_MEMO_BLOCK', label: _.t('NEW-MEMO'), type: 'checkbox', checked: true, click: ()=>{
+                    //console.log('NEW-MEMO');
+                    toggleNewMemoBlockFromMenu();
                 }}
             ]
         },
@@ -187,9 +189,29 @@ const setTemplate = (lang='ja') => {
   Menu.setApplicationMenu(template);
 }
 
+/**
+ * 「表示」メニューの「新規メモ欄」のチェックをON/OFF（レンダラーからの操作）
+ * 
+ * @param {boolean} result
+ */
+const toggleNewMemoBlockMenu = function (result) {
+    const mItem = Menu.getApplicationMenu().getMenuItemById('MN_SHOW_NEW_MEMO_BLOCK');
+    mItem.checked = result;
+}
+
+/**
+ * 「表示」メニューの「新規メモ欄」が選択されたら自身のチェック状態をレンダラーに伝え反映させる
+ */
+const toggleNewMemoBlockFromMenu = function () {
+    const mItem = Menu.getApplicationMenu().getMenuItemById('MN_SHOW_NEW_MEMO_BLOCK');
+    common.toggleNewMemoBlockFromMenu(!mItem.checked);
+}
+
+
 //--------------------------------
 // exports
 //--------------------------------
 module.exports = {
-    setTemplate: setTemplate
+    setTemplate: setTemplate,
+    toggleNewMemoBlockMenu : toggleNewMemoBlockMenu,
 }

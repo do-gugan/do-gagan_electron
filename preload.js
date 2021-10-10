@@ -25,11 +25,16 @@ contextBridge.exposeInMainWorld(
     //on: (callback) => ipcRenderer.on(channel, (event, argv)=>callback(event, argv)), //汎用（危険？）
     openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
     openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
+    toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
     
     getAppVersion: () => {
       const _ = new i18n(this.lang, 'default');
       p = require('./package.json');
       return p.version;
+    },
+
+    toggleNewMemoBlockMenu : (result) => {
+      ipcRenderer.invoke('toggleNewMemoBlockMenu', result)
     }
   }
 );
