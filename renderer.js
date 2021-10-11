@@ -2,6 +2,7 @@
        let locale;
        let _; //ローカライズ文字列取得用
        let player; //videoタグ
+       let playerBox = document.getElementById("player-box");
 
 
        // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
@@ -11,24 +12,45 @@
            locale = await window.api.getConfig('locale');
            //const locale = 'en';
            _ = window.api;
-           document.querySelector("#Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
-           document.querySelector("#Btn_SearchClear").textContent = _.t('CLEAR',locale);
-           document.querySelector("#player-box").innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
-           document.querySelector("#Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
+           document.getElementById("Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
+           document.getElementById("Btn_SearchClear").textContent = _.t('CLEAR',locale);
+           playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
+           document.getElementById("Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
+           document.getElementById("Sel_BackwardSec").innerHTML = updateJumpSecOptions();
+           document.getElementById("Sel_ForwardSec").innerHTML = updateJumpSecOptions();
 
            //初期ウインドウタイトル（バージョン表示）
            document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
        })();
 
+       /**
+        * ジャンプ秒数セレクターの選択肢（optionタグ群）を生成
+        * @param (string) sec
+        */
+       function updateJumpSecOptions(selected = '60') {
+            let options = "";
+            let sel = "";
+            const secs = [3,5,10,15,30,60,120,180,300,600];
+            for (const sec of secs){
+                if (sec.toString() == selected) {
+                    sel =" selected"
+                } else {
+                    sel ="";
+                }
+                options += '<option value="' + sec.toString() + '"' + sel + '>' + _.t(sec.toString(), locale) + '</option>\r\n';
+            }
+            return options;
+       }
+
         //メインプロセスからのプッシュでメディアファイルを開く
         window.api.openVideo((event, path)=>{           
             const videotag = '<video id="player" autoplay controls><source src="' + path + '"></video>';
-            document.querySelector("#player-box").innerHTML = videotag;
+            playerBox.innerHTML = videotag;
             mediaOpened(path);
         });
         window.api.openAudio((event, path)=>{
             const audiotag = '<audio id="player" autoplay controls><source src="' + path + '"></audio>';
-            document.querySelector("#player-box").innerHTML = audiotag;
+            playerBox.innerHTML = audiotag;
             mediaOpened(path);
         });
      
@@ -36,7 +58,7 @@
        //メディアを開いた時の共通処理
        function mediaOpened (path) {
            //console.log('mediaOpened:'+path);
-           player = document.querySelector("#player");            
+           player = document.getElementById("player");            
 
            //ファイル名をウインドウタイトルに
            changeWindowTitle(path);
@@ -104,15 +126,15 @@
        //ファイルのドラッグ&ドロップを受け付ける
        //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
        //標準動作をキャンセル
-       document.querySelector("#player-box").ondragover = document.ondrop = function (e) {
+       playerBox.ondragover = document.ondrop = function (e) {
            e.preventDefault();
        }
        //dragEnterエフェクト開始
-       document.querySelector("#player-box").ondragenter = document.ondrop = function (e) {
-           const ph = document.querySelector("#placeholderInPlayer");
+       playerBox.ondragenter = document.ondrop = function (e) {
+           const ph = document.getElementById("placeholderInPlayer");
            //既にメディアファイルを開いている場合はphが消滅しているのでundefinedになる
            if (ph != undefined) {
-               document.querySelector("#player-box").classList.add("dragging");
+               playerBox.classList.add("dragging");
                //const locale = window.api.getConfig('locale'); //非同期でとれない
                //対応形式
                const validTypes = [
@@ -134,9 +156,9 @@
 
        }
        //dragLeaveでエフェクトを解除
-       document.querySelector("#player-box").ondragleave = document.ondrop = function (e) {
-           document.querySelector("#player-box").classList.remove("dragging");
-           const ph = document.querySelector("#placeholderInPlayer");
+       playerBox.ondragleave = document.ondrop = function (e) {
+           playerBox.classList.remove("dragging");
+           const ph = document.getElementById("placeholderInPlayer");
            if (ph != undefined) {
                ph.innerHTML = window.api.t('DROP_HERE',locale);
            }
@@ -150,7 +172,7 @@
 
        /* #region 再生制御系ボタン */
        //再生・一時停止
-       document.querySelector('#Btn_PlayPause').addEventListener('click', function() {
+       document.getElementById('Btn_PlayPause').addEventListener('click', function() {
            togglePlayPause();
        });
        function togglePlayPause() {
@@ -163,6 +185,27 @@
                }
            }
        }
+       //前後ジャンプ
+       function skipForward(sec = 0){
+            var sec = document.getElementById('Sel_ForwardSec').value;
+            jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec));
+       }
+       function skipBackward(sec = 0){
+            var sec = document.getElementById('Sel_BackwardSec').value;
+            jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
+        }
+        //動画再生位置を指定秒に移動する
+        function jumpToTimeIndex(sec){
+            //document.getElementById('body').focus();
+            player.currentTime = sec;
+            player.play();
+        }
 
+        //秒インデックスを「分：秒」形式に変換
+        function secToMinSec(secTotal){
+            min = Math.floor(secTotal / 60);
+            sec = secTotal - min*60;
+            return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+        }
 
        /* endregion */

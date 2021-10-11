@@ -8,7 +8,17 @@
 
     "DROP_ONLY_SINGLE_FILE": "Multiple files can not be dropped!",
     "INVALID_FILETYPE": "Unsupported file type!",
-    "DROP_AND_OPEN": "This file will be opened."
+    "DROP_AND_OPEN": "This file will be opened.",
   
-  
+    "3": "3sec.",
+    "5": "5sec.",
+    "10": "10sec.",
+    "15": "15sec.",
+    "30": "30sec.",
+    "60": "1min.",
+    "120": "2min.",
+    "180": "3min.",
+    "300": "5min.",
+    "600": "10min."
+
 }

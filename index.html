@@ -15,9 +15,12 @@
                     <div id="player-box" draggable="true" id="drag"></div>
                     <div id="player-controls">
                         <button id="Btn_ScreenShot">📷</button>
-                        <button id="Btn_JumpBackward" class="webdings">7</button>
+                        <button id="Btn_JumpBackward" class="webdings" onclick="skipBackward()">7<br>
+                            <select id="Sel_BackwardSec" class="Sel_jumpSec"></select>
+                        </button>
                         <button id="Btn_PlayPause" class="calibri">▶/II</button>
-                        <button id="Btn_JumpForward" class="webdings">8</button>
+                        <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()">8<br>
+                            <select id="Sel_ForwardSec" class="Sel_jumpSec"></select></button>
                     </div>
                 </div>
                 <div id="top-right">

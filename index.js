@@ -19,7 +19,7 @@ let player;
 function createWindow() {
     mainWin = new BrowserWindow({
         width: 1600,
-        height: 800,
+        height: 1200,
         backgroundColor: 'white',
         webPreferences: {
             nodeIntegration: false,
