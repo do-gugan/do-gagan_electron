@@ -1,9 +1,14 @@
 {
   "ABOUT": "このアプリについて",
+
   "OPEN_VIDEO_TITLE":"開く動画／音声ファイルを選択してください。",
   "MEDIAFILES": "メディアファイル",
   "ALLFILES": "すべてのファイル",
   
+  "OPEN_LOG_FILE":"開くログファイルを選択してください。",
+  "LOGFILES": "メディアファイル",
+  
+
   "BUTTON-REBOOT": "再起動",
   "BUTTON-LATER": "あとで",
   "REBOOT_CONFIRM_TITLE": "再起動の確認",

@@ -1,8 +1,18 @@
        //グローバルオブジェクト
+       const common = window.api.common;
        let locale;
        let _; //ローカライズ文字列取得用
        let player; //videoタグ
        let playerBox = document.getElementById("player-box");
+        //対応形式
+        const validTypes = [
+            'video/mp4',
+            'video/webm',
+            'video/ogg', //ogv
+            'audio/mpeg', //mp3
+            'audio/wav',
+            'audio/ogg'
+        ];           
 
 
        // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
@@ -135,16 +145,6 @@
            //既にメディアファイルを開いている場合はphが消滅しているのでundefinedになる
            if (ph != undefined) {
                playerBox.classList.add("dragging");
-               //const locale = window.api.getConfig('locale'); //非同期でとれない
-               //対応形式
-               const validTypes = [
-                   'video/mp4',
-                   'video/webm',
-                   'video/ogg', //ogv
-                   'audio/mpeg', //mp3
-                   'audio/wav',
-                   'audio/ogg'
-                   ];           
                if (e.dataTransfer.items.length > 1) {
                    ph.innerText = _.t('DROP_ONLY_SINGLE_FILE',locale);
                } else if (!validTypes.includes(e.dataTransfer.items[0].type)) {
@@ -166,8 +166,9 @@
        }
        //ドロップされたファイルを開く
        document.body.addEventListener('drop', function (e) {
-           //console.log('file dropped:', e.dataTransfer.files[0].path);
-           window.api.openDroppedFile(e.dataTransfer.files[0].path);
+           if (validTypes.includes(e.dataTransfer.items[0].type)) {
+               window.api.openDroppedFile(e.dataTransfer.files[0].path);
+            }
        });
 
        /* #region 再生制御系ボタン */

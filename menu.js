@@ -1,7 +1,7 @@
 const { app, Menu } = require('electron');
+const common = require('./common');
 const i18n = require('./i18n')
 const dialog = require('./dialog');
-const common = require('./common');
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -37,37 +37,38 @@ const setTemplate = (lang='ja') => {
                     dialog.openVideoDialog();
                 }},
                 {type: 'separator'},
-                {label: _.t('ADD-LOG'), click: ()=>{
+                {id:'ADD-LOG', label: _.t('ADD-LOG'), enabled: false, click: ()=>{
                     console.log('ADD-LOG');
+                    dialog.OpenLog();
                 }},
                 {type: 'separator'},
-                {label: _.t('OVERWRITE'), click: ()=>{
+                {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false, click: ()=>{
                     console.log('OVERWRITE');
                 }},
-                {label: _.t('AUTOSAVE'), click: ()=>{
+                {id:'AUTOSAVE', label: _.t('AUTOSAVE'), type: 'checkbox', click: ()=>{
                     console.log('AUTOSAVE');
                 }},
-                {label: _.t('SAVE-AS'), click: ()=>{
+                {id:'SAVE-AS', label: _.t('SAVE-AS'), enabled: false, click: ()=>{
                     console.log('SAVE-AS');
                 }},
-                {label: _.t('EXPORT-LITE'), click: ()=>{
+                {id:'EXPORT-LITE', label: _.t('EXPORT-LITE'), enabled: false, click: ()=>{
                     console.log('EXPORT-LITE');
                 }},
                 {type: 'separator'},
-                {label: _.t('SETTINGS'), click: ()=>{
+                {id:'SETTINGS', label: _.t('SETTINGS'), click: ()=>{
                     console.log('SETTINGS...');
                 }},
-                {label: _.t('QUIT'), role: 'quit'}
+                {id:'QUIT', label: _.t('QUIT'), role: 'quit'}
             ]
         },
         {
             label: _.t('EDIT'),
             submenu: [
-                {label: _.t('CUT'), role: 'cut'},
-                {label: _.t('COPY'), role: 'copy'},
-                {label: _.t('PASTE'), role: 'paste'},
+                {id:'', label: _.t('CUT'), enabled: false, role: 'cut'},
+                {id:'', label: _.t('COPY'), enabled: false, role: 'copy'},
+                {id:'', label: _.t('PASTE'), enabled: false, role: 'paste'},
                 {type: 'separator'},
-                {label: _.t('REPLACE'), click: ()=>{
+                {id:'', label: _.t('REPLACE'), enabled: false, click: ()=>{
                     console.log('REPLACE');
                 }}
             ]
@@ -76,86 +77,87 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('PLAYBACK-CONTROL'),
             submenu: [
-                {label: _.t('PLAY-PAUSE'), click: ()=>{
+                {id:'PLAY-PAUSE', label: _.t('PLAY-PAUSE'), enabled: false, click: ()=>{
                     console.log('PLAY-PAUSE');
+                    common.playPauseToPlayer();
                 }},
-                {label: _.t('JUMP_F'), click: ()=>{
+                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, click: ()=>{
                     console.log('JUMP_F');
                 }},
-                {label: _.t('JUMP_R'), click: ()=>{
+                {id:'JUMP_R', label: _.t('JUMP_R'), enabled: false, click: ()=>{
                     console.log('JUMP_R');
                 }},
                 {type: 'separator'},
-                {label: _.t('JUMP_F_SEC'), enabled: false,
+                {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),
                 submenu: [
-                    {label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
                         console.log('SEC_3');
                     }},
-                    {label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
                         console.log('SEC_5');
                     }},
-                    {label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
                         console.log('SEC_10');
                     }},
-                    {label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
                         console.log('SEC_15');
                     }},
-                    {label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
                         console.log('SEC_30');
                     }},
-                    {label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
                         console.log('SEC_60');
                     }},
-                    {label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_90', label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
                         console.log('SEC_90');
                     }},
-                    {label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
                         console.log('SEC_120');
                     }},
-                    {label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
                         console.log('SEC_180');
                     }},
-                    {label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
                         console.log('SEC_300');
                     }},
-                    {label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
+                    {id:'FSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
                         console.log('SEC_600');
                     }}
                 ]
                 },
-                {label: _.t('JUMP_R_SEC'), enabled: false,
+                {id:'', label: _.t('JUMP_R_SEC'),
                 submenu: [
-                    {label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
                         console.log('SEC_3');
                     }},
-                    {label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
                         console.log('SEC_5');
                     }},
-                    {label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
                         console.log('SEC_10');
                     }},
-                    {label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
                         console.log('SEC_15');
                     }},
-                    {label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
                         console.log('SEC_30');
                     }},
-                    {label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
                         console.log('SEC_60');
                     }},
-                    {label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_90', label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
                         console.log('SEC_90');
                     }},
-                    {label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
                         console.log('SEC_120');
                     }},
-                    {label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
                         console.log('SEC_180');
                     }},
-                    {label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
                         console.log('SEC_300');
                     }},
-                    {label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
+                    {id:'RSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
                         console.log('SEC_600');
                     }}
                 ]},
@@ -173,7 +175,7 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('HELP'),
             submenu: [
-                {label: _.t('GOTO-SUPPORT-PAGE'), click: ()=>{
+                {label: _.t('GOTO-SUPPORT-PAGE'), enabled: false, click: ()=>{
                     console.log('GOTO-SUPPORT-PAGE');
                 }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
@@ -207,6 +209,21 @@ const toggleNewMemoBlockFromMenu = function () {
     common.toggleNewMemoBlockFromMenu(!mItem.checked);
 }
 
+/**
+ * メディア読み込み時にメニューを有効化する
+ */
+const enableMenuWhenMediaOpened = function () {
+    Menu.getApplicationMenu().getMenuItemById('ADD-LOG').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('OVERWRITE').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('SAVE-AS').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('EXPORT-LITE').enabled = true;
+
+    Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('JUMP_F').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('JUMP_R').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
+}
+
 
 //--------------------------------
 // exports
@@ -214,4 +231,5 @@ const toggleNewMemoBlockFromMenu = function () {
 module.exports = {
     setTemplate: setTemplate,
     toggleNewMemoBlockMenu : toggleNewMemoBlockMenu,
+    enableMenuWhenMediaOpened : enableMenuWhenMediaOpened,
 }

@@ -35,8 +35,10 @@ function createWindow() {
 
     //common下に参照を渡す
     common.mainWin = mainWin;
-
-    //common.updateWindowTitle(); //ウインドウタイトルを初期値でセット
+    common.menu = menu;
+    common.i18n = i18n;
+    common.dialog = dialog;
+    common.config = config;
 
     //グローバル変数にHTML要素オブジェクトをセット
     // playerBox = mainWin.webContents.document.querySelector("#player-box");
@@ -103,3 +105,13 @@ app.on('window-all-closed', () => {
     console.log(path);
     common.openMediaFile(path);
   });
+
+
+
+
+  //--------------------------------
+// exports
+//--------------------------------
+module.exports = {
+  common: common,
+}

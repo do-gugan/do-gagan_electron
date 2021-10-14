@@ -1,12 +1,15 @@
 /**
  * 共通オブジェクト、データ
 **/
-const i18n = require('./i18n');
 const path = require('path');
-
 
 //グローバルオブジェクト
 const mainWin = null; //メインウインドウハンドル
+const i18n = null;
+const menu = null;
+const dialog = null;
+const config = null;
+
 const lang = null;
 
 
@@ -43,6 +46,7 @@ function openMediaFile(pth) {
       //音声ファイル
       this.mainWin.webContents.send('open-audio', pth);
     }
+    this.menu.enableMenuWhenMediaOpened();
 
 }
 
@@ -56,14 +60,22 @@ function toggleNewMemoBlockFromMenu(result) {
     this.mainWin.webContents.send('toggle-new-memo-block');
 }
 
+function playPauseToPlayer() {
+  this.mainWin.webContents.send('play-pause');
+}
 
 //--------------------------------
 // exports
 //--------------------------------
 module.exports = {
     mainWin: mainWin,
+    menu: menu,
+    dialog: dialog,
+    i18n: i18n,
+    config: config,
     //updateWindowTitle: updateWindowTitle,
     openMediaFile: openMediaFile,
     toggleNewMemoBlockFromMenu: toggleNewMemoBlockFromMenu,
+    playPauseToPlayer: playPauseToPlayer,
 }
 

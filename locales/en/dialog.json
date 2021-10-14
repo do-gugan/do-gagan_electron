@@ -1,9 +1,13 @@
 {
   "ABOUT": "About this App.",
 
-  "OPEN_VIDEO_TITLE":"Choose Video/Audio file to open...",
+  "OPEN_VIDEO_TITLE":"Choose a Video/Audio file to open...",
   "MEDIAFILES": "Media Files",
   "ALLFIES": "All Files",
+
+  "OPEN_LOG_FILE":"Choose a Log file to open...",
+  "LOGFILES": "Log Files",
+  
 
   "BUTTON-REBOOT": "Reboot",
   "BUTTON-LATER": "Later",

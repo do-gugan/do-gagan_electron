@@ -54,7 +54,9 @@ body {
     background-color: #333;
 }
 
-/* 子要素にドラッグイベントを無視させる */
+/* 子要素にドラッグイベントを無視させる
+    このままだとプレーヤー操作が効かないので、動画再生開始時に解除する
+*/
 #player-box * {pointer-events: none;}
 
 #player {
@@ -65,6 +67,7 @@ body {
     height: 100%;
     max-height: 100%;
     min-height: 100%;
+    pointer-events: auto;
 }
 
 #placeholderWrapper {
@@ -79,6 +82,9 @@ body {
 }
 #player-controls {
     height: 40px;
+
+    display: flex;
+    justify-content: center;
 }
 
 #player-controls button{
@@ -86,7 +92,7 @@ body {
     width : 4em;
 }
 #Btn_JumpForward, #Btn_JumpBackward {
-    /* width: 7em !important; */
+    width: 5em !important;
 }
 
 .Sel_jumpSec {

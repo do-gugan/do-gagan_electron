@@ -75,6 +75,25 @@ const openVideoDialog = function() {
 }
 
 
+/**
+ * ログファイルを開くダイアログを表示
+ */
+ const OpenLog = function() {
+  p = require('./package.json');
+  let result = dialog.showOpenDialogSync(common.mainWin, {
+    title: _.t('OPEN_LOG_FILE'),
+    //defaultPath:"",
+    //message: "", //masOS only 
+    properties: ['openFile'],
+    filters: [
+      { name: _.t('LOGFILES'), extensions: ['txt'] },
+    ]
+  });
+  if (result != undefined) {
+    common.openMediaFile(result[0]);
+  }
+}
+
 
 //--------------------------------
 // exports
