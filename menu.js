@@ -39,7 +39,7 @@ const setTemplate = (lang='ja') => {
                 {type: 'separator'},
                 {id:'ADD-LOG', label: _.t('ADD-LOG'), enabled: false, click: ()=>{
                     console.log('ADD-LOG');
-                    dialog.OpenLog();
+                    dialog.openLog();
                 }},
                 {type: 'separator'},
                 {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false, click: ()=>{

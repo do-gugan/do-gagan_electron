@@ -78,7 +78,7 @@ const openVideoDialog = function() {
 /**
  * ログファイルを開くダイアログを表示
  */
- const OpenLog = function() {
+ const openLog = function() {
   p = require('./package.json');
   let result = dialog.showOpenDialogSync(common.mainWin, {
     title: _.t('OPEN_LOG_FILE'),
@@ -86,11 +86,11 @@ const openVideoDialog = function() {
     //message: "", //masOS only 
     properties: ['openFile'],
     filters: [
-      { name: _.t('LOGFILES'), extensions: ['txt'] },
+      { name: _.t('LOGFILES'), extensions: ['dggn.txt'] },
     ]
   });
   if (result != undefined) {
-    common.openMediaFile(result[0]);
+    common.openLogFile(result[0], false);
   }
 }
 
@@ -102,4 +102,5 @@ module.exports = {
   reboot: reboot,
   openAboutDialog: openAboutDialog,
   openVideoDialog: openVideoDialog,
+  openLog: openLog,
 }
