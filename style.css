@@ -131,10 +131,62 @@ body {
     width:100%;
 }
 
-#memolist-box {
-    background-color:orange;
-    flex-grow: 1;
-    align-self:stretch;
+div#scripts {
+    background-color: #ccc;
+    overflow-y: scroll;
+    border: 1px solid #999;
+    height: 100%;
+}
+
+.row {
+    display: flex;
+    flex-flow: row nowrap;
+    margin: 0.1em;
+    border: 1px solid #888;
+}
+.inTime {
+    background-color: #cfc;
+    text-align: right;
+    align-self: stretch;
+    padding: 0.3em;
+    flex-shrink: 1;
+    flex-basis: 30px;
+}
+
+div.speaker0 {
+    background-color: #CCFFCC;
+}
+div.speaker1 {
+    background-color: #FFD5EC;
+}
+div.speaker2 {
+    background-color: #CCFFCC;
+}
+div.speaker3 {
+    background-color: #FFAADD;
+}
+div.speaker4 {
+    background-color: #FFFFCC;
+}
+div.speaker5 {
+    background-color: #FFDBC9;
+}
+div.speaker6 {
+    background-color: #E6FFE9;
+}
+div.speaker7 {
+    background-color: #EAD9FF;
+}
+
+div.current {
+    border: 3px solid blue;        
+    outline-offset: -14px;
+}
+
+
+.script {
+    background-color: #fff;
+    flex-grow: 6;
 }
 
 #right-bottom {

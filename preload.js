@@ -1,31 +1,31 @@
 const { contextBridge, ipcRenderer} = require("electron")
-//const fs = require('fs')
-const common = require('./common');
+//const common = require('./common'); //異なるインスタンスがとれてしまう
 const i18n = require('./i18n');
-//const common = require('./common');
+const dggRecord = require('./dggRecord');
 
 contextBridge.exposeInMainWorld(
-  "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"
-    //json5 : require("json5"),//npmで取得したライブラリを渡す時の例。レンダラーにそのまま渡す
-    common: common,
-    //ipcRenderer : ipcRenderer,//ipcRenderer自体は公開しない
-
-    // getSetting :  () => {// fsも読み込める。レンダリングプロセスにそのまま渡さず、functionにしてできることを制限したほうがセキュリアそう。。。
-    //   const setting_path = 'c:/appSetting.json5';
-    //   return fs.existsSync(setting_path) ? fs.readFileSync(setting_path, 'utf8') : '{}'
-    // }
+  "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"  
 
     //メインプロセスからレンダラー
     openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
     openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
     toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
 
-    playPause: () => ipcRenderer.on('play-pause'),
+    togglePlayPause: (callback) => ipcRenderer.on("play-pause", ()=>callback()),
 
-
+    //ログ1件の内容を受け取り、リストに追加する
+    addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event, argv)=>callback(event, argv)),
 
 
     //レンダラーからメインプロセス
+    //サンプルAPI（非同期）
+    getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
+    //使用例： console.log(window.api.getSomeInfoFromMain());
+
+    //.send(cj, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
+    //.sendSyncなら同期
+    //.invokeは非同期で結果を受け取る
+
     // 指定されたキーの設定を取得する
     getConfig:(key) => ipcRenderer.invoke('getConfig', key),
 

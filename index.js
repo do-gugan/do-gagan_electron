@@ -29,12 +29,13 @@ function createWindow() {
             nativeWindowOpen: true,
         }
     });
-    mainWin.setMinimumSize(640,400);
+    mainWin.setMinimumSize(1280,800);
     mainWin.loadFile('./index.html');
     mainWin.webContents.openDevTools(); //Devツールを開く
 
     //common下に参照を渡す
-    common.mainWin = mainWin;
+    //common.mainWin = mainWin;
+    common.setMainWin(mainWin);
     common.menu = menu;
     common.i18n = i18n;
     common.dialog = dialog;
@@ -55,7 +56,7 @@ app.whenReady().then(()=>{
  
   // ウィンドウを開く
   createWindow();
- 
+
 });
 
 //------------------------------------
@@ -83,6 +84,23 @@ app.on('window-all-closed', () => {
   //----------------------------------------
 
   //レンダラー -> メイン
+  ipcMain.handle('getSomeInfoFromMain', (event) => {
+    return "hogefuga";
+  });
+
+
+  ipcMain.handle('getCommon', () => {
+    return( common );
+  });
+
+  ipcMain.handle('getMainWin', () => {
+    return( common.mainWin );
+  });
+
+  ipcMain.handle('getRecords', () => {
+    return( common.records );
+  });
+
   // 設定情報を取得
   ipcMain.handle('getConfig', (event, data) => {
     return( config.get(data) )
@@ -103,15 +121,19 @@ app.on('window-all-closed', () => {
   //ドロップされたメディアファイルを開く
   ipcMain.handle('openDroppedFile', (event, path) => {
     console.log(path);
-    common.openMediaFile(path);
+    common.openMediaFile(path);    
   });
 
+  //commonオブジェクトを返す
+  // ipcMain.handle('getCommonObject', (event, data) => {
+  //   console.log("returning common object.");
+  //   return( common );
+  // });
 
 
-
-  //--------------------------------
+//--------------------------------
 // exports
 //--------------------------------
-module.exports = {
-  common: common,
-}
+// module.exports = {
+//   common: common,
+// }

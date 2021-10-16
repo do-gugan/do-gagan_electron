@@ -175,8 +175,9 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('HELP'),
             submenu: [
-                {label: _.t('GOTO-SUPPORT-PAGE'), enabled: false, click: ()=>{
+                {label: _.t('GOTO-SUPPORT-PAGE'), click: ()=>{
                     console.log('GOTO-SUPPORT-PAGE');
+                    common.openSupportSite();
                 }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
                     console.log('VERSION-INFO');

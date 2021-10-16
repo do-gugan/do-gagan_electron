@@ -3,17 +3,22 @@
  * @constructor
  */
 module.exports = class dggRecord {
-    constructor(timeStamp, transcript, speaker=0, confidence=1.0) {
+    constructor(id, inTime, script, speaker=0, confidence=1.0) {
         /**
+         * ユニークID
+         * @type {Number}
+         */
+         this.id = id;
+         /**
          * タイムスタンプ
          * @type {Number}
          */
-        this.timeStamp = timeStamp;
+        this.inTime = inTime;
         /**
          * テキスト
          * @type {String}
          */
-         this.transcript = transcript;
+         this.script = script;
         /**
          * 話者フラグ（1～10）
          * @type {Number}

@@ -1,9 +1,9 @@
        //グローバルオブジェクト
-       const common = window.api.common;
        let locale;
        let _; //ローカライズ文字列取得用
        let player; //videoタグ
        let playerBox = document.getElementById("player-box");
+       let memolist = document.getElementById("scripts")
         //対応形式
         const validTypes = [
             'video/mp4',
@@ -78,6 +78,21 @@
            player.addEventListener('pause', (event) => playerPaused() );
 
        }
+
+        //メインプロセスからレコードを表示
+        window.api.addRecordToList((event, record) => {
+            console.log("displayRecords" + record.timeStamp);
+            const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'">'+secToMinSec(record.inTime)+'</div><div class="script">'+record.script+'</div></div>';
+            memolist.innerHTML += html;
+        });
+        //秒インデックスを「分：秒」形式に変換
+        function secToMinSec(secTotal){
+            min = Math.floor(secTotal / 60);
+            sec = secTotal - min*60;
+            return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+        }
+
+
        /* #region プレーヤーのイベントハンドラー（状態変化検知）系 */
        function playerPlayed() {
 
@@ -172,10 +187,15 @@
        });
 
        /* #region 再生制御系ボタン */
-       //再生・一時停止
+       //再生・一時停止（GUIから）
        document.getElementById('Btn_PlayPause').addEventListener('click', function() {
-           togglePlayPause();
+            togglePlayPause();
        });
+       //メインプロセス（メニュー）から
+       window.api.togglePlayPause(()=>{
+            togglePlayPause();
+       });
+       //実際の処理
        function togglePlayPause() {
            if(player != undefined) {
                //console.log('state:'+ player.paused);
@@ -186,6 +206,8 @@
                }
            }
        }
+
+
        //前後ジャンプ
        function skipForward(sec = 0){
             var sec = document.getElementById('Sel_ForwardSec').value;
