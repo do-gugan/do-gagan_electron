@@ -4,7 +4,6 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-        <link rel="stylesheet" href="ress.min.css">
         <link rel="stylesheet" href="style.css">
         <title></title>
      </head>
@@ -13,12 +12,12 @@
         <div id="main">
             <div id="player-box" class="grid1" id="drag" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
             <div id="player-controls"class="grid2" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <button id="Btn_ScreenShot">📷</button>
-                <button id="Btn_JumpBackward" class="webdings" onclick="skipBackward()">7<br>
-                    <select id="Sel_BackwardSec" class="Sel_jumpSec"></select>
+                <button id="Btn_ScreenShot" disabled>📷</button>
+                <button id="Btn_JumpBackward" class="webdings" onclick="skipBackward()" disabled>7<br>
+                    <select id="Sel_BackwardSec" class="Sel_jumpSec" ></select>
                 </button>
-                <button id="Btn_PlayPause" class="calibri">▶/II</button>
-                <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()">8<br>
+                <button id="Btn_PlayPause" class="calibri" disabled>▶/II</button>
+                <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()" disabled>8<br>
                     <select id="Sel_ForwardSec" class="Sel_jumpSec"></select>
                 </button>
             </div>

@@ -78,6 +78,12 @@
            //プレーヤーからのイベントリスナーを登録
            player.addEventListener('play', (event) => playerPlayed() );
            player.addEventListener('pause', (event) => playerPaused() );
+
+           //コントロールボタンを有効化
+           document.getElementById('Btn_ScreenShot').disabled = false;
+           document.getElementById('Btn_JumpBackward').disabled = false;
+           document.getElementById('Btn_PlayPause').disabled = false;
+           document.getElementById('Btn_JumpForward').disabled = false;
        }
 
         //メインプロセスからレコードを表示
@@ -120,13 +126,11 @@
        */
        const toglleNewMemoBlock = function () {
            const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
-           const bottom = document.querySelector("#bottom");
-
            if (checkbox.checked == true) {
-               bottom.style.display = 'block';
+               document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 12em";
                window.api.toggleNewMemoBlockMenu(true);
            } else {
-               bottom.style.display = 'none';
+               document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 0em";
                window.api.toggleNewMemoBlockMenu(false);
            }
        }
@@ -136,16 +140,15 @@
        */
        window.api.toggleNewMemoBlockFromMenu((event, result)=>{
            const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
-           const bottom = document.querySelector("#bottom");
-
-           if (bottom.style.display == 'none') {
+           const main = document.getElementById('main');
+           if (main.style.gridTemplateRows == "2.5em 1fr 3em 0em") {
                //非表示だったら表示
-               bottom.style.display = 'block';
+               main.style.gridTemplateRows = "2.5em 1fr 3em 12em";
                checkbox.checked = true;
                return true;
            } else {
                //表示だったら非表示
-               bottom.style.display = 'none';
+               main.style.gridTemplateRows = "2.5em 1fr 3em 0em";
                checkbox.checked = false;
                return false;
            }
