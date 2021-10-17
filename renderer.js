@@ -3,7 +3,9 @@
        let _; //ローカライズ文字列取得用
        let player; //videoタグ
        let playerBox = document.getElementById("player-box");
-       let memolist = document.getElementById("scripts")
+       let memolist = document.getElementById("scripts");
+       let lastFocusedRow; //最後の選択された行のdivエレメント
+
         //対応形式
         const validTypes = [
             'video/mp4',
@@ -81,8 +83,12 @@
         //メインプロセスからレコードを表示
         window.api.addRecordToList((event, record) => {
             //console.log("displayRecords" + record.timeStamp);
-            const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'">'+secToMinSec(record.inTime)+'</div><div class="script">'+record.script+'</div></div>';
+            const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="resizeTextarea(event.target);">'+record.script+'</textarea></div></div>';
             memolist.innerHTML += html;
+
+            //セルの高さを文字数にあわせて調整
+            var t = document.querySelector('#' + record.id + ' .script textarea');
+            resizeTextarea(t);
         });
         //秒インデックスを「分：秒」形式に変換
         function secToMinSec(secTotal){
@@ -230,7 +236,54 @@
             return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
         }
 
+        //「分：秒」形式を秒に変換
+        function minSecToSec(minsec) {
+            const d = minsec.split(":");
+            return Number(d[0]*60) + Number(d[1]);
+        }
+
        /* #endregion */
+
+        /* #region レコードセル関連 */
+        /**
+         * タイムコードがクリックされたら当該シーンにジャンプする
+         */
+        function timeClicked(event) {
+            const tcell = event.target;
+            jumpToTimeIndex(minSecToSec(tcell.innerText)); //当該位置にジャンプ
+
+            //既にフォーカスされた行がある場合はリセット
+            if (lastFocusedRow != undefined) { lastFocusedRow.classList.remove('focused'); }
+            
+            //親エレメントにフォーカス枠のクラスを追加
+            console.log(tcell.parentElement.id);
+            tcell.parentElement.classList.add('focused');
+            lastFocusedRow = tcell.parentElement;
+        }
+
+        /**
+         * ログが編集される時、文字数にあわせてセルの高さを調整する
+         * @param (textarea) element
+         */
+        function resizeTextarea(textarea) {
+            const initial_height = parseFloat(getComputedStyle(textarea).height)
+            textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+        /**
+         * ウインドウがリサイズされた時にログ欄のセル高を調整する
+         * 高さは自動で増えるが、↑を呼ばないと狭まらない
+         * #dragBarのドラッグイベントからも呼んでいる。
+         */
+        function resizeAllTextArea() {
+            var rows = document.querySelectorAll('.script textarea');
+            for (const ta of rows) {
+                resizeTextarea(ta);
+            }
+        }        
+        window.addEventListener('resize',function(){
+            resizeAllTextArea();
+        })
 
        /** #region フレームのドラッグリサイズ
         *  参考:https://codepen.io/lukerazor/pen/GVBMZK
@@ -275,6 +328,7 @@
                 if ( rightColWidthPx > 300 && leftColWidthPx > 232) {
                     main.style.gridTemplateColumns = newColDef;
                 }              
+                resizeAllTextArea(); //ログのセル高をリサイズする
                 event.preventDefault()
             }
         }

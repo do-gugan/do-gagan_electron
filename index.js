@@ -29,7 +29,7 @@ function createWindow() {
             nativeWindowOpen: true,
         }
     });
-    mainWin.setMinimumSize(1280,800);
+    mainWin.setMinimumSize(1600,1200);
     mainWin.loadFile('./index.html');
     mainWin.webContents.openDevTools(); //Devツールを開く
 

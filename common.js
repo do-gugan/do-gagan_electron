@@ -62,7 +62,7 @@ class Common {
       for (var line of lines) {
         var cols = line.split("\t");
         if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
-          let rec = new dggRecord(0,cols[0], cols[1], cols[2]);
+          let rec = new dggRecord("row"+records.length,cols[0], cols[1], cols[2]);
           records.push(rec);
           this.mainWin.webContents.send('add-record-to-list',rec); //レンダラーに描画指示
         } else {
