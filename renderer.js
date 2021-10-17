@@ -76,7 +76,6 @@
            //プレーヤーからのイベントリスナーを登録
            player.addEventListener('play', (event) => playerPlayed() );
            player.addEventListener('pause', (event) => playerPaused() );
-
        }
 
         //メインプロセスからレコードを表示
@@ -231,4 +230,53 @@
             return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
         }
 
-       /* endregion */
+       /* #endregion */
+
+       /** #region フレームのドラッグリサイズ
+        *  参考:https://codepen.io/lukerazor/pen/GVBMZK
+        */
+       let isDragging = false;
+
+       function StartDrag() {
+        isDragging = true;
+        SetCursor("ew-resize");
+        }
+
+        function SetCursor(cursor) {
+            playerBox.style.cursor = cursor;
+        }
+        function EndDrag() {
+            isDragging = false;
+            SetCursor("auto");
+        }
+        
+        function OnDrag(event) {
+            if(isDragging) {
+                //console.log("Dragging");
+                //console.log(event);
+                
+                const main = document.getElementById("main");
+                const totalWidthPx = main.clientWidth;
+                const dragbarWidthPx = 5; //(px)
+
+                let leftcol = playerBox;
+                let rightcol = document.getElementById("search-box");	
+                //console.log("total:"+totalWidthPx+"px");
+                //console.log("player:"+playerBox.clientWidth+"px");
+                //console.log("clientX:"+event.clientX+"px");
+                let leftColWidth = Math.round((event.clientX / totalWidthPx) * 100);
+                //console.log("percentage:"+leftColWidth+"%");
+                          
+                newColDef = leftColWidth + "% 5px auto"; //左カラム、ドラッグボーダー、右カラム
+
+                //各カラムの最小サイズをpxで判定
+                const rightColWidthPx = (totalWidthPx - (totalWidthPx * leftColWidth /100) - dragbarWidthPx);
+                const leftColWidthPx = (totalWidthPx * leftColWidth /100);
+                if ( rightColWidthPx > 300 && leftColWidthPx > 232) {
+                    main.style.gridTemplateColumns = newColDef;
+                }              
+                event.preventDefault()
+            }
+        }
+        
+        /* #endregion */

@@ -15,7 +15,7 @@ body {
     width: 100%;
     height:100%;
 
-    grid-template-columns: 75% 25%;
+    grid-template-columns: 70% 5px auto;
     grid-template-rows: 2.5em 1fr 3em 12em ;
 }
 
@@ -30,24 +30,33 @@ body {
     grid-row-start: 3;
 }
 
-.grid3 {
+.dragbar {
     grid-column-start: 2;
+    grid-row-start: 1;
+    grid-row-end: 4;
+
+    background-color: #ddd;
+    cursor: ew-resize;
+}
+
+.grid3 {
+    grid-column-start: 3;
     grid-row-start: 1;
 }
 
 .grid4 {
-    grid-column-start: 2;
+    grid-column-start: 3;
     grid-row-start: 2;
 }
 
 .grid5 {
-    grid-column-start: 2;
+    grid-column-start: 3;
     grid-row-start: 3;
 }
 
 .grid6 {
     grid-column-start: 1;
-    grid-column-end: 3;
+    grid-column-end: 4;
     grid-row-start: 4;
 }
 
@@ -105,6 +114,7 @@ body {
     メディアプレーヤー下のコントローラーブロック
  ============================================= */
  #player-controls {
+    background-color: #eee;
     display: flex;
     justify-content: center;
 }
@@ -127,7 +137,7 @@ body {
  ============================================= */
  #search-box {
 
-    background-color:seagreen;
+    background-color:#eee;
 
     display: flex;
     align-items: center;
@@ -219,7 +229,7 @@ div.current {
       grid2のメディアコントローラーと同じ高さ
  ============================================= */
  #right-bottom {
-    background-color:aqua;
+    background-color:#eee;
     padding-right:0.5em;
 
     display: flex;
@@ -232,10 +242,9 @@ div.current {
         　　    新規ログ入力ブロック
  ============================================= */
  #bottom {
+    background-color: #ccc;
 
     display: flex;
-    background-color: #ce4;
-    flex-grow:2;
 }
 
 

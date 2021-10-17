@@ -18,7 +18,7 @@ const records = []; //ログ（dggRecordsオブジェクト）を保持する配
 
 class Common {
   constructor() {
-    console.log("constructor of common.");
+    //console.log("constructor of common.");
   }
 
   /**
@@ -94,12 +94,10 @@ class Common {
   }
 
   setMainWin(browserWindow) {
-    console.log("setMainWin");
     this.mainWin = browserWindow;
   }
 
   getMainWin(browserWindow) {
-    console.log("getMainWin");
     return this.mainWin;
   }
 
