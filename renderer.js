@@ -81,7 +81,7 @@
 
         //メインプロセスからレコードを表示
         window.api.addRecordToList((event, record) => {
-            console.log("displayRecords" + record.timeStamp);
+            //console.log("displayRecords" + record.timeStamp);
             const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'">'+secToMinSec(record.inTime)+'</div><div class="script">'+record.script+'</div></div>';
             memolist.innerHTML += html;
         });

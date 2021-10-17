@@ -133,9 +133,12 @@ body {
 
 div#scripts {
     background-color: #ccc;
-    overflow-y: scroll;
     border: 1px solid #999;
     height: 100%;
+
+    flex:1 1 0;
+    overflow-y: scroll;
+
 }
 
 .row {
