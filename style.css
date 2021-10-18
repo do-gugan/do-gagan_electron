@@ -215,28 +215,28 @@ body {
     flex-basis: 30px;
 }
 
-div.speaker0 {
-    background-color: #CCFFCC;
+.speaker0 {
+    background-color: #CCFFFF;
 }
-div.speaker1 {
+.speaker1 {
     background-color: #FFD5EC;
 }
-div.speaker2 {
+.speaker2 {
     background-color: #CCFFCC;
 }
-div.speaker3 {
+.speaker3 {
     background-color: #FFAADD;
 }
-div.speaker4 {
+.speaker4 {
     background-color: #FFFFCC;
 }
-div.speaker5 {
+.speaker5 {
     background-color: #FFDBC9;
 }
-div.speaker6 {
+.speaker6 {
     background-color: #E6FFE9;
 }
-div.speaker7 {
+.speaker7 {
     background-color: #EAD9FF;
 }
 
@@ -244,7 +244,6 @@ div.current {
     border: 3px solid blue;        
     outline-offset: -14px;
 }
-
 
 .script {
     background-color: #fff;
