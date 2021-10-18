@@ -10,6 +10,16 @@
     "INVALID_FILETYPE": "Unsupported file type!",
     "DROP_AND_OPEN": "This file will be opened.",
   
+    "TIMECODE": "Timecode",
+    "SPEAKER": "Speaker",
+    "MEMO": "Memo",
+    "ADD": "Add",
+    "F1_DEFAULT": "F1: Task Start",
+    "F2_DEFAULT": "F2: Participant says:",
+    "F3_DEFAULT": "F3: Moderator says:",
+    "F4_DEFAULT": "F4: Highlight :",
+    "F5_DEFAULT": "F5: Task Finish",
+  
     "3": "3sec.",
     "5": "5sec.",
     "10": "10sec.",

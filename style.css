@@ -16,7 +16,7 @@ body {
 
 
 /* =============================================
-　              グリッドレイアウト
+             グリッドレイアウト（全体）
  ============================================= */
 
  #main {
@@ -25,7 +25,7 @@ body {
     height:100%;
 
     grid-template-columns: 70% 5px auto;
-    grid-template-rows: 2.5em 1fr 3em 12em ;
+    grid-template-rows: 2.5em 1fr 3em 6em ;
 }
 
 .grid1 {
@@ -44,7 +44,7 @@ body {
     grid-row-start: 1;
     grid-row-end: 4;
 
-    background-color: #ddd;
+    background-color: #eee;
     cursor: ew-resize;
 }
 
@@ -133,12 +133,26 @@ body {
     width : 4em;
     
 }
+.Btn_Jump{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-end;
+}
+.Btn_Jump div {
+    font-size: 1.42em;
+    position: relative;
+    top: 0.22em;
+}
+
 #Btn_JumpForward, #Btn_JumpBackward {
     width: 5em !important;
 }
 
 .Sel_jumpSec {
     font-size: 0.8em;
+    position: relative;
+    bottom: -9px;
 }
 
 /* =============================================
@@ -268,12 +282,102 @@ div.current {
                      grid6
         　　    新規ログ入力ブロック
  ============================================= */
- #bottom {
-    background-color: #ccc;
+ /* =============================================
+             グリッドレイアウト（）
+ ============================================= */
 
-    display: flex;
+#bottom {
+    background-color: #eee;
+    width: 100%;
+    height:100%;
+
+    /* サブグリッド */
+    display: grid;
+    grid-template-columns: 7.5em 5.5em auto 6.5em;
+    grid-template-rows: 1ft 1fr 1fr;
 }
 
+.sg1-1 {
+    grid-row-start: 1;
+    grid-column-start: 1;
+}
+.sg1-2 {
+    grid-row-start: 1;
+    grid-column-start: 2;
+}
+.sg1-3 {
+    grid-row-start: 1;
+    grid-column-start: 3;
+}
+
+.sg2-1 {
+    grid-row-start: 2;
+    grid-column-start: 1;
+    margin-left: 0.4em;
+
+}
+.sg2-2 {
+    grid-row-start: 2;
+    grid-column-start: 2;
+    margin-left: 0.4em;
+}
+.sg2-3 {
+    grid-row-start: 2;
+    grid-column-start: 3;
+    grid-row-end: 3;
+    margin-left: 0.4em;
+}
+.sg2-4 {
+    grid-row-start: 2;
+    grid-column-start: 4;
+    margin-left: 1em;
+    margin-right: 0.8em;
+}
+
+.sg3-1 {
+    grid-row-start: 3;
+    grid-column-start: 1;
+    grid-column-end: 5;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.subgrid.row1 {
+    align-self: flex-end;
+    padding:  0.3em 0em 0em 0.3em;
+}
+
+.subgrid.row2 button{
+    padding-top: 0.4em;
+}
+
+
+#lockedTimecode,#speaker,#memo {
+    display: flex;
+}
+#Txt_lockedTimecode{
+    width: 3.5em;
+    text-align: center;
+}
+#Txt_speaker{
+    width: 1.5em;
+    text-align: center;
+}
+#Txt_memo {
+    width: 100%;
+}
+
+/* ファンクションボタン群 */
+.subgrid.row3 {
+    margin-top:0.3em;
+}
+.subgrid.row3 button{
+    flex-grow: 1;
+}
 
 .webdings {
     font-family: Webdings;

@@ -7,6 +7,16 @@
   "CLEAR": "クリア",
   "NEW_MEMO_FIELD": "新規メモ欄",
 
+  "TIMECODE": "タイムコード",
+  "SPEAKER": "話者",
+  "MEMO": "メモ",
+  "ADD": "追加",
+  "F1_DEFAULT": "F1: タスク開始",
+  "F2_DEFAULT": "F2: 参加者「」",
+  "F3_DEFAULT": "F3: 進行役「」",
+  "F4_DEFAULT": "F4: 見所！:",
+  "F5_DEFAULT": "F5: タスク完了",
+
   "DROP_ONLY_SINGLE_FILE": "複数のファイルをドロップできません。",
   "INVALID_FILETYPE": "非対応のファイル形式です。",
   "DROP_AND_OPEN": "ドロップすると開きます。",

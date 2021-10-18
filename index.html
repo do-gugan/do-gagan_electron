@@ -13,11 +13,13 @@
             <div id="player-box" class="grid1" id="drag" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
             <div id="player-controls"class="grid2" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
                 <button id="Btn_ScreenShot" disabled>📷</button>
-                <button id="Btn_JumpBackward" class="webdings" onclick="skipBackward()" disabled>7<br>
+                <button id="Btn_JumpBackward" class="webdings Btn_Jump" onclick="skipBackward()" disabled>
+                    <div>7</div>
                     <select id="Sel_BackwardSec" class="Sel_jumpSec" ></select>
                 </button>
                 <button id="Btn_PlayPause" class="calibri" disabled>▶/II</button>
-                <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()" disabled>8<br>
+                <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()" disabled>
+                    <div>8</div>
                     <select id="Sel_ForwardSec" class="Sel_jumpSec"></select>
                 </button>
             </div>
@@ -31,8 +33,35 @@
             <div id="right-bottom" class="grid5" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
                 <label for="Chk_ShowHideNewMemo"><input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" onchange="toglleNewMemoBlock();" checked/><span id="Lbl_ShowHideNewMemo" class="label"></span><label>
             </div>
-            <div id="bottom" class="grid6">
-                bottom
+            <div id="bottom" class="grid6 subgrid-container">
+                <div id="Lbl_lockedTimecode" class="subgrid row1 sg1-1"></div>
+                <div id="Lbl_speaker" class="subgrid row1 sg1-2"></div>
+                <div id="Lbl_memo" class="subgrid row1 sg1-3"></div>
+
+                <div id="lockedTimecode" class="subgrid row2 sg2-1">
+                    <button id="Btn_timecodeDecrement" onclick=""><</button>
+                    <input type="text" id="Txt_lockedTimecode" value="000:00" />
+                    <button id="Btn_timecodeIncrement" onclick="">></button>
+                </div>
+                <div id="speaker" class="subgrid row2 sg2-2">
+                    <button id="Btn_speakerDecrement" onclick=""><</button>
+                    <input type="text" id="Txt_speaker" value="0" />
+                    <button id="Btn_speakerIncrement" onclick="">></button>
+                </div>
+                <div id="memo" class="subgrid row2 sg2-3">
+                    <input type="text" id="Txt_memo" />
+                </div>
+                <button id="Btn_add" class="subgrid row2 sg2-4"></button>
+
+                <div id="function_buttons" class="subgrid row3 sg3-1">
+                    <Button id="Btn_F1">F1:</Button>
+                    <Button id="Btn_F2">F2:</Button>
+                    <Button id="Btn_F3">F3:</Button>
+                    <Button id="Btn_F4">F4:</Button>
+                    <Button id="Btn_F5">F5:</Button>    
+                </div>
+
+
             </div>
         </div>
         <!--#endregion-->

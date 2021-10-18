@@ -24,12 +24,24 @@
            locale = await window.api.getConfig('locale');
            //const locale = 'en';
            _ = window.api;
-           document.getElementById("Lbl_Search").innerHTML = _.t('SEARCH',locale) + ":";
-           document.getElementById("Btn_SearchClear").textContent = _.t('CLEAR',locale);
+           document.getElementById('Lbl_Search').innerHTML = _.t('SEARCH',locale) + ":";
+           document.getElementById('Btn_SearchClear').textContent = _.t('CLEAR',locale);
            playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
-           document.getElementById("Lbl_ShowHideNewMemo").innerHTML = _.t('NEW_MEMO_FIELD',locale);
-           document.getElementById("Sel_BackwardSec").innerHTML = updateJumpSecOptions();
-           document.getElementById("Sel_ForwardSec").innerHTML = updateJumpSecOptions();
+           document.getElementById('Lbl_ShowHideNewMemo').innerHTML = _.t('NEW_MEMO_FIELD',locale);
+           document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions();
+           document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions();
+
+           document.getElementById('Lbl_lockedTimecode').innerHTML = _.t('TIMECODE',locale);
+           document.getElementById('Lbl_speaker').innerHTML = _.t('SPEAKER',locale);
+           document.getElementById('Lbl_memo').innerHTML = _.t('MEMO',locale);
+
+           document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
+
+           document.getElementById('Btn_F1').innerHTML = _.t('F1_DEFAULT',locale);
+           document.getElementById('Btn_F2').innerHTML = _.t('F2_DEFAULT',locale);
+           document.getElementById('Btn_F3').innerHTML = _.t('F3_DEFAULT',locale);
+           document.getElementById('Btn_F4').innerHTML = _.t('F4_DEFAULT',locale);
+           document.getElementById('Btn_F5').innerHTML = _.t('F5_DEFAULT',locale);
 
            //初期ウインドウタイトル（バージョン表示）
            document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
@@ -127,7 +139,7 @@
        const toglleNewMemoBlock = function () {
            const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
            if (checkbox.checked == true) {
-               document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 12em";
+               document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 6em";
                window.api.toggleNewMemoBlockMenu(true);
            } else {
                document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 0em";
@@ -143,7 +155,7 @@
            const main = document.getElementById('main');
            if (main.style.gridTemplateRows == "2.5em 1fr 3em 0em") {
                //非表示だったら表示
-               main.style.gridTemplateRows = "2.5em 1fr 3em 12em";
+               main.style.gridTemplateRows = "2.5em 1fr 3em 6em";
                checkbox.checked = true;
                return true;
            } else {

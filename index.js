@@ -18,7 +18,7 @@ let player;
 
 function createWindow() {
     mainWin = new BrowserWindow({
-        width: 1600,
+        width: 1800,
         height: 1200,
         backgroundColor: 'white',
         webPreferences: {
