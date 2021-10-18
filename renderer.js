@@ -103,6 +103,11 @@ function mediaOpened (path) {
     document.getElementById('Btn_JumpBackward').disabled = false;
     document.getElementById('Btn_PlayPause').disabled = false;
     document.getElementById('Btn_JumpForward').disabled = false;
+
+    document.getElementById('Btn_timecodeDecrement').disabled = false;
+    document.getElementById('Btn_timecodeIncrement').disabled = false;
+    document.getElementById('Txt_lockedTimecode').disabled = false;
+
 }
 
 //メインプロセスからレコードを表示
@@ -261,11 +266,20 @@ function jumpToTimeIndex(sec){
     player.play();
 }
 
-//秒インデックスを「分：秒」形式に変換
-function secToMinSec(secTotal){
+/** 秒インデックスを「分：秒」形式に変換
+ * @param (Number) secTotal
+ * @param (Number) minDigit 分の桁数（3を指定すると000:00）
+ */
+function secToMinSec(secTotal, minDigit = 2){
     min = Math.floor(secTotal / 60);
-    sec = secTotal - min*60;
-    return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+    sec = Math.floor(secTotal - min*60);
+    let minSkel = '00';
+    let sl = -2;
+    if (minDigit == 3) {
+        minSkel = '000';
+        sl = -3
+    }
+    return ( minSkel + min ).slice( sl ) + ":" + ( '00' + sec ).slice( -2 )
 }
 
 //「分：秒」形式を秒に変換
@@ -387,7 +401,6 @@ function decrementSpeaker() {
         setSpeakerColor(sp);
     }
 }
-
 function incrementSpeaker() {
     let sp = parseInt(document.getElementById('Txt_speaker').value);
     if (sp < 100) {
@@ -397,7 +410,6 @@ function incrementSpeaker() {
         setSpeakerColor(sp);
     }
 }
-
 function setSpeakerColor(sp){
     if (sp < 8) {
         //話者カラー
@@ -406,4 +418,24 @@ function setSpeakerColor(sp){
         //個別カラーがない番号はすべて0と同色
         document.getElementById('Txt_speaker').classList.add('speaker0');
     }
+}
+
+// タイムコードロックオン
+function decrementTimecode() {
+    let ct = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
+    if (ct > 0) {
+        document.getElementById('Txt_lockedTimecode').value = secToMinSec(--ct,3);
+        jumpToTimeIndex(ct);
+    }
+}
+function incrementTimecode() {
+    let ct = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
+    console.log(player.duration);
+    if (ct < player.duration) {
+        document.getElementById('Txt_lockedTimecode').value = secToMinSec(++ct,3);
+        jumpToTimeIndex(ct);
+    }    
+}
+function syncTimecode() {
+    document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
 }
