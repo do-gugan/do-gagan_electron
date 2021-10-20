@@ -1,7 +1,9 @@
+"use strict";
+
 const { contextBridge, ipcRenderer} = require("electron")
 //const common = require('./common'); //異なるインスタンスがとれてしまう
 const i18n = require('./i18n');
-const dggRecord = require('./dggRecord');
+const dggRecord = require('./dggRecord').dggRecord;
 
 contextBridge.exposeInMainWorld(
   "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"  
@@ -15,7 +17,7 @@ contextBridge.exposeInMainWorld(
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event, argv)=>callback(event, argv)),
-
+    clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
     //レンダラーからメインプロセス
     //サンプルAPI（非同期）
@@ -37,7 +39,7 @@ contextBridge.exposeInMainWorld(
 
     getAppVersion: () => {
       //const _ = new i18n(this.lang, 'default');
-      p = require('./package.json');
+      const p = require('./package.json');
       return p.version;
     },
 
@@ -48,5 +50,8 @@ contextBridge.exposeInMainWorld(
       ipcRenderer.invoke('toggleNewMemoBlockMenu', result)
     },
 
+    //新しいメモ（dggRecordオブジェクト）をレンダラーからメインプロセスに
+    addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker).then(result => result).catch(err => console.log(err)),
+  
   }
 );

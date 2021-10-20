@@ -210,7 +210,7 @@ body {
     background-color: #cfc;
     text-align: right;
     align-self: stretch;
-    padding: 0.3em;
+    padding: 0.2em;
     flex-shrink: 1;
     flex-basis: 30px;
 }
@@ -248,20 +248,21 @@ div.current {
 .script {
     background-color: #fff;
     flex-grow: 6;
+    padding: 0.2em;
 }
 
 .script textarea {
-    width: 100%;
+    width: 98%;
     height: 90%;
     vertical-align: middle;
     line-height: 1.3em;
     resize: none;
-    padding: 0.2em;
+    border:none;
 }
 
-.script textarea:focus {
+/* .script textarea:focus {
     box-shadow: 0 0 0 4px rgba(35, 167, 195, 0.3);
- }
+ } */
 
 /* =============================================
                      grid5

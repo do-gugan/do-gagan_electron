@@ -1,6 +1,8 @@
 /**
  * 共通オブジェクト、データ
 **/
+"use strict";
+
 const path = require('path');
 const fs = require('fs'); //ファイルアクセス
 const readline = require("readline"); //1行ずつ読む
@@ -100,7 +102,23 @@ class Common {
   getMainWin(browserWindow) {
     return this.mainWin;
   }
-
+  
+ //レンダラーから新規メモを受け取る
+  addNewMemoFromGUI(inTime, script, speaker) {
+    const rec = new dggRecord(records.length + 1, inTime, script, speaker);
+    records.push(rec);
+    records.sort(function(a, b) {
+      if (a.inTime > b.inTime) {
+        return 1;
+      } else {
+        return -1;
+      };
+    });
+    this.mainWin.webContents.send('clear-records'); //一度リストをクリア
+    records.forEach(r => {
+      this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
+    });
+  }
 }
 
 module.exports = new Common();

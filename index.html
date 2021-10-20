@@ -51,17 +51,15 @@
                 <div id="memo" class="subgrid row2 sg2-3">
                     <input type="text" id="Txt_memo" />
                 </div>
-                <button id="Btn_add" class="subgrid row2 sg2-4"></button>
+                <button id="Btn_add" class="subgrid row2 sg2-4" onclick="addMemo();" disabled></button>
 
                 <div id="function_buttons" class="subgrid row3 sg3-1">
-                    <Button id="Btn_F1">F1:</Button>
-                    <Button id="Btn_F2">F2:</Button>
-                    <Button id="Btn_F3">F3:</Button>
-                    <Button id="Btn_F4">F4:</Button>
-                    <Button id="Btn_F5">F5:</Button>    
+                    <Button id="Btn_F1" onclick="inputFromFunctionTemplate('F1');">F1:</Button>
+                    <Button id="Btn_F2" onclick="inputFromFunctionTemplate('F2');">F2:</Button>
+                    <Button id="Btn_F3" onclick="inputFromFunctionTemplate('F3');">F3:</Button>
+                    <Button id="Btn_F4" onclick="inputFromFunctionTemplate('F4');">F4:</Button>
+                    <Button id="Btn_F5" onclick="inputFromFunctionTemplate('F5');">F5:</Button>    
                 </div>
-
-
             </div>
         </div>
         <!--#endregion-->

@@ -1,6 +1,9 @@
 /**
 * レンダラープロセス（index.html）用のJavaScriptファイル
 */
+"use strict";
+
+//const dggRecord = require("./dggRecord");
 
 //グローバルオブジェクト
 let locale;
@@ -41,15 +44,24 @@ const validTypes = [
 
     document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
 
-    document.getElementById('Btn_F1').innerHTML = _.t('F1_DEFAULT',locale);
-    document.getElementById('Btn_F2').innerHTML = _.t('F2_DEFAULT',locale);
-    document.getElementById('Btn_F3').innerHTML = _.t('F3_DEFAULT',locale);
-    document.getElementById('Btn_F4').innerHTML = _.t('F4_DEFAULT',locale);
-    document.getElementById('Btn_F5').innerHTML = _.t('F5_DEFAULT',locale);
+    document.getElementById('Btn_F1').innerHTML = "F1: " + eliminateTemplateCode(_.t('F1_DEFAULT',locale));
+    document.getElementById('Btn_F2').innerHTML = "F2: " + eliminateTemplateCode(_.t('F2_DEFAULT',locale));
+    document.getElementById('Btn_F3').innerHTML = "F3: " + eliminateTemplateCode(_.t('F3_DEFAULT',locale));
+    document.getElementById('Btn_F4').innerHTML = "F4: " + eliminateTemplateCode(_.t('F4_DEFAULT',locale));
+    document.getElementById('Btn_F5').innerHTML = "F5: " + eliminateTemplateCode(_.t('F5_DEFAULT',locale));
 
     //初期ウインドウタイトル（バージョン表示）
     document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
 })();
+
+/**
+ * ファンクションキーテンプレート中の制御文字を除去
+ * @param {string} str 
+ * @returns $tと$cを除去した文字列
+ */
+function eliminateTemplateCode(str) {
+    return str.replace('$t','').replace('$c','');
+}
 
 /**
 * ジャンプ秒数セレクターの選択肢（optionタグ群）を生成
@@ -98,7 +110,7 @@ function mediaOpened (path) {
     player.addEventListener('play', (event) => playerPlayed() );
     player.addEventListener('pause', (event) => playerPaused() );
 
-    //コントロールボタンを有効化
+    //ボタンを有効化
     document.getElementById('Btn_ScreenShot').disabled = false;
     document.getElementById('Btn_JumpBackward').disabled = false;
     document.getElementById('Btn_PlayPause').disabled = false;
@@ -107,6 +119,7 @@ function mediaOpened (path) {
     document.getElementById('Btn_timecodeDecrement').disabled = false;
     document.getElementById('Btn_timecodeIncrement').disabled = false;
     document.getElementById('Txt_lockedTimecode').disabled = false;
+    document.getElementById('Btn_add').disabled = false;
 
 }
 
@@ -117,13 +130,13 @@ window.api.addRecordToList((event, record) => {
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
-    var t = document.querySelector('#' + record.id + ' .script textarea');
+    const t = document.querySelector('#' + record.id + ' .script textarea');
     resizeTextarea(t);
 });
 //秒インデックスを「分：秒」形式に変換
 function secToMinSec(secTotal){
-    min = Math.floor(secTotal / 60);
-    sec = secTotal - min*60;
+    const min = Math.floor(secTotal / 60);
+    const sec = secTotal - min*60;
     return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
 }
 
@@ -271,8 +284,8 @@ function jumpToTimeIndex(sec){
  * @param (Number) minDigit 分の桁数（3を指定すると000:00）
  */
 function secToMinSec(secTotal, minDigit = 2){
-    min = Math.floor(secTotal / 60);
-    sec = Math.floor(secTotal - min*60);
+    const min = Math.floor(secTotal / 60);
+    const sec = Math.floor(secTotal - min*60);
     let minSkel = '00';
     let sl = -2;
     if (minDigit == 3) {
@@ -319,7 +332,7 @@ function timeClicked(event) {
 function resizeTextarea(textarea) {
     const initial_height = parseFloat(getComputedStyle(textarea).height)
     textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
-    textarea.style.height = textarea.scrollHeight + "px";
+    textarea.style.height = (textarea.scrollHeight -3 ) + "px";
 }
 /**
  * ウインドウがリサイズされた時にログ欄のセル高を調整する
@@ -342,12 +355,12 @@ window.addEventListener('resize',function(){
 let isDragging = false;
 
 function StartDrag() {
-isDragging = true;
-SetCursor("ew-resize");
+    isDragging = true;
+    SetCursor("ew-resize");
 }
 
 function SetCursor(cursor) {
-    playerBox.style.cursor = cursor;
+        playerBox.style.cursor = cursor;
 }
 function EndDrag() {
     isDragging = false;
@@ -355,10 +368,9 @@ function EndDrag() {
 }
 
 function OnDrag(event) {
-    if(isDragging) {
+    if (isDragging){
         //console.log("Dragging");
         //console.log(event);
-        
         const main = document.getElementById("main");
         const totalWidthPx = main.clientWidth;
         const dragbarWidthPx = 5; //(px)
@@ -371,7 +383,7 @@ function OnDrag(event) {
         let leftColWidth = Math.round((event.clientX / totalWidthPx) * 100);
         //console.log("percentage:"+leftColWidth+"%");
                     
-        newColDef = leftColWidth + "% 5px auto"; //左カラム、ドラッグボーダー、右カラム
+        const newColDef = leftColWidth + "% 5px auto"; //左カラム、ドラッグボーダー、右カラム
 
         //各カラムの最小サイズをpxで判定
         const rightColWidthPx = (totalWidthPx - (totalWidthPx * leftColWidth /100) - dragbarWidthPx);
@@ -439,3 +451,53 @@ function incrementTimecode() {
 function syncTimecode() {
     document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
 }
+
+//ファクションキーテンプレート
+/**
+ * 
+ * @param {string} key (F1～F5) 
+ */
+function inputFromFunctionTemplate(key) {
+    let txt;
+    const memo = document.getElementById('Txt_memo');
+    switch (key) {
+        case 'F1':
+            txt = _.t('F1_DEFAULT',locale);           
+            break;
+        case 'F2':
+            txt = _.t('F2_DEFAULT',locale);           
+            break;
+        case 'F3':
+            txt = _.t('F3_DEFAULT',locale);           
+            break;
+        case 'F4':
+            txt = _.t('F4_DEFAULT',locale);           
+            break;
+        case 'F5':
+            txt = _.t('F5_DEFAULT',locale);           
+            break;                                        
+    }
+
+    txt =txt.replace('$t', memo.value);    //$tを現在のテキストボックスの文字列にリプレイス
+    let cur = txt.indexOf('$c');    //$cの位置を記憶
+    memo.value = txt.replace('$c',''); //$cを削除して文字を挿入
+    if (cur != -1){
+        memo.focus();
+        memo.setSelectionRange(cur, cur); //カーソルを移動
+    }
+}
+
+
+//GUIからメインプロセスに新規メモ内容を送信
+function addMemo() {
+    const inTime = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
+    const script = document.getElementById('Txt_memo').value;
+    const speaker = document.getElementById('Txt_speaker').value;
+    window.api.addNewMemoFromGUI(inTime, script, speaker);   
+}
+
+//ログリストをクリア
+window.api.clearRecords(()=>{
+    console.log("clear");
+    memolist.innerHTML = "";
+});

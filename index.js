@@ -1,3 +1,5 @@
+"use strict";
+
 const { app, BrowserWindow, ipcMain } = require('electron');
 const common = require('./common');
 const menu = require('./menu');
@@ -5,6 +7,7 @@ const config = require('./config');
 const dialog = require('./dialog');
 const path = require('path');
 const i18n = require('./i18n');
+const dggRecord = require('./dggRecord');
 
 //------------------------------------
 // グローバル変数
@@ -124,12 +127,10 @@ app.on('window-all-closed', () => {
     common.openMediaFile(path);    
   });
 
-  //commonオブジェクトを返す
-  // ipcMain.handle('getCommonObject', (event, data) => {
-  //   console.log("returning common object.");
-  //   return( common );
-  // });
-
+  //レンダラーから新規メモを受け取る
+  ipcMain.handle('addNewMemoFromGUI', (event, inTime, script, speaker) => {
+    common.addNewMemoFromGUI(inTime, script, speaker);
+  });
 
 //--------------------------------
 // exports
