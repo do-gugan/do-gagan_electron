@@ -138,6 +138,32 @@ class Common {
     return records.find(r => r.id == id).speaker;
   }
 
+    /**
+   * コンテクストメニューから話者フラグ変更を実行
+   * @param {string} id 
+   * @param {Number} speaker 
+   */
+  setSpeakerOfRow(id, speaker) {
+    //配列を更新
+    this.speakerChanged(id, speaker);
+    records.forEach(e => console.log(e.id +':'+ e.speaker));
+
+    //レンダラーにも反映
+    this.mainWin.webContents.send('set-speaker-of-row',id, speaker);
+  }
+  /**
+   * コンテクストメニューからの削除を実行
+   * @param {Number} id 
+   */
+  deleteRow(id) {
+    //配列から削除
+    const idx = records.indexOf(records.find(r => r.id == id)); //配列中の位置を調べ、
+    records.splice(idx,1); //削除
+
+    //レンダラーにも反映
+    this.mainWin.webContents.send('delete-row',id);
+  }
+
 }
 
 module.exports = new Common();

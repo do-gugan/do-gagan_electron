@@ -30,8 +30,8 @@ contextBridge.exposeInMainWorld(
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
     //コンテクストメニューの選択からの処理
-    setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (id, speaker)=>callback(id, speaker)),
-    deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(event, id)),
+    setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (event, id, speaker)=>callback(id, speaker)),
+    deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(id)),
 
 
     // --------------------------------------------

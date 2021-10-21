@@ -365,18 +365,21 @@ window.addEventListener('resize',function(){
 function openContextMenuOn(e) {
     e.preventDefault();
     const id = e.target.parentElement.id;
-    console.log('right-clicked ID:' + id);
     window.api.openContextMenuOn(id);
 }
 
 //メインプロセスから指定ID行の話者クラスを変更
 window.api.setSpeakerOfRow((id, speaker)=>{
-    console.log("setSpeakerOfRow:" + id + " to " + speaker);
+    const el = document.querySelector('#'+ id + " .inTime");
+    for (let i=0; i<8; i++){
+        el.classList.remove("speaker" + i);
+    }
+    el.classList.add("speaker" + speaker);
 })
 
 //メインプロセスから指定ID行を削除
 window.api.deleteRow((id)=>{
-    console.log("deleteRow:" + id);
+    document.querySelector('#'+ id).remove();
 })
 
 /** #region フレームのドラッグリサイズ

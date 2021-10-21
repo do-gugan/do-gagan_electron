@@ -142,34 +142,34 @@ app.on('window-all-closed', () => {
         label: _.t('SPEAKERLABEL'),
         submenu: [
           {id:'SPK_0', label: '0', type: 'checkbox', click: ()=>{
-            setSpeakerOfRow(id, 0);
+            common.setSpeakerOfRow(id, 0);
           }},
           {id:'SPK_1', label: '1', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 1);
+            common.setSpeakerOfRow(id, 1);
               }},
           {id:'SPK_2', label: '2', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 2);
+            common.setSpeakerOfRow(id, 2);
             }},
           {id:'SPK_3', label: '3', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 3);
+            common.setSpeakerOfRow(id, 3);
             }},
           {id:'SPK_4', label: '4', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 4);
+            common.setSpeakerOfRow(id, 4);
             }},
           {id:'SPK_5', label: '5', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 5);
+            common.setSpeakerOfRow(id, 5);
             }},
           {id:'SPK_6', label: '6', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 6);
+            common.setSpeakerOfRow(id, 6);
             }},
           {id:'SPK_7', label: '7', type: 'checkbox', click: ()=>{
-              setSpeakerOfRow(id, 7);
+            common.setSpeakerOfRow(id, 7);
             }}
         ]
     },
     {
         label: _.t('DELETE_ITEM'), click: ()=>{
-            deleteRow(id);
+            common.deleteRow(id);
         }
     },
     
@@ -184,17 +184,7 @@ app.on('window-all-closed', () => {
     
   });
 
-  /**
-   * コンテクストメニューの選択から、レンダラーの当該行に反映
-   * @param {string} id 
-   * @param {Number} speaker 
-   */
-  function setSpeakerOfRow(id, speaker) {
-    common.mainWin.webContents.send('set-speaker-of-row',id, speaker);
-  }
-  function deleteRow(id) {
-    common.mainWin.webContents.send('delete-row',id);
-  }
+
 
 //--------------------------------
 // exports
