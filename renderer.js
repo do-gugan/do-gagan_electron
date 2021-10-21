@@ -126,7 +126,7 @@ function mediaOpened (path) {
 //メインプロセスからレコードを表示
 window.api.addRecordToList((event, record) => {
     //console.log("displayRecords" + record.timeStamp);
-    const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="resizeTextarea(event.target);">'+record.script+'</textarea></div></div>';
+    const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="editTextarea(event.target);">'+record.script+'</textarea></div></div>';
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
@@ -325,9 +325,21 @@ function timeClicked(event) {
     lastFocusedRow = tcell.parentElement;
 }
 
+
+/** 
+ * ログ欄のテキストが編集されたら、DBへ反映とリサイズ
+ * @param (textarea) element
+ */
+function editTextarea(textarea){
+    const id = textarea.parentElement.parentElement.id;
+    //メインプロセスに変更を送る
+    window.api.memoChanged(id, textarea.value);
+
+    //リサイズ処理を呼ぶ
+    resizeTextarea(textarea);
+}
 /**
  * ログが編集される時、文字数にあわせてセルの高さを調整する
- * @param (textarea) element
  */
 function resizeTextarea(textarea) {
     const initial_height = parseFloat(getComputedStyle(textarea).height)

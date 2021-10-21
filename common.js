@@ -119,6 +119,21 @@ class Common {
       this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
     });
   }
+
+  //レンダラーから更新されたセルの情報を受け取りrecordに反映
+  memoChanged(id,script) {
+    records.find(r => r.id == id).script = script;
+  }
+
+  inTimeChanged(id,inTime) {
+    records.find(r => r.id == id).inTime = inTime;
+  }
+
+  speakerChanged(id,speaker) {
+    records.find(r => r.id == id).speaker = speaker;
+  }
+
+
 }
 
 module.exports = new Common();

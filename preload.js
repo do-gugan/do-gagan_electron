@@ -52,6 +52,11 @@ contextBridge.exposeInMainWorld(
 
     //新しいメモ（dggRecordオブジェクト）をレンダラーからメインプロセスに
     addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker).then(result => result).catch(err => console.log(err)),
-  
+
+    //既存メモのテキストが更新された
+    memoChanged:(id,script) => ipcRenderer.invoke('memoChanged', id,script),
+    inTimeChanged:(id,inTime) => ipcRenderer.invoke('inTimeChanged', id,inTime),
+    speakerChanged:(id,speaker)=>ipcRenderer.invoke('speakerChanged', id,speaker),
+
   }
 );

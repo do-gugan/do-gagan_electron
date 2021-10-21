@@ -132,6 +132,18 @@ app.on('window-all-closed', () => {
     common.addNewMemoFromGUI(inTime, script, speaker);
   });
 
+  //レンダラーからリスト内のログが更新されたら受け取る
+  ipcMain.handle('memoChanged', (event, id, script) => {
+    common.memoChanged(id,script);
+  });
+  ipcMain.handle('inTimeChanged', (event, id, inTime) => {
+    common.inTimeChanged(id,inTime);
+  });
+  ipcMain.handle('speakerChanged', (event, id, speaker) => {
+    common.speakerChanged(id,speaker);
+  });
+
+
 //--------------------------------
 // exports
 //--------------------------------
