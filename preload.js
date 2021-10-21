@@ -8,7 +8,17 @@ const dggRecord = require('./dggRecord').dggRecord;
 contextBridge.exposeInMainWorld(
   "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"  
 
-    //メインプロセスからレンダラー
+    // --------------------------------------------
+    //          メインプロセス → レンダラー(HTML)
+    // --------------------------------------------
+    //サンプルAPI（非同期）
+    // receiveValue: (listener) => ipcRenderer.on("receive-value", (event, arg) => listener(arg)),
+    
+    //レンダラー側での受け取り例：
+    // window.api.receiveValue((value) => {
+    //    console.log(value);
+    // }
+
     openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
     openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
     toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
@@ -19,14 +29,22 @@ contextBridge.exposeInMainWorld(
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event, argv)=>callback(event, argv)),
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
-    //レンダラーからメインプロセス
-    //サンプルAPI（非同期）
-    //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
-    //使用例： console.log(window.api.getSomeInfoFromMain());
+    //コンテクストメニューの選択からの処理
+    setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (id, speaker)=>callback(id, speaker)),
+    deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(event, id)),
 
-    //.send(cj, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
-    //.sendSyncなら同期
-    //.invokeは非同期で結果を受け取る
+
+    // --------------------------------------------
+    //         レンダラー(HTML) → メインプロセス
+    // --------------------------------------------
+    //サンプルAPI（非同期）
+    //.send(ch, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
+    //sendMessageToMain: () => ipcRenderer.send("send-message-to-main"),
+    //.sendSyncなら同期だが特に利用する必要はない
+
+    //結果を受け取りたい場合は.invoke
+    //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
+    //レンダラーからの呼び出し例： console.log(window.api.getSomeInfoFromMain());
 
     // 指定されたキーの設定を取得する
     getConfig:(key) => ipcRenderer.invoke('getConfig', key),
@@ -46,17 +64,15 @@ contextBridge.exposeInMainWorld(
     //ドロップされたファイルを開く
     openDroppedFile: (path) => ipcRenderer.invoke('openDroppedFile', path),
 
-    toggleNewMemoBlockMenu : (result) => {
-      ipcRenderer.invoke('toggleNewMemoBlockMenu', result)
-    },
+    toggleNewMemoBlockMenu : (result) => ipcRenderer.send('toggleNewMemoBlockMenu', result),
 
     //新しいメモ（dggRecordオブジェクト）をレンダラーからメインプロセスに
     addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker).then(result => result).catch(err => console.log(err)),
 
     //既存メモのテキストが更新された
-    memoChanged:(id,script) => ipcRenderer.invoke('memoChanged', id, script),
-    inTimeChanged:(id,inTime) => ipcRenderer.invoke('inTimeChanged', id, inTime),
-    speakerChanged:(id,speaker)=>ipcRenderer.invoke('speakerChanged', id, speaker),
+    memoChanged:(id,script) => ipcRenderer.send('memoChanged', id, script),
+    //inTimeChanged:(id,inTime) => ipcRenderer.send('inTimeChanged', id, inTime),
+    //speakerChanged:(id,speaker)=>ipcRenderer.send('speakerChanged', id, speaker),
 
     //右クリックからコンテクストメニューを開く
     openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id),

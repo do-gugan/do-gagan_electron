@@ -24,6 +24,7 @@ function createWindow() {
         height: 1200,
         backgroundColor: 'white',
         webPreferences: {
+            worldSafeExecuteJavaScript: true,
             nodeIntegration: false,
             enableRemoteModule: true,
             contextIsolation: true,
@@ -103,7 +104,7 @@ app.on('window-all-closed', () => {
   });
 
   //「新規メモ欄」メニューのチェック状態を更新   
-  ipcMain.handle('toggleNewMemoBlockMenu', async (event, data) => {
+  ipcMain.on('toggleNewMemoBlockMenu', async (event, data) => {
     menu.toggleNewMemoBlockMenu(data);
   });
 
@@ -119,15 +120,18 @@ app.on('window-all-closed', () => {
   });
 
   //レンダラーからリスト内のログが更新されたら受け取る
-  ipcMain.handle('memoChanged', (event, id, script) => {
+  ipcMain.on('memoChanged', (event, id, script) => {
     common.memoChanged(id,script);
+    console.log(id,script);
   });
-  ipcMain.handle('inTimeChanged', (event, id, inTime) => {
-    common.inTimeChanged(id,inTime);
-  });
-  ipcMain.handle('speakerChanged', (event, id, speaker) => {
-    common.speakerChanged(id,speaker);
-  });
+  // ipcMain.on('inTimeChanged', (event, id, inTime) => {
+  //   common.inTimeChanged(id,inTime);
+  //   console.log(id,inTime);
+  // });
+  // ipcMain.on('speakerChanged', (event, id, speaker) => {
+  //   common.speakerChanged(id,speaker);
+  //   console.log(id,speaker);
+  // });
 
   //ログ上のコンテクストメニューを開く
   ipcMain.on('openContextMenuOn', (event, id) => {
@@ -138,34 +142,34 @@ app.on('window-all-closed', () => {
         label: _.t('SPEAKERLABEL'),
         submenu: [
           {id:'SPK_0', label: '0', type: 'checkbox', click: ()=>{
-            console.log('SPK_0');
+            setSpeakerOfRow(id, 0);
           }},
           {id:'SPK_1', label: '1', type: 'checkbox', click: ()=>{
-                console.log('SPK_1');
-          }},
+              setSpeakerOfRow(id, 1);
+              }},
           {id:'SPK_2', label: '2', type: 'checkbox', click: ()=>{
-              console.log('SPK_2');
-          }},
+              setSpeakerOfRow(id, 2);
+            }},
           {id:'SPK_3', label: '3', type: 'checkbox', click: ()=>{
-              console.log('SPK_3');
-          }},
+              setSpeakerOfRow(id, 3);
+            }},
           {id:'SPK_4', label: '4', type: 'checkbox', click: ()=>{
-              console.log('SPK_4');
-          }},
+              setSpeakerOfRow(id, 4);
+            }},
           {id:'SPK_5', label: '5', type: 'checkbox', click: ()=>{
-              console.log('SPK_5');
-          }},
+              setSpeakerOfRow(id, 5);
+            }},
           {id:'SPK_6', label: '6', type: 'checkbox', click: ()=>{
-              console.log('SPK_6');
-          }},
+              setSpeakerOfRow(id, 6);
+            }},
           {id:'SPK_7', label: '7', type: 'checkbox', click: ()=>{
-              console.log('SPK_7');
-          }}
+              setSpeakerOfRow(id, 7);
+            }}
         ]
     },
     {
         label: _.t('DELETE_ITEM'), click: ()=>{
-            console.log('DELETE_ITEM');
+            deleteRow(id);
         }
     },
     
@@ -179,6 +183,18 @@ app.on('window-all-closed', () => {
     m.popup(BrowserWindow.fromWebContents(event.sender));
     
   });
+
+  /**
+   * コンテクストメニューの選択から、レンダラーの当該行に反映
+   * @param {string} id 
+   * @param {Number} speaker 
+   */
+  function setSpeakerOfRow(id, speaker) {
+    common.mainWin.webContents.send('set-speaker-of-row',id, speaker);
+  }
+  function deleteRow(id) {
+    common.mainWin.webContents.send('delete-row',id);
+  }
 
 //--------------------------------
 // exports

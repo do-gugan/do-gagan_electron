@@ -369,6 +369,15 @@ function openContextMenuOn(e) {
     window.api.openContextMenuOn(id);
 }
 
+//メインプロセスから指定ID行の話者クラスを変更
+window.api.setSpeakerOfRow((id, speaker)=>{
+    console.log("setSpeakerOfRow:" + id + " to " + speaker);
+})
+
+//メインプロセスから指定ID行を削除
+window.api.deleteRow((id)=>{
+    console.log("deleteRow:" + id);
+})
 
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK
