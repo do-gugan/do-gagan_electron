@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld(
 
     //レンダラーからメインプロセス
     //サンプルAPI（非同期）
-    getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
+    //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
     //使用例： console.log(window.api.getSomeInfoFromMain());
 
     //.send(cj, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
@@ -54,9 +54,16 @@ contextBridge.exposeInMainWorld(
     addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker).then(result => result).catch(err => console.log(err)),
 
     //既存メモのテキストが更新された
-    memoChanged:(id,script) => ipcRenderer.invoke('memoChanged', id,script),
-    inTimeChanged:(id,inTime) => ipcRenderer.invoke('inTimeChanged', id,inTime),
-    speakerChanged:(id,speaker)=>ipcRenderer.invoke('speakerChanged', id,speaker),
+    memoChanged:(id,script) => ipcRenderer.invoke('memoChanged', id, script),
+    inTimeChanged:(id,inTime) => ipcRenderer.invoke('inTimeChanged', id, inTime),
+    speakerChanged:(id,speaker)=>ipcRenderer.invoke('speakerChanged', id, speaker),
 
+    //右クリックからコンテクストメニューを開く
+    openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id),
+
+    //コンテクストメニューで実行された機能
+    // ipcRenderer.on(''), (e.command) => {
+
+    // }
   }
 );

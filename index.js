@@ -1,6 +1,6 @@
 "use strict";
 
-const { app, BrowserWindow, ipcMain } = require('electron');
+const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const common = require('./common');
 const menu = require('./menu');
 const config = require('./config');
@@ -17,7 +17,6 @@ const dggRecord = require('./dggRecord');
 let mainWin;
 let playerBox;
 let player; 
-
 
 function createWindow() {
     mainWin = new BrowserWindow({
@@ -87,22 +86,9 @@ app.on('window-all-closed', () => {
   //----------------------------------------
 
   //レンダラー -> メイン
-  ipcMain.handle('getSomeInfoFromMain', (event) => {
-    return "hogefuga";
-  });
-
-
-  ipcMain.handle('getCommon', () => {
-    return( common );
-  });
-
-  ipcMain.handle('getMainWin', () => {
-    return( common.mainWin );
-  });
-
-  ipcMain.handle('getRecords', () => {
-    return( common.records );
-  });
+  // ipcMain.handle('getSomeInfoFromMain', (event) => {
+  //   return "hogefuga";
+  // });
 
   // 設定情報を取得
   ipcMain.handle('getConfig', (event, data) => {
@@ -143,6 +129,56 @@ app.on('window-all-closed', () => {
     common.speakerChanged(id,speaker);
   });
 
+  //ログ上のコンテクストメニューを開く
+  ipcMain.on('openContextMenuOn', (event, id) => {
+    const lang = config.get('locale') || app.getLocale();
+    const _ = new i18n(lang, 'menu');
+    const template = [
+      {
+        label: _.t('SPEAKERLABEL'),
+        submenu: [
+          {id:'SPK_0', label: '0', type: 'checkbox', click: ()=>{
+            console.log('SPK_0');
+          }},
+          {id:'SPK_1', label: '1', type: 'checkbox', click: ()=>{
+                console.log('SPK_1');
+          }},
+          {id:'SPK_2', label: '2', type: 'checkbox', click: ()=>{
+              console.log('SPK_2');
+          }},
+          {id:'SPK_3', label: '3', type: 'checkbox', click: ()=>{
+              console.log('SPK_3');
+          }},
+          {id:'SPK_4', label: '4', type: 'checkbox', click: ()=>{
+              console.log('SPK_4');
+          }},
+          {id:'SPK_5', label: '5', type: 'checkbox', click: ()=>{
+              console.log('SPK_5');
+          }},
+          {id:'SPK_6', label: '6', type: 'checkbox', click: ()=>{
+              console.log('SPK_6');
+          }},
+          {id:'SPK_7', label: '7', type: 'checkbox', click: ()=>{
+              console.log('SPK_7');
+          }}
+        ]
+    },
+    {
+        label: _.t('DELETE_ITEM'), click: ()=>{
+            console.log('DELETE_ITEM');
+        }
+    },
+    
+    ];
+    const m = Menu.buildFromTemplate(template);
+
+    //recordsから現在のspeakerを調べてチェックをする
+    m.getMenuItemById('SPK_' + common.getSpeakerFromId(id)).checked = true;
+
+    //コンテクストメニューを表示
+    m.popup(BrowserWindow.fromWebContents(event.sender));
+    
+  });
 
 //--------------------------------
 // exports

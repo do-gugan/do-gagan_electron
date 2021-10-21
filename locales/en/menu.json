@@ -47,6 +47,9 @@
 
   "HELP": "Help",
   "GOTO-SUPPORT-PAGE": "Support Page",
-  "VERSION-INFO": "Version Info."
+  "VERSION-INFO": "Version Info.",
+
+  "SPEAKERLABEL": "Speaker label",
+  "DELETE_ITEM": "Delete"
 
 }

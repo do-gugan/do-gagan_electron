@@ -12,6 +12,7 @@ const dggRecord = require("./dggRecord"); //レコードクラス
 const mainWin = null; //メインウインドウハンドル
 const i18n = null;
 const menu = null;
+const cmenu = null;
 const dialog = null;
 const config = null;
 
@@ -133,6 +134,9 @@ class Common {
     records.find(r => r.id == id).speaker = speaker;
   }
 
+  getSpeakerFromId(id) {
+    return records.find(r => r.id == id).speaker;
+  }
 
 }
 

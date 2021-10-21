@@ -126,7 +126,7 @@ function mediaOpened (path) {
 //メインプロセスからレコードを表示
 window.api.addRecordToList((event, record) => {
     //console.log("displayRecords" + record.timeStamp);
-    const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="editTextarea(event.target);">'+record.script+'</textarea></div></div>';
+    const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="editTextarea(event.target);">'+record.script+'</textarea></div></div>';
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
@@ -360,6 +360,15 @@ function resizeAllTextArea() {
 window.addEventListener('resize',function(){
     resizeAllTextArea();
 })
+
+//行の右クリックでコンテクストメニューを表示
+function openContextMenuOn(e) {
+    e.preventDefault();
+    const id = e.target.parentElement.id;
+    console.log('right-clicked ID:' + id);
+    window.api.openContextMenuOn(id);
+}
+
 
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK

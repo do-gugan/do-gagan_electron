@@ -47,7 +47,10 @@
 
     "HELP": "ヘルプ",
     "GOTO-SUPPORT-PAGE": "サポートページ",
-    "VERSION-INFO": "バージョン情報"
+    "VERSION-INFO": "バージョン情報",
 
+    "SPEAKERLABEL": "話者ラベル",
+    "DELETE_ITEM": "削除"
+  
   }
   
