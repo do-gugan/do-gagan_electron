@@ -18,27 +18,27 @@ const setTemplate = (lang='ja') => {
     ...(isMac ? [{
         label: app.name,
         submenu: [
-          {role:'about',      label: _.t('ABOUT') },
+          {role:'about', label: _.t('ABOUT') },
           {type:'separator'},
-          {role:'services',   label: _.t('SERVICE')},
+          {role:'services', label: _.t('SERVICE')},
           {type:'separator'},
-          {role:'hide',       label: _.t('HIDE')},
+          {role:'hide', label: _.t('HIDE')},
           {role:'hideothers', label: _.t('HIDEOTHERS')},
-          {role:'unhide',     label: _.t('UNHIDE')},
+          {role:'unhide', label: _.t('UNHIDE')},
           {type:'separator'},
-          {role:'quit',       label: _.t('QUIT-MAC')}
+          {role:'quit', label: _.t('QUIT-MAC'), accelerator: ''}
         ]
       }] : []),
       {
             label: _.t('FILE'),
             submenu: [
                 {label: _.t('OPEN-MOVIE'), click: ()=>{
-                    console.log('OPEN-MOVIE');
+                    //console.log('OPEN-MOVIE');
                     dialog.openVideoDialog();
                 }},
                 {type: 'separator'},
                 {id:'ADD-LOG', label: _.t('ADD-LOG'), enabled: false, click: ()=>{
-                    console.log('ADD-LOG');
+                    //console.log('ADD-LOG');
                     dialog.openLog();
                 }},
                 {type: 'separator'},
@@ -58,7 +58,7 @@ const setTemplate = (lang='ja') => {
                 {id:'SETTINGS', label: _.t('SETTINGS'), click: ()=>{
                     console.log('SETTINGS...');
                 }},
-                {id:'QUIT', label: _.t('QUIT'), role: 'quit'}
+                ...(isMac ? [] : [{id:'QUIT', label: _.t('QUIT'), role: 'quit'}]),
             ]
         },
         {
