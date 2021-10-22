@@ -6,12 +6,46 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "Kazuyoshi Furuta @ do-gugan",
+  "author": "Kazuyoshi Furuta",
   "license": "MIT",
   "dependencies": {
     "electron-store": "^6.0.1"
   },
   "devDependencies": {
     "electron": "14.0.0"
+  },
+  "build": {
+    "productName": "動画眼3",
+    "copyright": "Copyright © 2021 ${author}",
+    "appId": "com.do-gugan.electron.do-gagan",
+
+    "mac": {
+      "icon": "build/icon.png",
+      "identity": "Kazuyoshi Furuta",
+      "target":{
+        "target": "dmg",
+        "arch": ["x64"]
+      }
+    },
+
+    "win": {
+      "icon": "build/icon.png",
+      "target": {
+        "target": "nsis",
+      "arch": ["x64","ia32"]
+      }
+    },
+    "nsis": {
+      "language": "0411",
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "allowElevation": true,
+      "perMachine": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true,      
+      "createStartMenuShortcut": true,
+      "menuCategory": "道具眼(do-gugan)",
+      "include": "build/installer.nsh"
+    }
   }
 }
