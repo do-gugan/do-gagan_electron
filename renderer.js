@@ -25,11 +25,10 @@ const validTypes = [
 
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
-//const i18n = window.requires.i18n;
 (async ()=>{
     //const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
     locale = await window.api.getConfig('locale');
-    //const locale = 'en';
+    //locale = 'en';
     _ = window.api;
     document.getElementById('Lbl_Search').innerHTML = _.t('SEARCH',locale) + ":";
     document.getElementById('Btn_SearchClear').textContent = _.t('CLEAR',locale);
@@ -49,6 +48,21 @@ const validTypes = [
     document.getElementById('Btn_F3').innerHTML = "F3: " + eliminateTemplateCode(_.t('F3_DEFAULT',locale));
     document.getElementById('Btn_F4').innerHTML = "F4: " + eliminateTemplateCode(_.t('F4_DEFAULT',locale));
     document.getElementById('Btn_F5').innerHTML = "F5: " + eliminateTemplateCode(_.t('F5_DEFAULT',locale));
+
+    //キーボードイベント
+    //アプリ全体で効くコマンド
+    document.body.addEventListener('keyup', (event)=>{
+        //Ctrl+LまたはAlt+Lでロックオン
+        if ((event.ctrlKey || event.altKey) && event.key == 'l') {
+            //console.log('lock-on');
+            syncTimecode();
+        }
+    });
+    
+    //メモ欄でリターンで「追加」ボタン代用
+    document.getElementById('Txt_memo').addEventListener('keypress', ()=>{
+        addMemo();
+    })
 
     //初期ウインドウタイトル（バージョン表示）
     document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
@@ -272,6 +286,10 @@ function skipBackward(sec = 0){
     var sec = document.getElementById('Sel_BackwardSec').value;
     jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
 }
+//メインプロセス（メニュー）から
+window.api.skipForward(()=>skipForward());
+window.api.skipBackward(()=>skipBackward());
+
 //動画再生位置を指定秒に移動する
 function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();
@@ -482,7 +500,11 @@ function incrementTimecode() {
     }    
 }
 function syncTimecode() {
-    document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
+    if (player != undefined) {
+        document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
+    } else {
+        console.log("not playing");
+    }
 }
 
 //ファクションキーテンプレート

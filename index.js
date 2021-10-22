@@ -53,7 +53,7 @@ function createWindow() {
 app.whenReady().then(()=>{
   // 言語設定を取得する
   const locale = config.get('locale') || app.getLocale();
-
+  //const locale = 'en'; //英語UIテスト時に有効化する
   // メニューを適用する
   menu.setTemplate(locale);
  

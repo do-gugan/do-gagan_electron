@@ -24,6 +24,8 @@ contextBridge.exposeInMainWorld(
     toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
 
     togglePlayPause: (callback) => ipcRenderer.on("play-pause", ()=>callback()),
+    skipForward: (callback) => ipcRenderer.on("skip-forward", ()=>callback()),
+    skipBackward: (callback) => ipcRenderer.on("skip-backward", ()=>callback()),
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event, argv)=>callback(event, argv)),

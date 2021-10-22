@@ -42,7 +42,7 @@ const setTemplate = (lang='ja') => {
                     dialog.openLog();
                 }},
                 {type: 'separator'},
-                {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false, click: ()=>{
+                {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false,accelerator: 'CmdOrCtrl+S',  click: ()=>{
                     console.log('OVERWRITE');
                 }},
                 {id:'AUTOSAVE', label: _.t('AUTOSAVE'), type: 'checkbox', click: ()=>{
@@ -77,15 +77,17 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('PLAYBACK-CONTROL'),
             submenu: [
-                {id:'PLAY-PAUSE', label: _.t('PLAY-PAUSE'), enabled: false, click: ()=>{
-                    console.log('PLAY-PAUSE');
+                {id:'PLAY-PAUSE', label: _.t('PLAY-PAUSE'), enabled: false, accelerator: 'CmdOrCtrl+Space', click: ()=>{
+                    //console.log('PLAY-PAUSE');
                     common.playPauseToPlayer();
                 }},
-                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, click: ()=>{
-                    console.log('JUMP_F');
+                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, accelerator: 'CmdOrCtrl+W', click: ()=>{
+                    //console.log('JUMP_F');
+                    common.skipForwardToPlayer();
                 }},
-                {id:'JUMP_R', label: _.t('JUMP_R'), enabled: false, click: ()=>{
-                    console.log('JUMP_R');
+                {id:'JUMP_R', label: _.t('JUMP_R'), enabled: false, accelerator: 'CmdOrCtrl+Q', click: ()=>{
+                    //console.log('JUMP_R');
+                    common.skipBackwardToPlayer();
                 }},
                 {type: 'separator'},
                 {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),
@@ -166,7 +168,7 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('VIEW'),
             submenu: [
-                {id:'MN_SHOW_NEW_MEMO_BLOCK', label: _.t('NEW-MEMO'), type: 'checkbox', checked: true, click: ()=>{
+                {id:'MN_SHOW_NEW_MEMO_BLOCK', label: _.t('NEW-MEMO'), type: 'checkbox', checked: true, accelerator: 'CmdOrCtrl+M', click: ()=>{
                     //console.log('NEW-MEMO');
                     toggleNewMemoBlockFromMenu();
                 }}

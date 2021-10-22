@@ -92,9 +92,17 @@ class Common {
       this.mainWin.webContents.send('toggle-new-memo-block');
   }
 
+  //再生制御系
   playPauseToPlayer() {
     this.mainWin.webContents.send('play-pause');
   }
+  skipForwardToPlayer() {
+    this.mainWin.webContents.send('skip-forward');
+  }
+  skipBackwardToPlayer() {
+    this.mainWin.webContents.send('skip-backward');
+  }
+
 
   setMainWin(browserWindow) {
     this.mainWin = browserWindow;
