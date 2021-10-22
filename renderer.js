@@ -353,7 +353,6 @@ function timeClicked(event) {
     if (lastFocusedRow != undefined) { lastFocusedRow.classList.remove('focused'); }
     
     //親エレメントにフォーカス枠のクラスを追加
-    console.log(tcell.parentElement.id);
     tcell.parentElement.classList.add('focused');
     lastFocusedRow = tcell.parentElement;
 }
@@ -508,7 +507,6 @@ function decrementTimecode() {
 }
 function incrementTimecode() {
     let ct = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
-    console.log(player.duration);
     if (ct < player.duration) {
         document.getElementById('Txt_lockedTimecode').value = secToMinSec(++ct,3);
         jumpToTimeIndex(ct);
@@ -566,8 +564,23 @@ function addMemo() {
     window.api.addNewMemoFromGUI(inTime, script, speaker);   
 }
 
+//GUIからメインプロセスに動画の静止画キャプチャを送信
+function sendCapturetoMain() {
+    const canvas = document.createElement("canvas");
+    //キャプチャするサイズ
+    canvas.height = 720;
+    //縦横比を維持して高さ720に変換
+    canvas.width = 720 * (player.videoWidth / player.videoHeight);
+
+    //ビデオの元解像度からキャプチャサイズにスケールして保存
+    canvas.getContext('2d').drawImage(player, 0, 0, player.videoWidth, player.videoHeight,0,0,canvas.width,canvas.height);
+
+    //メインプロセスに
+    var dataURL = canvas.toDataURL("image/jpeg",0.8);
+    window.api.saveCapture(dataURL, secToMinSec(player.currentTime));
+}
+
 //ログリストをクリア
 window.api.clearRecords(()=>{
-    console.log("clear");
     memolist.innerHTML = "";
 });

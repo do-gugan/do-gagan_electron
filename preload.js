@@ -82,6 +82,7 @@ contextBridge.exposeInMainWorld(
     //右クリックからコンテクストメニューを開く
     openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id),
 
+    saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
     //コンテクストメニューで実行された機能
     // ipcRenderer.on(''), (e.command) => {
 

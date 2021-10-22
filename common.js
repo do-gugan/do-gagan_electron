@@ -15,6 +15,7 @@ const menu = null;
 const cmenu = null;
 const dialog = null;
 const config = null;
+const mediaPath = null;
 
 const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
@@ -39,6 +40,8 @@ class Common {
         //音声ファイル
         this.mainWin.webContents.send('open-audio', pth);
       }
+      this.mediaPath = pth;
+
       this.menu.enableMenuWhenMediaOpened();
 
       //同名のログファイルが存在する場合は読み込む
@@ -130,6 +133,25 @@ class Common {
     records.forEach(r => {
       this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
     });
+  }
+
+  /**
+   * レンダラーからキャプチャー画像を受け取る
+   * @param {string} dataURL //base64エンコードされた画像データ
+   * @param {String} sec //再生時間（"12:34"形式。変換してファイル名にアペンド）
+   */
+  saveCapture(dataURL, currentSec) {
+    //余計なヘッダを除去
+    dataURL = dataURL.replace('data:image/jpeg;base64,','');
+
+    //秒を分秒形式に変換
+    currentSec = currentSec.replace(":","m")+"s";
+    let cpath = this.mediaPath.replace(path.extname(this.mediaPath), "@" + currentSec + ".jpg");
+    try {
+        fs.writeFileSync(cpath, dataURL,{encoding: 'base64'});
+    } catch(e) {
+        console.log(e);
+    }
   }
 
   //レンダラーから更新されたセルの情報を受け取りrecordに反映

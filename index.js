@@ -110,7 +110,6 @@ app.on('window-all-closed', () => {
 
   //ドロップされたメディアファイルを開く
   ipcMain.handle('openDroppedFile', (event, path) => {
-    console.log(path);
     common.openMediaFile(path);    
   });
 
@@ -119,19 +118,16 @@ app.on('window-all-closed', () => {
     common.addNewMemoFromGUI(inTime, script, speaker);
   });
 
+   //レンダラーからキャプチャー画像を受け取る
+   ipcMain.handle('saveCapture', (event, dataURL, currentSec) => {
+    common.saveCapture(dataURL, currentSec);
+  });
+
+
   //レンダラーからリスト内のログが更新されたら受け取る
   ipcMain.on('memoChanged', (event, id, script) => {
     common.memoChanged(id,script);
-    console.log(id,script);
   });
-  // ipcMain.on('inTimeChanged', (event, id, inTime) => {
-  //   common.inTimeChanged(id,inTime);
-  //   console.log(id,inTime);
-  // });
-  // ipcMain.on('speakerChanged', (event, id, speaker) => {
-  //   common.speakerChanged(id,speaker);
-  //   console.log(id,speaker);
-  // });
 
   //ログ上のコンテクストメニューを開く
   ipcMain.on('openContextMenuOn', (event, id) => {

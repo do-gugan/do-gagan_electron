@@ -12,7 +12,7 @@
         <div id="main">
             <div id="player-box" class="grid1" id="drag" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
             <div id="player-controls"class="grid2" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <button id="Btn_ScreenShot" disabled>📷</button>
+                <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled>📷</button>
                 <button id="Btn_JumpBackward" class="webdings Btn_Jump" onclick="skipBackward()" disabled>
                     <div>7</div>
                     <select id="Sel_BackwardSec" class="Sel_jumpSec" ></select>
