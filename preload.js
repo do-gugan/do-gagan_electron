@@ -35,6 +35,9 @@ contextBridge.exposeInMainWorld(
     setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (event, id, speaker)=>callback(id, speaker)),
     deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(id)),
 
+    //メニューからのスキップ秒数の変更
+    setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, index)=>callback(direction, index)),
+
 
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス

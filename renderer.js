@@ -286,10 +286,25 @@ function skipBackward(sec = 0){
     var sec = document.getElementById('Sel_BackwardSec').value;
     jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
 }
+/**
+ * メニューからスキップ秒数をセット
+ * @param {string} direction 'forward'または'backward'
+ * @param {Number} index 選択するする行番号
+ */
+function setSkipTime(direction, index) {
+    //console.log('setSkipTime on Renderer:' + direction + " index:"+ index);
+    let sel;
+    if (direction == "forward") {
+        sel = document.getElementById('Sel_ForwardSec');
+    } else if (direction == "backward") {
+        sel = document.getElementById('Sel_BackwardSec');
+    }
+    sel.selectedIndex = index;
+}
 //メインプロセス（メニュー）から
 window.api.skipForward(()=>skipForward());
 window.api.skipBackward(()=>skipBackward());
-
+window.api.setSkipTime((direction, index)=>setSkipTime(direction, index));
 //動画再生位置を指定秒に移動する
 function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();

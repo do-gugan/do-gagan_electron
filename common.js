@@ -103,6 +103,9 @@ class Common {
     this.mainWin.webContents.send('skip-backward');
   }
 
+  setSkipTime(direction, index) {
+    this.mainWin.webContents.send('set-skip-time', direction, index);
+  }
 
   setMainWin(browserWindow) {
     this.mainWin = browserWindow;

@@ -93,74 +93,88 @@ const setTemplate = (lang='ja') => {
                 {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),
                 submenu: [
                     {id:'FSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_3');
+                        //console.log('SEC_3');
+                        common.setSkipTime('forward',0);
                     }},
                     {id:'FSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_5');
+                        //console.log('SEC_5');
+                        common.setSkipTime('forward',1);
                     }},
                     {id:'FSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_10');
+                        //console.log('SEC_10');
+                        common.setSkipTime('forward',2);
                     }},
                     {id:'FSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_15');
+                        //console.log('SEC_15');
+                        common.setSkipTime('forward',3);
                     }},
                     {id:'FSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_30');
+                        //console.log('SEC_30');
+                        common.setSkipTime('forward',4);
                     }},
                     {id:'FSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_60');
-                    }},
-                    {id:'FSEC_90', label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_90');
+                        //console.log('SEC_60');
+                        common.setSkipTime('forward',5);
                     }},
                     {id:'FSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_120');
+                        //console.log('SEC_120');
+                        common.setSkipTime('forward',6);
                     }},
                     {id:'FSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_180');
+                        //console.log('SEC_180');
+                        common.setSkipTime('forward',7);
                     }},
                     {id:'FSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_300');
+                        //console.log('SEC_300');
+                        common.setSkipTime('forward',8);
                     }},
                     {id:'FSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_600');
+                        //console.log('SEC_600');
+                        common.setSkipTime('forward',9);
                     }}
                 ]
                 },
                 {id:'', label: _.t('JUMP_R_SEC'),
                 submenu: [
                     {id:'RSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_3');
+                        //console.log('SEC_3');
+                        common.setSkipTime('backward',0);
                     }},
                     {id:'RSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_5');
+                        //console.log('SEC_5');
+                        common.setSkipTime('backward',1);
                     }},
                     {id:'RSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_10');
+                        //console.log('SEC_10');
+                        common.setSkipTime('backward',2);
                     }},
                     {id:'RSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_15');
+                        //console.log('SEC_15');
+                        common.setSkipTime('backward',3);
                     }},
                     {id:'RSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_30');
+                        //console.log('SEC_30');
+                        common.setSkipTime('backward',4);
                     }},
                     {id:'RSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_60');
-                    }},
-                    {id:'RSEC_90', label: _.t('SEC_90'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_90');
+                        //console.log('SEC_60');
+                        common.setSkipTime('backward',5);
                     }},
                     {id:'RSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_120');
+                        //console.log('SEC_120');
+                        common.setSkipTime('backward',6);
                     }},
                     {id:'RSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_180');
+                        //console.log('SEC_180');
+                        common.setSkipTime('backward',7);
                     }},
                     {id:'RSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_300');
+                        //console.log('SEC_300');
+                        common.setSkipTime('backward',8);
                     }},
                     {id:'RSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
-                        console.log('SEC_600');
+                        //console.log('SEC_600');
+                        common.setSkipTime('backward',9);
                     }}
                 ]},
             ]
