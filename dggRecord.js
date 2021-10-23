@@ -8,12 +8,21 @@
  * メモ欄のレコードクラス
  */
 class dggRecord {
-    constructor(id, inTime, script, speaker=0, confidence=1.0) {
+    static maxId = -1; //ユニークIDを発番するための最大値を保持
+
+    /**
+     * 
+     * @param {Number} inTime IN点
+     * @param {string} script メモ内容
+     * @param {Number} speaker 話者コード（0-7）
+     * @param {Number} confidence 書き起こし信頼度(0.0-1.0)
+     */
+    constructor(inTime, script, speaker=0, confidence=1.0) {
         /**
          * ユニークID
          * @type {Number}
          */
-            this.id = id;
+            this.id = "row" + dggRecord.maxId++; //発番する度に+1
             /**
          * タイムスタンプ
          * @type {Number}
@@ -35,6 +44,7 @@ class dggRecord {
          */
         this.confidence = confidence;             
     }
+
 
 }
 module.exports = dggRecord;

@@ -52,16 +52,24 @@ const validTypes = [
     //キーボードイベント
     //アプリ全体で効くコマンド
     document.body.addEventListener('keyup', (event)=>{
+        // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
+        // console.log("Key:" + event.key);
+
         //Ctrl+LまたはAlt+Lでロックオン
         if ((event.ctrlKey || event.altKey) && event.key == 'l') {
-            //console.log('lock-on');
             syncTimecode();
+        } else if ((event.ctrlKey || event.altKey) && event.key == 'ArrowRight') {
+            incrementSpeaker();
+        } else if ((event.ctrlKey || event.altKey) && event.key == 'ArrowLeft') {
+            decrementSpeaker();
         }
     });
     
     //メモ欄でリターンで「追加」ボタン代用
-    document.getElementById('Txt_memo').addEventListener('keypress', ()=>{
-        addMemo();
+    document.getElementById('Txt_memo').addEventListener('keypress', (event)=>{
+        if (event.code == 'Enter'){
+            addMemo();
+        }
     })
 
     //初期ウインドウタイトル（バージョン表示）
@@ -133,12 +141,13 @@ function mediaOpened (path) {
     document.getElementById('Btn_timecodeDecrement').disabled = false;
     document.getElementById('Btn_timecodeIncrement').disabled = false;
     document.getElementById('Txt_lockedTimecode').disabled = false;
+    document.getElementById('Txt_memo').disabled = false;
     document.getElementById('Btn_add').disabled = false;
 
 }
 
 //メインプロセスからレコードを表示
-window.api.addRecordToList((event, record) => {
+window.api.addRecordToList((record) => {
     //console.log("displayRecords" + record.timeStamp);
     const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="editTextarea(event.target);">'+record.script+'</textarea></div></div>';
     memolist.innerHTML += html;
@@ -310,6 +319,7 @@ function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();
     player.currentTime = sec;
     player.play();
+    syncTimecode();
 }
 
 /** 秒インデックスを「分：秒」形式に変換
@@ -414,6 +424,9 @@ window.api.deleteRow((id)=>{
     document.querySelector('#'+ id).remove();
 })
 
+
+
+
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK
 */
@@ -480,7 +493,7 @@ function decrementSpeaker() {
 }
 function incrementSpeaker() {
     let sp = parseInt(document.getElementById('Txt_speaker').value);
-    if (sp < 100) {
+    if (sp < 7) {
         document.getElementById('Txt_speaker').classList.remove('speaker'+ sp);
         sp++;
         document.getElementById('Txt_speaker').value = sp;
@@ -557,11 +570,12 @@ function inputFromFunctionTemplate(key) {
 
 
 //GUIからメインプロセスに新規メモ内容を送信
-function addMemo() {
+function addMemo() {    
     const inTime = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
     const script = document.getElementById('Txt_memo').value;
     const speaker = document.getElementById('Txt_speaker').value;
-    window.api.addNewMemoFromGUI(inTime, script, speaker);   
+    window.api.addNewMemoFromGUI(inTime, script, speaker);
+    document.getElementById('Txt_memo').value = "";
 }
 
 //GUIからメインプロセスに動画の静止画キャプチャを送信

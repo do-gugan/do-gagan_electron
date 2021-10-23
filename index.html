@@ -15,12 +15,12 @@
                 <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled>📷</button>
                 <button id="Btn_JumpBackward" class="webdings Btn_Jump" onclick="skipBackward()" disabled>
                     <div>7</div>
-                    <select id="Sel_BackwardSec" class="Sel_jumpSec" ></select>
+                    <select id="Sel_BackwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()"></select>
                 </button>
                 <button id="Btn_PlayPause" class="calibri" disabled>▶/II</button>
                 <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()" disabled>
                     <div>8</div>
-                    <select id="Sel_ForwardSec" class="Sel_jumpSec"></select>
+                    <select id="Sel_ForwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()"></select>
                 </button>
             </div>
             <div class="dragbar" onmousedown="StartDrag()" onmouseup="EndDrag()"></div>
@@ -49,7 +49,7 @@
                     <button id="Btn_speakerIncrement" onclick="incrementSpeaker()">></button>
                 </div>
                 <div id="memo" class="subgrid row2 sg2-3">
-                    <input type="text" id="Txt_memo" />
+                    <input type="text" id="Txt_memo" disabled title="hoge"/>
                 </div>
                 <button id="Btn_add" class="subgrid row2 sg2-4" onclick="addMemo();" disabled></button>
 

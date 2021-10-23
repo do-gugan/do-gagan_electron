@@ -28,7 +28,7 @@ contextBridge.exposeInMainWorld(
     skipBackward: (callback) => ipcRenderer.on("skip-backward", ()=>callback()),
 
     //ログ1件の内容を受け取り、リストに追加する
-    addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event, argv)=>callback(event, argv)),
+    addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
     //コンテクストメニューの選択からの処理

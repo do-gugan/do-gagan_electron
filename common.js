@@ -68,7 +68,7 @@ class Common {
       for (var line of lines) {
         var cols = line.split("\t");
         if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
-          let rec = new dggRecord("row"+records.length,cols[0], cols[1], cols[2]);
+          let rec = new dggRecord(cols[0], cols[1], cols[2]);
           records.push(rec);
           this.mainWin.webContents.send('add-record-to-list',rec); //レンダラーに描画指示
         } else {
@@ -117,17 +117,13 @@ class Common {
   getMainWin(browserWindow) {
     return this.mainWin;
   }
-  
- //レンダラーから新規メモを受け取る
+
+  //レンダラーから新規メモを受け取る
   addNewMemoFromGUI(inTime, script, speaker) {
-    const rec = new dggRecord(records.length + 1, inTime, script, speaker);
+    const rec = new dggRecord(inTime, script, speaker);
     records.push(rec);
     records.sort(function(a, b) {
-      if (a.inTime > b.inTime) {
-        return 1;
-      } else {
-        return -1;
-      };
+      return a.inTime - b.inTime;
     });
     this.mainWin.webContents.send('clear-records'); //一度リストをクリア
     records.forEach(r => {
