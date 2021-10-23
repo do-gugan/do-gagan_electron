@@ -9,6 +9,7 @@ const readline = require("readline"); //1行ずつ読む
 const dggRecord = require("./dggRecord"); //レコードクラス
 
 //グローバルオブジェクト
+const app = null;
 const mainWin = null; //メインウインドウハンドル
 const i18n = null;
 const menu = null;
@@ -43,6 +44,9 @@ class Common {
       this.mediaPath = pth;
 
       this.menu.enableMenuWhenMediaOpened();
+
+      //OSの最近使ったファイルに登録する（Windowsはファイル形式が対応付けられていないと表示されない？）
+      this.app.addRecentDocument(pth);
 
       //同名のログファイルが存在する場合は読み込む
       const logpath = pth.replace(path.extname(pth),".dggn.txt"); //ログ形式Ver.2の拡張子
@@ -110,9 +114,9 @@ class Common {
     this.mainWin.webContents.send('set-skip-time', direction, index);
   }
 
-  setMainWin(browserWindow) {
-    this.mainWin = browserWindow;
-  }
+  // setMainWin(browserWindow) {
+  //   this.mainWin = browserWindow;
+  // }
 
   getMainWin(browserWindow) {
     return this.mainWin;

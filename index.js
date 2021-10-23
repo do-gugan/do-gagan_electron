@@ -40,7 +40,8 @@ function createWindow() {
 
     //common下に参照を渡す
     //common.mainWin = mainWin;
-    common.setMainWin(mainWin);
+    common.app = app;
+    common.mainWin = mainWin;
     common.menu = menu;
     common.i18n = i18n;
     common.dialog = dialog;
