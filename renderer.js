@@ -238,7 +238,7 @@ const toglleNewMemoBlock = function () {
         document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 6em";
         window.api.toggleNewMemoBlockMenu(true);
     } else {
-        document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 0em";
+        document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 0.5em";
         window.api.toggleNewMemoBlockMenu(false);
     }
 }
