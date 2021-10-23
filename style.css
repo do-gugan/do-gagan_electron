@@ -167,7 +167,7 @@ body {
     align-items: center;
 }
 
-#search-box1, #search-box3 {
+#search-box1 {
     flex-grow: 1;
     align-self: center;
 
@@ -177,6 +177,7 @@ body {
 
 #search-box2 {
     flex-grow: 10;
+    margin-right: 0.7em;
 }
 
 #Txt_Search {
@@ -202,6 +203,13 @@ body {
     margin: 0.1em;
     border: 1px solid #888;
 }
+.filtered {
+    display: none;
+}
+.emphasised {
+    background-color: #d2e6ff;
+}
+
 .focused {
     border: 2px solid blue;
 }

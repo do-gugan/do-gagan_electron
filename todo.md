@@ -17,7 +17,7 @@
     - [] ロックオン自動更新
     - [] Shiftキーを押すとn倍ジャンプ
 - [] 一括置換
-- [] ログのフィルター
+- [x] ログのフィルター
 - [] 自動スクロール？
 - [] 最近使用したファイル https://www.electronjs.org/docs/latest/tutorial/recent-documents
 - [] アプリ自動更新 https://www.electronjs.org/docs/latest/tutorial/updates (公式API使用にはコード署名が必要)

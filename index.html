@@ -25,9 +25,13 @@
             </div>
             <div class="dragbar" onmousedown="StartDrag()" onmouseup="EndDrag()"></div>
             <div id="search-box" class="grid3" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <div id="search-box1"><span id="Lbl_Search" class="label"></span></div>
-                <div id="search-box2"><input id="Txt_Search" name="Txt_Search" type="text"></div>
-                <div id="search-box3"><button id="Btn_SearchClear"></button></div>
+                <div id="search-box1">
+                    <select id="Sel_SearchMethod" onChange="searchWordChanged();">
+                        <option value="filter" id="Opt_Filter"></option>
+                        <option value="emphasise" id="Opt_Emphasise"></option>
+                    </select>
+                </div>
+                <div id="search-box2"><input id="Txt_Search" name="Txt_Search" type="search" placeholder="" onInput="searchWordChanged();" onSearch="resetSearch();"></div>
             </div>
             <div id="scripts" class="grid4" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
             <div id="right-bottom" class="grid5" onmouseup="EndDrag()" onmousemove="OnDrag(event)">

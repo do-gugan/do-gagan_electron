@@ -28,10 +28,11 @@ const validTypes = [
 (async ()=>{
     //const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
     locale = await window.api.getConfig('locale');
-    //locale = 'en';
+    //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
-    document.getElementById('Lbl_Search').innerHTML = _.t('SEARCH',locale) + ":";
-    document.getElementById('Btn_SearchClear').textContent = _.t('CLEAR',locale);
+    document.getElementById('Txt_Search').placeholder = _.t('SEARCH_PLACEHOLDER',locale);
+    document.getElementById('Opt_Filter').innerHTML = _.t('FILTER',locale);
+    document.getElementById('Opt_Emphasise').innerHTML = _.t('EMPHASISE',locale);
     playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
     document.getElementById('Lbl_ShowHideNewMemo').innerHTML = _.t('NEW_MEMO_FIELD',locale);
     document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions();
@@ -135,11 +136,13 @@ function mediaOpened (path) {
     player.addEventListener('play', (event) => playerPlayed() );
     player.addEventListener('pause', (event) => playerPaused() );
 
-    //ボタンを有効化
+    //UIを有効化
     document.getElementById('Btn_ScreenShot').disabled = false;
     document.getElementById('Btn_JumpBackward').disabled = false;
     document.getElementById('Btn_PlayPause').disabled = false;
     document.getElementById('Btn_JumpForward').disabled = false;
+
+    document.getElementById('Txt_Search').disabled = false;
 
     document.getElementById('Btn_timecodeDecrement').disabled = false;
     document.getElementById('Btn_timecodeIncrement').disabled = false;
@@ -428,6 +431,47 @@ window.api.deleteRow((id)=>{
 })
 
 
+/**
+ * フィルター機能
+ */
+function searchWordChanged() {
+    const word = document.getElementById('Txt_Search').value;
+    const method = document.getElementById('Sel_SearchMethod').value;
+    resetSearch();
+    if (word){
+        //let start = new Date().getTime();
+        const rows = document.querySelectorAll('.row'); //全行の配列
+        switch (method){
+            case "filter":
+                //wordを含まないものを非表示にする
+                [...rows].forEach(row => { //NodeListオブジェクトrowsを配列に変換して列挙（スプレッド構文）
+                    if (!row.querySelector('textarea').value.includes(word)){
+                        row.classList.add('filtered');               
+                    }
+                });
+                break;
+            case "emphasise":
+                //wordを含むものを強調する
+                [...rows].forEach(row => { //NodeListオブジェクトrowsを配列に変換して列挙（スプレッド構文）
+                    const ta = row.querySelector('textarea');
+                    if (ta.value.includes(word)){
+                        ta.classList.add('emphasised');
+                    }
+                });
+                break;
+        }
+        //console.log("Time " +(new Date().getTime()-start)+"msec");            
+    }
+    document.getElementById('Txt_Search').focus();
+}
+//検索によって付加したスタイルをリセットする
+function resetSearch() {    
+    const rows = document.querySelectorAll('.row'); //全行の配列
+    [...rows].forEach(row => {
+        row.classList.remove('filtered');
+        row.querySelector('textarea').classList.remove('emphasised');
+    })
+}
 
 
 /** #region フレームのドラッグリサイズ

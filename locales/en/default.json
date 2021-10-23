@@ -2,8 +2,10 @@
     "APPNAME": "Do-gagan",
     "AUTHOR": "Do-gugan (Kazuyoshi Furuta)",
     "DROP_HERE": "Drag & drop your video/audio file here or <br>select from \"File\" menu.",
-    "SEARCH": "Search",
-    "CLEAR": "Clear",
+    "SEARCH_PLACEHOLDER": "Input Search Word...",
+    "FILTER": "Filter",
+    "EMPHASISE": "Emphasise",
+      "CLEAR": "Clear",
     "NEW_MEMO_FIELD": "Adding Record",
 
     "DROP_ONLY_SINGLE_FILE": "Multiple files can not be dropped!",

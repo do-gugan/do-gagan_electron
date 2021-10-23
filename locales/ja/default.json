@@ -3,7 +3,9 @@
   "AUTHOR": "道具眼 (古田一義)",
 
   "DROP_HERE": "動画、音声ファイルを「ファイル」メニューから読み込むか、<br>ここにドラッグ＆ドロップしてください。",
-  "SEARCH": "検索",
+  "SEARCH_PLACEHOLDER": "検索語を入力",
+  "FILTER": "抽出",
+  "EMPHASISE": "強調",
   "CLEAR": "クリア",
   "NEW_MEMO_FIELD": "新規メモ欄",
 
