@@ -58,10 +58,13 @@ const validTypes = [
         //Ctrl+LまたはAlt+Lでロックオン
         if ((event.ctrlKey || event.altKey) && event.key == 'l') {
             syncTimecode();
+        //Enter/Ctrl+←/→で話者コードの増減
         } else if ((event.ctrlKey || event.altKey) && event.key == 'ArrowRight') {
             incrementSpeaker();
         } else if ((event.ctrlKey || event.altKey) && event.key == 'ArrowLeft') {
             decrementSpeaker();
+        } else if (event.key == 'F1' || event.key == 'F2' || event.key == 'F3' || event.key == 'F4' || event.key == 'F5') {
+            inputFromFunctionTemplate(event.key);
         }
     });
     
