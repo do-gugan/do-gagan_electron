@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <link rel="stylesheet" href="replace.css">
+        <title></title>
+     </head>
+    <body>
+    <div id="main">
+        <div id="Lbl_guide" class="grid1">Case-sensitive</div>
+        <div id="Lbl_search" class="grid2">Search:</div>
+        <div class="grid3">
+            <input type="search" id="Txt_search" oninput="wordChanged();"/>
+        </div>
+        <div id="Lbl_replace" class="grid4">Replace:</div>
+        <div class="grid5">
+            <input type="search" id="Txt_replace" />
+        </div>
+    </div>
+    <div id="bottom">
+        <div id="Lbl_match">Matched:</div>
+        <div id="Lbl_count">0</div>
+        <Button id="Btn_cancel" onclick="cancel();">Cancel</Button>
+        <Button id="Btn_execute" onclick="execute();">Replace</Button>
+    </div>
+    </body>
+    <script src="replace.js"></script>
+</html>

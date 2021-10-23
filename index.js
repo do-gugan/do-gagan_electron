@@ -14,12 +14,17 @@ const dggRecord = require('./dggRecord');
 //------------------------------------
 // ウィンドウ管理用
 // ここではまだウインドウが初期化されていないのでオブジェクトをセットできない
-let mainWin;
-let playerBox;
-let player; 
+
+common.app = app;
+common.browserWindow = BrowserWindow;
+common.i18n = i18n;
+common.dialog = dialog;
+common.config = config;
+common.menu = menu;
+common.lang = config.get('locale') || app.getLocale();
 
 function createWindow() {
-    mainWin = new BrowserWindow({
+    const mainWin = new BrowserWindow({
         width: 1800,
         height: 1200,
         backgroundColor: 'white',
@@ -40,17 +45,8 @@ function createWindow() {
 
     //common下に参照を渡す
     //common.mainWin = mainWin;
-    common.app = app;
     common.mainWin = mainWin;
-    common.menu = menu;
-    common.i18n = i18n;
-    common.dialog = dialog;
-    common.config = config;
-
-    //グローバル変数にHTML要素オブジェクトをセット
-    // playerBox = mainWin.webContents.document.querySelector("#player-box");
-    // player = mainWin.webContents.document.querySelector("#player");
-    // showPlaceholderInPlayer();
+  
 }
 
 app.whenReady().then(()=>{
@@ -62,6 +58,7 @@ app.whenReady().then(()=>{
  
   // ウィンドウを開く
   createWindow();
+
 
 });
 
@@ -96,6 +93,7 @@ app.on('window-all-closed', () => {
 
   // 設定情報を取得
   ipcMain.handle('getConfig', (event, data) => {
+    console.log("getConfig:"+config.get(data));
     return( config.get(data) )
     //return 'en'; //英語環境テスト用
   });
@@ -103,7 +101,7 @@ app.on('window-all-closed', () => {
   // 言語設定を保存
   ipcMain.handle('setLocale', async (event, data) => {
     config.set('locale', data)
-    dialog.reboot(mainWin)      // 再起動する？
+    dialog.reboot(common.mainWin)      // 再起動する？
   });
 
   //「新規メモ欄」メニューのチェック状態を更新   

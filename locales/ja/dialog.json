@@ -12,5 +12,15 @@
   "BUTTON-REBOOT": "再起動",
   "BUTTON-LATER": "あとで",
   "REBOOT_CONFIRM_TITLE": "再起動の確認",
-  "REBOOT_CONFIRM_DETAIL": "今すぐ再起動しますか？"
+  "REBOOT_CONFIRM_DETAIL": "今すぐ再起動しますか？",
+
+  "REPLACE": "置換",
+  "REPLACE_ACCESSIBLETITLE": "置換ダイアログ",
+  "REPLACE_GUIDE": "(全角半角、大文字小文字は区別します）",
+  "REPLACE_SEARCH": "検索:",
+  "REPLACE_REPLACE": "置換:",
+  "REPLACE_MATCHED": "該当数:",
+  "REPLACE_CANCEL": "キャンセル",
+  "REPLACE_EXECUTE": "置換"
+
 }

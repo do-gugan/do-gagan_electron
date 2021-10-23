@@ -34,3 +34,4 @@
     - [] ストア出品？
 
 # Issues
+getConfigで正しいlocaleが取得できていない。

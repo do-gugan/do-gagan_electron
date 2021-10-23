@@ -1,0 +1,81 @@
+body {
+
+}
+
+#main {
+    display: grid;
+    height:100%;
+    margin: 1em;
+
+    grid-template-columns: 4em auto;
+    grid-template-rows: 1fr 1fr 1fr;
+    gap: 0.7em;
+}
+
+/* ガイドラベル */
+.grid1 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    
+    color:#888;
+    font-size: small;
+    text-align: right;
+}
+
+/* 検索ラベル */
+.grid2 {
+    grid-column-start: 1;
+    grid-row-start: 2;
+
+    text-align: right;
+}
+/* 検索テキスト欄 */
+.grid3 {
+    grid-column-start: 2;
+    grid-row-start: 2;
+}
+/* 置換ラベル */
+.grid4 {
+    grid-column-start: 1;
+    grid-row-start: 3;
+
+    text-align: right;
+}
+/* 置換テキスト欄 */
+.grid5 {
+    grid-column-start: 2;
+    grid-row-start: 3;
+}
+#Txt_search, #Txt_replace {
+    width: 100%;
+}
+
+/* 最下段 */
+#bottom {
+    display: grid;
+    flex-direction: row;
+
+    grid-template-columns: 5em auto 5.5em 5.5em;
+    grid-template-rows: 1fr;
+    gap: 0.3em;
+}
+
+/* 該当数ラベル */
+#Lbl_match {
+    grid-column-start: 1;
+    text-align:right;
+}
+/* 該当数カウンター */
+#Lbl_count {
+    grid-column-start: 2;
+    text-align:left;
+}
+/* キャンセルボタン */
+#Btn_cancel {
+    grid-column-start: 3;
+}
+/* 実行ボタン */
+#Btn_execute {
+    grid-column-start: 4;
+}

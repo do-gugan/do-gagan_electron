@@ -64,12 +64,12 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('EDIT'),
             submenu: [
-                {id:'', label: _.t('CUT'), enabled: false, role: 'cut'},
-                {id:'', label: _.t('COPY'), enabled: false, role: 'copy'},
-                {id:'', label: _.t('PASTE'), enabled: false, role: 'paste'},
+                {id:'CUT', label: _.t('CUT'), enabled: false, role: 'cut'},
+                {id:'COPY', label: _.t('COPY'), enabled: false, role: 'copy'},
+                {id:'PASTE', label: _.t('PASTE'), enabled: false, role: 'paste'},
                 {type: 'separator'},
-                {id:'', label: _.t('REPLACE'), enabled: false, click: ()=>{
-                    console.log('REPLACE');
+                {id:'REPLACE', label: _.t('REPLACE'), enabled: false, click: ()=>{
+                    common.openReplaceWindow();
                 }}
             ]
         },
@@ -234,6 +234,11 @@ const enableMenuWhenMediaOpened = function () {
     Menu.getApplicationMenu().getMenuItemById('OVERWRITE').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('SAVE-AS').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('EXPORT-LITE').enabled = true;
+
+    Menu.getApplicationMenu().getMenuItemById('CUT').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('COPY').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('PASTE').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('REPLACE').enabled = true;
 
     Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('JUMP_F').enabled = true;

@@ -1,6 +1,6 @@
 "use strict";
 
-const { contextBridge, ipcRenderer} = require("electron")
+const { contextBridge, ipcRenderer} = require("electron");
 //const common = require('./common'); //異なるインスタンスがとれてしまう
 const i18n = require('./i18n');
 const dggRecord = require('./dggRecord').dggRecord;
@@ -26,6 +26,9 @@ contextBridge.exposeInMainWorld(
     togglePlayPause: (callback) => ipcRenderer.on("play-pause", ()=>callback()),
     skipForward: (callback) => ipcRenderer.on("skip-forward", ()=>callback()),
     skipBackward: (callback) => ipcRenderer.on("skip-backward", ()=>callback()),
+
+    openReplaceWindow: (callback) => ipcRenderer.on("open-replace-window", ()=>callback()),
+   
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),

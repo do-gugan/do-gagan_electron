@@ -7,19 +7,20 @@ const path = require('path');
 const fs = require('fs'); //ファイルアクセス
 const readline = require("readline"); //1行ずつ読む
 const dggRecord = require("./dggRecord"); //レコードクラス
+const i18n = require("./i18n");
 
 //グローバルオブジェクト
 const app = null;
+const browserWindow = null;
 const mainWin = null; //メインウインドウハンドル
-const i18n = null;
 const menu = null;
 const cmenu = null;
 const dialog = null;
 const config = null;
 const mediaPath = null;
-
 const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
+const _ = null;
 
 class Common {
   constructor() {
@@ -118,6 +119,55 @@ class Common {
   //   this.mainWin = browserWindow;
   // }
 
+  //--------------------------------
+  // 置換ダイアログウインドウ
+  //--------------------------------
+  openReplaceWindow() {
+    const _ = new this.i18n(this.lang, 'dialog');
+    let replaceWindow = new this.browserWindow({
+      parent: mainWin,
+      modal: true,
+      width: 1500,
+      height: 400,
+      backgroundColor: 'white',
+      resizable: false,
+      minimizable: false,
+      maximizable: false,
+      alwaysOnTop: true,
+      fullscreenable: false,
+      skipTaskbar: true,
+      show: false,
+      title:_.t('REPLACE'),
+      webPreferences: {
+        worldSafeExecuteJavaScript: true,
+        nodeIntegration: false,
+        enableRemoteModule: true,
+        contextIsolation: true,
+        preload: path.join(__dirname, './preload_replace.js'),
+        nativeWindowOpen: true,
+        accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
+      }
+    });
+    replaceWindow.setMenu(null);
+    replaceWindow.setMinimumSize(1500,400);
+    replaceWindow.loadFile('replace.html');
+    if (!this.app.isPackaged) {
+      replaceWindow.webContents.openDevTools(); //Devツールを開く
+    }
+
+    // レンダリングが完了したら呼ばれる
+    replaceWindow.once('ready-to-show', () => {
+      replaceWindow.show();
+      this.replaceWin = replaceWindow;
+    });
+
+    //ウインドウが閉じられる時呼ばれる
+    replaceWindow.on('closed', () => {
+      this.replaceWin = null;
+    });
+    return replaceWindow;
+  }
+
   getMainWin(browserWindow) {
     return this.mainWin;
   }
@@ -200,21 +250,3 @@ class Common {
 }
 
 module.exports = new Common();
-
-//--------------------------------
-// exports
-//--------------------------------
-// module.exports = {
-//     mainWin: mainWin,
-//     menu: menu,
-//     dialog: dialog,
-//     i18n: i18n,
-//     config: config,
-//     dggRecord: dggRecord,
-//     //updateWindowTitle: updateWindowTitle,
-//     openMediaFile: openMediaFile,
-//     openLogFile: openLogFile,
-//     toggleNewMemoBlockFromMenu: toggleNewMemoBlockFromMenu,
-//     playPauseToPlayer: playPauseToPlayer,
-// }
-

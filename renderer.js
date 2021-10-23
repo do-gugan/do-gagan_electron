@@ -3,8 +3,6 @@
 */
 "use strict";
 
-//const dggRecord = require("./dggRecord");
-
 //グローバルオブジェクト
 let locale;
 let _; //ローカライズ文字列取得用
@@ -26,7 +24,6 @@ const validTypes = [
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
-    //const locale = await window.requires.ipcRenderer.invoke('getConfig', 'locale');
     locale = await window.api.getConfig('locale');
     //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
@@ -473,6 +470,12 @@ function resetSearch() {
     })
 }
 
+//メインプロセス（メニュー）から置換ウインドウを開く
+window.api.openReplaceWindow(()=>{
+    console.log("hoge");
+    const childWindow = window.open('replace.html');
+    //childWindow.document.write('<h1>Hello</h1>')
+});
 
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK

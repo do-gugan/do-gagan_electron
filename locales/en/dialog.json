@@ -12,5 +12,14 @@
   "BUTTON-REBOOT": "Reboot",
   "BUTTON-LATER": "Later",
   "REBOOT_CONFIRM_TITLE": "Confirm Reboot",
-  "REBOOT_CONFIRM_DETAIL": "Do you want to reboot now?"
+  "REBOOT_CONFIRM_DETAIL": "Do you want to reboot now?",
+
+  "REPLACE": "Replace",
+  "REPLACE_ACCESSIBLETITLE": "Replace dialogue",
+  "REPLACE_GUIDE": "Case-sensitive",
+  "REPLACE_SEARCH": "Search:",
+  "REPLACE_REPLACE": "Replace:",
+  "REPLACE_MATCHED": "Matched:",
+  "REPLACE_CANCEL": "Cancel",
+  "REPLACE_EXECUTE": "Replace"
 }
