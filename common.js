@@ -1,4 +1,4 @@
-/**
+﻿/**
  * 共通オブジェクト、データ
 **/
 "use strict";
@@ -127,8 +127,8 @@ class Common {
     let replaceWindow = new this.browserWindow({
       parent: mainWin,
       modal: true,
-      width: 1500,
-      height: 400,
+      width: 400,
+      height: 190,
       backgroundColor: 'white',
       resizable: false,
       minimizable: false,
@@ -149,11 +149,10 @@ class Common {
       }
     });
     replaceWindow.setMenu(null);
-    replaceWindow.setMinimumSize(1500,400);
     replaceWindow.loadFile('replace.html');
-    if (!this.app.isPackaged) {
-      replaceWindow.webContents.openDevTools(); //Devツールを開く
-    }
+    // if (!this.app.isPackaged) {
+    //   replaceWindow.webContents.openDevTools(); //Devツールを開く
+    // }
 
     // レンダリングが完了したら呼ばれる
     replaceWindow.once('ready-to-show', () => {
@@ -246,7 +245,41 @@ class Common {
     //レンダラーにも反映
     this.mainWin.webContents.send('delete-row',id);
   }
+//--------------------------------
+// #region 置換ダイアログ用
+//--------------------------------
+
+/**
+ * 検索語に対してマッチしたrowの数を返す
+ * @param {string} word 検索語
+ * @returns ヒットしたrowの数
+ */
+  getMatchCount(word) {
+    return records.filter(r => r.script.includes(word)).length;
+  }
+
+  /**
+   * 全rowに対して置換を実行
+   * @param {*} before 検索語
+   * @param {*} after 置換後
+   */
+   executeReplace(before, after) {
+    this.mainWin.webContents.send('clear-records'); //一度リストをクリア
+
+    //置換実行
+    console.log(`replace ${before} to ${after}`);
+    records.forEach(r => {
+      r.script = r.script.replace(before, after);
+      this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに表示
+    });
+
+  }
+
+// #endregion
+
+
 
 }
+
 
 module.exports = new Common();

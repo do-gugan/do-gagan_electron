@@ -100,8 +100,8 @@ app.on('window-all-closed', () => {
 
   // 言語設定を保存
   ipcMain.handle('setLocale', async (event, data) => {
-    config.set('locale', data)
-    dialog.reboot(common.mainWin)      // 再起動する？
+    config.set('locale', data);
+    dialog.reboot(common.mainWin);     // 再起動する？
   });
 
   //「新規メモ欄」メニューのチェック状態を更新   
@@ -181,6 +181,23 @@ app.on('window-all-closed', () => {
     
   });
 
+
+//--------------------------------
+// #region 置換ダイアログ用
+//--------------------------------
+
+/**
+ * 検索語に対してマッチしたrowの数を返す
+ */
+ipcMain.handle('getMatchCount', async (event, word) => {
+  return common.getMatchCount(word);
+});
+
+ipcMain.handle('executeRaplace', async (event, before, after ) => {
+  common.executeReplace(before, after);
+});
+
+// #endregion
 
 
 //--------------------------------

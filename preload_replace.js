@@ -14,6 +14,10 @@ contextBridge.exposeInMainWorld(
         return _.t(label);
     },
 
+    getMatchCount:(word) => ipcRenderer.invoke('getMatchCount', word),
+    executeRaplace:(before,after) => ipcRenderer.invoke('executeRaplace', before,after),
+
+
   }
 );
 
