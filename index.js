@@ -45,8 +45,7 @@ function createWindow() {
 
     //common下に参照を渡す
     //common.mainWin = mainWin;
-    common.mainWin = mainWin;
-  
+    common.mainWin = mainWin; 
 }
 
 app.whenReady().then(()=>{
@@ -58,8 +57,6 @@ app.whenReady().then(()=>{
  
   // ウィンドウを開く
   createWindow();
-
-
 });
 
 //------------------------------------
@@ -92,21 +89,22 @@ app.on('window-all-closed', () => {
   // });
 
   // 設定情報を取得
-  ipcMain.handle('getConfig', (event, data) => {
-    console.log("getConfig:"+config.get(data));
-    return( config.get(data) )
+  ipcMain.handle('getConfig', (event, key) => {
+    //console.log(`getConfig key:${key} result:` + common.config.get(key));
+    return (common.config.get(key))
+  });
+
+  //設定を保存
+  ipcMain.handle('setConfig', (event, key, value) => {
+    //console.log(`setConfig: key:${key} value:${value}`);
+    return( config.set(key, value) ); //boolean
     //return 'en'; //英語環境テスト用
   });
 
   // 言語設定を保存
   ipcMain.handle('setLocale', async (event, data) => {
-    config.set('locale', data);
+    common.config.set('locale', data);
     dialog.reboot(common.mainWin);     // 再起動する？
-  });
-
-  //「新規メモ欄」メニューのチェック状態を更新   
-  ipcMain.on('toggleNewMemoBlockMenu', async (event, data) => {
-    menu.toggleNewMemoBlockMenu(data);
   });
 
   //ドロップされたメディアファイルを開く
@@ -129,6 +127,18 @@ app.on('window-all-closed', () => {
   ipcMain.on('memoChanged', (event, id, script) => {
     common.memoChanged(id,script);
   });
+
+  //「新規メモ欄」メニューのチェック状態を更新   
+  ipcMain.on('toggleNewMemoBlockMenu', async (event, data) => {
+    menu.toggleNewMemoBlockMenu(data);
+  });
+
+  //GUIでスキップ秒数を変更したらメニューにも反映
+  ipcMain.on('setSkipTimeFromGUI', (event, direction, idx) => {
+    menu.setSkipTimeFromGUI(direction, idx);
+  });
+  // #endregion
+
 
   //ログ上のコンテクストメニューを開く
   ipcMain.on('openContextMenuOn', (event, id) => {
@@ -171,6 +181,11 @@ app.on('window-all-closed', () => {
     },
     
     ];
+
+    //--------------------------------
+    // #region 右クリックメニュー
+    //--------------------------------
+
     const m = Menu.buildFromTemplate(template);
 
     //recordsから現在のspeakerを調べてチェックをする
@@ -180,7 +195,7 @@ app.on('window-all-closed', () => {
     m.popup(BrowserWindow.fromWebContents(event.sender));
     
   });
-
+// #endregion
 
 //--------------------------------
 // #region 置換ダイアログ用

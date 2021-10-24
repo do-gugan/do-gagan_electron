@@ -33,4 +33,5 @@
     - [] ストア出品？
 
 # Issues
-getConfigで正しいlocaleが取得できていない。
+- [] getConfigで正しいlocaleが取得できていない。
+- [x] 行削除すると、row-1というIDができる。

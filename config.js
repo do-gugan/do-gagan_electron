@@ -13,7 +13,20 @@ const store = new Store({
       type: 'string',
       minLength: 2,
       maxLength: 6
+    },
+    skipForwardIndex: {
+      type: 'number',
+      default: 5,
+      minimum: 0,
+      maximum: 9
+    },
+    skipBackwardIndex: {
+      type: 'number',
+      default: 5,
+      minimum: 0,
+      maximum: 9
     }
+
   }
 })
 
@@ -21,7 +34,9 @@ const store = new Store({
 // グローバル変数
 //--------------------------------
 const Config = {
-  locale: store.get('locale')
+  locale: store.get('locale'),
+  skipForwardIndex: store.get('skipForwardIndex'),
+  skipBackwardIndex: store.get('skipBackwardIndex'),
 }
 
 /**
@@ -44,20 +59,21 @@ const get = (key) =>{
  * @param {any} value
  * @return {boolean}
  */
-const set = ((key, value)=>{
-  if(typeof key !== 'string'){
-    return(false)
+const set = (key, value) =>{
+  //console.log(`key: ${key} value: ${value} (` + typeof value +`)`);
+  if(typeof key !== 'string' || value === undefined){
+    return(false);
   }
-
   try{
-    store.set(key, value)
-    Config[key] = value
-    return(true)
+    store.set(key, value); //保存
+    Config[key] = value; //参照用プロパティ更新
+    return(true);
   }
   catch(e){
-    return(false)
+    console.log(`exp:` + e.message);
+    return(e);
   }
-})
+}
 
 //--------------------------------
 // exports

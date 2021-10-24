@@ -75,7 +75,26 @@ const validTypes = [
 
     //初期ウインドウタイトル（バージョン表示）
     document.title = _.t('APPNAME') + "3 Ver." + window.api.getAppVersion();
+
+    await loadConfig();//設定をロード
+    
 })();
+
+//起動時、設定を呼び出して画面に反映させる
+async function loadConfig() {
+    console.log('Loading Settings...');
+
+    //スキップ秒数
+    window.api.getConfig('skipForwardIndex').then(function(result){
+        setSkipTime('forward', result); //GUI
+        window.api.setSkipTimeFromGUI('forward', result); //メニュー
+    });
+    window.api.getConfig('skipBackwardIndex').then(function(result){
+        setSkipTime('backward', result); //GUI
+        window.api.setSkipTimeFromGUI('backward', result); //メニュー
+    });
+
+}
 
 /**
  * ファンクションキーテンプレート中の制御文字を除去
@@ -312,11 +331,41 @@ function setSkipTime(direction, index) {
         sel = document.getElementById('Sel_BackwardSec');
     }
     sel.selectedIndex = index;
+    skipTimeChanged(direction, true); //設定を保存
 }
+
+/**
+ * スキップ秒数の設定を反映／記憶する
+ * メニューからもGUIからも呼ばれるので、反映はループしないようfromMenuで判定
+ * @param {*} direction 'forward' or 'backward'
+ * @param {*} fromMenu メニューから呼ばれた時はtrue
+ */
+const skipTimeChanged = (direction, fromMenu=false) => {
+    //console.log(`skipTimeChanged direction:${direction} fromMenu:${fromMenu}`);
+    let idx = 0;
+    let key = '';
+    if (direction=='forward') {
+        idx = document.getElementById('Sel_ForwardSec').selectedIndex;
+        key = 'skipForwardIndex';
+    } else if (direction == 'backward') {
+        idx = document.getElementById('Sel_BackwardSec').selectedIndex;
+        key = 'skipBackwardIndex';
+    }
+    //console.log(`skipTimeChanged(direction: ${direction} fromMenu: ${fromMenu} index: ${idx})`);
+    //保存
+    //idx = parseInt(idx); //Numberに変換
+    window.api.setConfig(key,idx);
+    //メニューに反映
+    if (fromMenu === false) {
+        window.api.setSkipTimeFromGUI(direction, idx);
+    }
+
+}
+
 //メインプロセス（メニュー）から
-window.api.skipForward(()=>skipForward());
-window.api.skipBackward(()=>skipBackward());
-window.api.setSkipTime((direction, index)=>setSkipTime(direction, index));
+window.api.skipForward(()=>skipForward()); //スキップ実行
+window.api.skipBackward(()=>skipBackward()); //スキップ実行
+window.api.setSkipTime((direction, index)=>setSkipTime(direction, index)); //スキップ設定をselectに反映
 //動画再生位置を指定秒に移動する
 function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();

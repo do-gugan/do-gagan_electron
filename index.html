@@ -15,12 +15,12 @@
                 <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled>📷</button>
                 <button id="Btn_JumpBackward" class="webdings Btn_Jump" onclick="skipBackward()" disabled>
                     <div>7</div>
-                    <select id="Sel_BackwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()"></select>
+                    <select id="Sel_BackwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('backward');"></select>
                 </button>
                 <button id="Btn_PlayPause" class="calibri" disabled>▶/II</button>
                 <button id="Btn_JumpForward" class="webdings Btn_Jump" onclick="skipForward()" disabled>
                     <div>8</div>
-                    <select id="Sel_ForwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()"></select>
+                    <select id="Sel_ForwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('forward');"></select>
                 </button>
             </div>
             <div class="dragbar" onmousedown="StartDrag()" onmouseup="EndDrag()"></div>

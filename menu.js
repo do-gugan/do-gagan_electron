@@ -92,88 +92,68 @@ const setTemplate = (lang='ja') => {
                 {type: 'separator'},
                 {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),
                 submenu: [
-                    {id:'FSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_3');
+                    {id:'FSEC_0', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',0);
                     }},
-                    {id:'FSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_5');
+                    {id:'FSEC_1', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',1);
                     }},
-                    {id:'FSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_10');
+                    {id:'FSEC_2', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',2);
                     }},
-                    {id:'FSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_15');
+                    {id:'FSEC_3', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',3);
                     }},
-                    {id:'FSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_30');
+                    {id:'FSEC_4', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',4);
                     }},
-                    {id:'FSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_60');
+                    {id:'FSEC_5', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',5);
                     }},
-                    {id:'FSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_120');
+                    {id:'FSEC_6', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',6);
                     }},
-                    {id:'FSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_180');
+                    {id:'FSEC_7', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',7);
                     }},
-                    {id:'FSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_300');
+                    {id:'FSEC_8', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',8);
                     }},
-                    {id:'FSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_600');
+                    {id:'FSEC_9', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('forward',9);
                     }}
                 ]
                 },
                 {id:'', label: _.t('JUMP_R_SEC'),
                 submenu: [
-                    {id:'RSEC_3', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_3');
+                    {id:'RSEC_0', label: _.t('SEC_3'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',0);
                     }},
-                    {id:'RSEC_5', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_5');
+                    {id:'RSEC_1', label: _.t('SEC_5'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',1);
                     }},
-                    {id:'RSEC_10', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_10');
+                    {id:'RSEC_2', label: _.t('SEC_10'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',2);
                     }},
-                    {id:'RSEC_15', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_15');
+                    {id:'RSEC_3', label: _.t('SEC_15'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',3);
                     }},
-                    {id:'RSEC_30', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_30');
+                    {id:'RSEC_4', label: _.t('SEC_30'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',4);
                     }},
-                    {id:'RSEC_60', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_60');
+                    {id:'RSEC_5', label: _.t('SEC_60'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',5);
                     }},
-                    {id:'RSEC_120', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_120');
+                    {id:'RSEC_6', label: _.t('SEC_120'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',6);
                     }},
-                    {id:'RSEC_180', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_180');
+                    {id:'RSEC_7', label: _.t('SEC_180'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',7);
                     }},
-                    {id:'RSEC_300', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_300');
+                    {id:'RSEC_8', label: _.t('SEC_300'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',8);
                     }},
-                    {id:'RSEC_600', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
-                        //console.log('SEC_600');
+                    {id:'RSEC_9', label: _.t('SEC_600'), type: 'checkbox', click: ()=>{
                         common.setSkipTime('backward',9);
                     }}
                 ]},
@@ -246,6 +226,28 @@ const enableMenuWhenMediaOpened = function () {
     Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
 }
 
+/**
+ * GUIで変更されたスキップ秒数をメニューにも反映
+ * @param {string} direction 
+ * @param {Number} sec 
+ */
+const setSkipTimeFromGUI = function(direction, idx) {
+    let direcKey = '';
+    switch (direction) {
+        case 'forward':
+            direcKey = 'FSEC_';
+            break;
+        case 'backward':
+            direcKey = 'RSEC_';
+            break;    
+    }
+    //全てOFF
+    for (let i; i<10; i++){
+        secs.forEach(s => Menu.getApplicationMenu().getMenuItemById(direcKey + i).checked = false);
+    }
+    //該当項目にチェック
+    Menu.getApplicationMenu().getMenuItemById(direcKey+idx).checked = true;
+}
 
 //--------------------------------
 // exports
@@ -254,4 +256,5 @@ module.exports = {
     setTemplate: setTemplate,
     toggleNewMemoBlockMenu : toggleNewMemoBlockMenu,
     enableMenuWhenMediaOpened : enableMenuWhenMediaOpened,
+    setSkipTimeFromGUI: setSkipTimeFromGUI,
 }

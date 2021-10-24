@@ -39,8 +39,7 @@ contextBridge.exposeInMainWorld(
     deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(id)),
 
     //メニューからのスキップ秒数の変更
-    setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, index)=>callback(direction, index)),
-
+    setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, idx)=>callback(direction, idx)),
 
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
@@ -54,14 +53,18 @@ contextBridge.exposeInMainWorld(
     //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
     //レンダラーからの呼び出し例： console.log(window.api.getSomeInfoFromMain());
 
+    //GUIでスキップ秒数を変更したらメニューに反映
+    setSkipTimeFromGUI:(direction, index) => ipcRenderer.send('setSkipTimeFromGUI', direction, index),
+
     // 指定されたキーの設定を取得する
-    getConfig:(key) => ipcRenderer.invoke('getConfig', key),
+    getConfig:(key) => ipcRenderer.invoke('getConfig', key).then(result => result).catch(err => console.log(err)),
 
     //レンダラーがi18nクラス経由でローカライズテキストを取得
     t : (label, lang) => {
         const _ = new i18n(lang, 'default');
         return _.t(label);
     },
+    setConfig: (key, value) => ipcRenderer.invoke("setConfig", key, value).then(result => result).catch(err => console.log(err)),
 
     getAppVersion: () => {
       //const _ = new i18n(this.lang, 'default');
@@ -87,6 +90,9 @@ contextBridge.exposeInMainWorld(
 
     saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
     //コンテクストメニューで実行された機能
+
+    //
+ 
     // ipcRenderer.on(''), (e.command) => {
 
     // }

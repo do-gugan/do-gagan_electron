@@ -8,7 +8,7 @@
  * メモ欄のレコードクラス
  */
 class dggRecord {
-    static maxId = -1; //ユニークIDを発番するための最大値を保持
+    static maxId = 0; //ユニークIDを発番するための最大値を保持
 
     /**
      * 
