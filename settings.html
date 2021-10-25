@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <link rel="stylesheet" href="settings.css">
+        <title>Settings</title>
+     </head>
+    <body>
+    <div id="main">
+        <div id="Group_FunctionTemplates" class="grid1">
+        <fieldset id="fieldset1">
+            <legend id="Legend_FunctionTemplates"></legend>
+                <div id="fieldset_inner_left">
+                    <div>F1:<input id="Txt_templateF1" type="search" /></div>
+                    <div>F2:<input id="Txt_templateF2" type="search" /></div>
+                    <div>F3:<input id="Txt_templateF3" type="search" /></div>
+                    <div>F4:<input id="Txt_templateF4" type="search" /></div>
+                    <div>F5:<input id="Txt_templateF5" type="search" /></div>    
+                </div>
+                <div id="fieldset_inner_right">
+                    <div id="Lbl_TemplateGuideT" class="guide">a</div>
+                    <div id="Lbl_TemplateGuideC" class="guide">b</div>
+                    <button id="Btn_Reset" >RESET</button>
+                </div>
+        </fieldset>
+        </div>
+        <div class=grid2>
+            <div>
+                <span id="Lbl_AutoSave_before"></span>
+                <input type="text" id="Txt_AutoSave" />
+                <span id="Lbl_AutoSave_after"></span>
+            </div>
+            <div>
+                <input type="checkbox" id="Txt_AutoLoclOn" />
+                <span id="Lbl_AutoLockOn_after"></span>
+            </div>
+            <div>
+                <span id="Lbl_MultiplySkipTime_before"></span>
+                <input type="text" id="Txt_MultiplySkipTime" />
+                <span id="Lbl_MultiplySkipTime_after"></span>
+            </div>
+            <div>
+                <span id="Lbl_Guide1" class="guide"></span>
+            </div>
+        </div>
+        <div class=grid3>
+            <button id="Btn_Close" >Close</button>
+        </div>
+    </div>
+    </body>
+    <script src="settings.js"></script>
+</html>

@@ -21,5 +21,19 @@
   "REPLACE_REPLACE": "Replace:",
   "REPLACE_MATCHED": "Matched:",
   "REPLACE_CANCEL": "Cancel",
-  "REPLACE_EXECUTE": "Replace"
+  "REPLACE_EXECUTE": "Replace",
+
+  "SETTINGS": "Settings",
+  "FUNCTION_SNIPPETS": "FunctionKey Snippets",
+  "SNIPPET_GUIDE_T": "$t will replaced current text you have already input.",
+  "SNIPPET_GUIDE_C": "The caret will move to the $c location.",
+  "RESET": "Initialize",
+  "AUTOSAVE_BEFORE": "Auto-save interval",
+  "AUTOSAVE_AFTER": "min.(You can enable it from [File] menu.",
+  "AUTO_LOCKON_AFTER": "Update 'lock-on' time code when you start type new memo or jump playback point.",
+  "MULTIPLY_SKIPTIME_BEFORE": "Multipley jump time by ",
+  "MULTIPLY_SKIPTIME_AFTER": "x when Shift key pressed.",
+  "SKIPTIME_GUIDE": "You can select base jump time from [Playback] menu of bottom menu of [◀◀][▶▶] buttons.",
+  "CLOSE": "Close"
+
 }

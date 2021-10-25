@@ -6,7 +6,12 @@
 //--------------------------------
 // モジュール
 //--------------------------------
+const { app } = require('electron');
 const Store = require('electron-store')
+const i18n = require('./i18n');
+const lang = app.getLocale();
+const _ = new i18n(lang, 'default');
+
 const store = new Store({
   schema:{
     locale:{
@@ -25,19 +30,81 @@ const store = new Store({
       default: 5,
       minimum: 0,
       maximum: 9
-    }
-
+    },
+    functionSnippet1: {
+      type: 'string',
+      default: _.t('F1_DEFAULT'),
+    },
+    functionSnippet2: {
+      type: 'string',
+      default: _.t('F2_DEFAULT'),
+    },
+    functionSnippet3: {
+      type: 'string',
+      default: _.t('F3_DEFAULT'),
+    },
+    functionSnippet4: {
+      type: 'string',
+      default: _.t('F4_DEFAULT'),
+    },
+    functionSnippet5: {
+      type: 'string',
+      default: _.t('F5_DEFAULT'),
+    },
+    autoSaveInterval: {
+      type: 'number',
+      default: 5,
+      minimum: 1,
+    },
+    autoLockOn: {
+      type:'boolean',
+      default: true,
+    },
+    multiPlyJump: {
+      type: 'number',
+      default: 2,
+      minimum: 1,
+      maximum: 10,
+    },
+    windowSizeWidth: {
+        type: 'number',
+        default: 1024,
+        minimum: 800,
+    },
+    windowSizeHeight: {
+        type: 'number',
+        default: 700,
+        minimum: 600,
+    },
+    windowPosTop: {
+        type: 'number',
+        minimum: 0,
+    },
+    windowPosLeft: {
+        type: 'number',
+        minimum: 0,
+    },
   }
-})
+});
+
 
 //--------------------------------
 // グローバル変数
 //--------------------------------
-const Config = {
-  locale: store.get('locale'),
-  skipForwardIndex: store.get('skipForwardIndex'),
-  skipBackwardIndex: store.get('skipBackwardIndex'),
-}
+// const Config = {
+//   locale: this.get('locale'),
+//   skipForwardIndex: this.get('skipForwardIndex'),
+//   skipBackwardIndex: this.get('skipBackwardIndex'),
+//   functionSnippet1: this.get('functionSnippet1'),
+//   functionSnippet2: this.get('functionSnippet2'),
+//   functionSnippet3: this.get('functionSnippet3'),
+//   functionSnippet4: this.get('functionSnippet4'),
+//   functionSnippet5: this.get('functionSnippet5'),
+//   autoSaveInterval: this.get('autoSaveInterval'),
+//   autoLockOn: this.get('autoLockOn'),
+//   multiPlyJump: this.get('multiPlyJump'),
+//   window: this.get('window'),
+// }
 
 /**
  * 設定情報を返却
@@ -45,11 +112,12 @@ const Config = {
  * @param {string} key
  * @return {any|undefined}
  */
-const get = (key) =>{
-  if( key in Config ){
-    return( Config[key] )
-  }
-  return(undefined)
+ function get(key) {
+  // if( key in Config ){
+  //   return( Config[key] )
+  // }
+  // return(undefined)
+  return store.get(key);
 }
 
 /**
@@ -59,14 +127,14 @@ const get = (key) =>{
  * @param {any} value
  * @return {boolean}
  */
-const set = (key, value) =>{
+function set(key, value) {
   //console.log(`key: ${key} value: ${value} (` + typeof value +`)`);
   if(typeof key !== 'string' || value === undefined){
     return(false);
   }
   try{
     store.set(key, value); //保存
-    Config[key] = value; //参照用プロパティ更新
+    //Config[key] = value; //参照用プロパティ更新
     return(true);
   }
   catch(e){
@@ -74,6 +142,9 @@ const set = (key, value) =>{
     return(e);
   }
 }
+
+
+
 
 //--------------------------------
 // exports

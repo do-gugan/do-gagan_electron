@@ -24,9 +24,11 @@ common.menu = menu;
 common.lang = config.get('locale') || app.getLocale();
 
 function createWindow() {
-    const mainWin = new BrowserWindow({
-        width: 1800,
-        height: 1200,
+  //console.log("load size width: "+config.get('windowSizeWidth') + " height: "+ config.get('windowSizeHeight'));
+  //console.log("load pose top: "+config.get('windowPosTop') + " left: "+ config.get('windowPosLeft'));
+  const mainWin = new BrowserWindow({
+        width: config.get('windowSizeWidth'),
+        height: config.get('windowSizeHeight'),
         backgroundColor: 'white',
         webPreferences: {
             worldSafeExecuteJavaScript: true,
@@ -37,11 +39,30 @@ function createWindow() {
             nativeWindowOpen: true,
         }
     });
-    mainWin.setMinimumSize(1600,1200);
     mainWin.loadFile('./index.html');
+    mainWin.setMinimumSize(800,600);
+    mainWin.setPosition(config.get('windowPosTop'),config.get('windowPosLeft'));
+
     if (!app.isPackaged) {
-      mainWin.webContents.openDevTools(); //Devツールを開く
+      //mainWin.webContents.openDevTools(); //Devツールを開く
     }
+
+  //------------------------------------
+  // [mainWin] 設定保存
+  //------------------------------------
+  // ウィンドウが閉じられたとき処理
+  mainWin.on('close', () => {
+    //console.log("close");
+    //console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
+    //最小の800x600を下回らないよう補正
+    config.set('windowSizeWidth',mainWin.getSize()[0]-1);
+    config.set('windowSizeHeight',mainWin.getSize()[1]+20);
+
+    //console.log("save pos top: "+ (mainWin.getPosition()[0]) + " left: "+ (mainWin.getPosition()[1]));
+    config.set('windowPosTop',mainWin.getPosition()[0]);
+    config.set('windowPosLeft',mainWin.getPosition()[1]);
+
+  })
 
     //common下に参照を渡す
     //common.mainWin = mainWin;
@@ -69,7 +90,7 @@ app.on('window-all-closed', () => {
       app.quit()
     }
   })
-  
+ 
   // アプリがアクティブになった時の処理
   // (macOSはDocのアイコンがクリックされたとき）
   app.on('activate', () => {
@@ -79,6 +100,8 @@ app.on('window-all-closed', () => {
     }
   })
   
+
+
   //----------------------------------------
   // IPC通信
   //----------------------------------------

@@ -21,6 +21,18 @@
   "REPLACE_REPLACE": "置換:",
   "REPLACE_MATCHED": "該当数:",
   "REPLACE_CANCEL": "キャンセル",
-  "REPLACE_EXECUTE": "置換"
+  "REPLACE_EXECUTE": "置換",
 
+  "SETTINGS": "設定",
+  "FUNCTION_SNIPPETS": "ファンクションキー定型文",
+  "SNIPPET_GUIDE_T": "$tの位置に記入済みのテキストが挿入されます。",
+  "SNIPPET_GUIDE_C": "$cの位置にカーソルが置かれます。",
+  "RESET": "初期化",
+  "AUTOSAVE_BEFORE": "自動保存間隔",
+  "AUTOSAVE_AFTER": "分（有効化は「ファイル」メニューから）",
+  "AUTO_LOCKON_AFTER": "新規メモ欄のタイムコードを、新規入力開始時やジャンプ操作時に更新する",
+  "MULTIPLY_SKIPTIME_BEFORE": "Shiftキーを押しながらジャンプした時の移動量を",
+  "MULTIPLY_SKIPTIME_AFTER": "倍にする",
+  "SKIPTIME_GUIDE": "基本スキップ秒数の変更は「再生」メニューまたは◀◀／▶▶ボタン下のプルダウンメニューで行えます。",
+  "CLOSE": "閉じる"
 }
