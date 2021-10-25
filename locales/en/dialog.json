@@ -24,6 +24,7 @@
   "REPLACE_EXECUTE": "Replace",
 
   "SETTINGS": "Settings",
+  "SETTINGS_ACCESSIBLETITLE": "Settings window",
   "FUNCTION_SNIPPETS": "FunctionKey Snippets",
   "SNIPPET_GUIDE_T": "$t will replaced current text you have already input.",
   "SNIPPET_GUIDE_C": "The caret will move to the $c location.",

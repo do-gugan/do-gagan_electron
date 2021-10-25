@@ -115,9 +115,55 @@ class Common {
     this.mainWin.webContents.send('set-skip-time', direction, index);
   }
 
-  // setMainWin(browserWindow) {
-  //   this.mainWin = browserWindow;
+  //--------------------------------
+  // 設定ウインドウ
+  //--------------------------------
+  openSettingsWindow() {
+    const _ = new this.i18n(this.lang, 'dialog');
+    let settingsWindow = new this.browserWindow({
+    parent: mainWin,
+    modal: true,
+    width: 1200,
+    height: 600,
+    backgroundColor: 'white',
+    resizable: false,
+    minimizable: false,
+    maximizable: false,
+    alwaysOnTop: true,
+    fullscreenable: false,
+    skipTaskbar: true,
+    show: false,
+    title:_.t('SETTINGS'),
+    webPreferences: {
+      worldSafeExecuteJavaScript: true,
+      nodeIntegration: false,
+      enableRemoteModule: true,
+      contextIsolation: true,
+      preload: path.join(__dirname, './preload_settings.js'),
+      nativeWindowOpen: true,
+      accessibleTitle: _.t('SETTINGS_ACCESSIBLETITLE')
+    }
+  });
+  settingsWindow.setMenu(null);
+  settingsWindow.loadFile('settings.html');
+  // if (!this.app.isPackaged) {
+     settingsWindow.webContents.openDevTools(); //Devツールを開く
   // }
+
+  // レンダリングが完了したら呼ばれる
+  settingsWindow.once('ready-to-show', () => {
+    settingsWindow.show();
+    //this.replaceWin = settingsWindow;
+  });
+
+  //ウインドウが閉じられる時呼ばれる
+  settingsWindow.on('closed', () => {
+    //this.replaceWin = null;
+  });
+  return settingsWindow;
+
+
+  }
 
   //--------------------------------
   // 置換ダイアログウインドウ
@@ -148,6 +194,7 @@ class Common {
         accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
       }
     });
+
     replaceWindow.setMenu(null);
     replaceWindow.loadFile('replace.html');
     // if (!this.app.isPackaged) {
@@ -157,12 +204,12 @@ class Common {
     // レンダリングが完了したら呼ばれる
     replaceWindow.once('ready-to-show', () => {
       replaceWindow.show();
-      this.replaceWin = replaceWindow;
+      //this.replaceWin = replaceWindow;
     });
 
     //ウインドウが閉じられる時呼ばれる
     replaceWindow.on('closed', () => {
-      this.replaceWin = null;
+      //this.replaceWin = null;
     });
     return replaceWindow;
   }

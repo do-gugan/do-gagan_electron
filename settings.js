@@ -20,12 +20,21 @@ let _ = null;
 
     document.getElementById('Lbl_AutoSave_before').innerHTML = _.t('AUTOSAVE_BEFORE',locale);
     document.getElementById('Lbl_AutoSave_after').innerHTML = _.t('AUTOSAVE_AFTER',locale);
-    document.getElementById('Lbl_AutoLockOn_after').innerHTML = _.t('AUTOLOCKON_AFTER',locale);
+    document.getElementById('Lbl_AutoLockOn_after').innerHTML = _.t('AUTO_LOCKON_AFTER',locale);
     document.getElementById('Lbl_MultiplySkipTime_before').innerHTML = _.t('MULTIPLY_SKIPTIME_BEFORE',locale);
     document.getElementById('Lbl_MultiplySkipTime_after').innerHTML = _.t('MULTIPLY_SKIPTIME_AFTER',locale);
     document.getElementById('Lbl_Guide1').innerHTML = _.t('SKIPTIME_GUIDE',locale);
 
-    document.getElementById('Btn_close').innerHTML = _.t('CLOSE',locale);
+    document.getElementById('Btn_Close').value = _.t('CLOSE',locale);
+    //設定をロード
+    window.api.getConfig('functionSnippet1').then((result)=>{ document.getElementById('Txt_templateF1').value = result;});
+    window.api.getConfig('functionSnippet2').then((result)=>{ document.getElementById('Txt_templateF2').value = result;});
+    window.api.getConfig('functionSnippet3').then((result)=>{ document.getElementById('Txt_templateF3').value = result;});
+    window.api.getConfig('functionSnippet4').then((result)=>{ document.getElementById('Txt_templateF4').value = result;});
+    window.api.getConfig('functionSnippet5').then((result)=>{ document.getElementById('Txt_templateF5').value = result;});
+    window.api.getConfig('autoSaveInterval').then((result)=>{ document.getElementById('Txt_AutoSave').value = result;});
+    window.api.getConfig('autoLockOn').then((result)=>{ document.getElementById('Chk_AutoLoclOn').checked = result;});
+    window.api.getConfig('multiPlyJump').then((result)=>{ document.getElementById('Txt_MultiplySkipTime').value = result;});
 
 
 })();

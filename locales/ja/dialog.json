@@ -24,6 +24,7 @@
   "REPLACE_EXECUTE": "置換",
 
   "SETTINGS": "設定",
+  "SETTINGS_ACCESSIBLETITLE": "設定ウインドウ",
   "FUNCTION_SNIPPETS": "ファンクションキー定型文",
   "SNIPPET_GUIDE_T": "$tの位置に記入済みのテキストが挿入されます。",
   "SNIPPET_GUIDE_C": "$cの位置にカーソルが置かれます。",

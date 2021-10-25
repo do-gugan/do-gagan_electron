@@ -56,7 +56,7 @@ const setTemplate = (lang='ja') => {
                 }},
                 {type: 'separator'},
                 {id:'SETTINGS', label: _.t('SETTINGS'), click: ()=>{
-                    console.log('SETTINGS...');
+                    common.openSettingsWindow();
                 }},
                 ...(isMac ? [] : [{id:'QUIT', label: _.t('QUIT'), role: 'quit'}]),
             ]
