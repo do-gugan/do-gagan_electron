@@ -26,6 +26,7 @@ let _ = null;
     document.getElementById('Lbl_Guide1').innerText = _.t('SKIPTIME_GUIDE',locale);
 
     document.getElementById('Btn_Close').innerText = _.t('CLOSE',locale);
+
     //設定をロード
     window.api.getConfig('functionSnippet1').then((result)=>{ document.getElementById('Txt_templateF1').value = result;});
     window.api.getConfig('functionSnippet2').then((result)=>{ document.getElementById('Txt_templateF2').value = result;});
@@ -34,7 +35,7 @@ let _ = null;
     window.api.getConfig('functionSnippet5').then((result)=>{ document.getElementById('Txt_templateF5').value = result;});
     window.api.getConfig('autoSaveInterval').then((result)=>{ document.getElementById('Txt_AutoSave').value = result;});
     window.api.getConfig('autoLockOn').then((result)=>{ document.getElementById('Chk_AutoLoclOn').checked = result;});
-    window.api.getConfig('multiPlyJump').then((result)=>{ document.getElementById('Txt_MultiplySkipTime').value = result;});
+    window.api.getConfig('multiPlyJumpIndex').then((result)=>{ document.getElementById('Sel_MultiplySkipTime').selectedIndex = result;});
 
 
 })();
@@ -82,7 +83,8 @@ function changeAutoSaveDur() {
 }
 
 function changeAutoLocSetting() {
-    window.api.setConfig('autoLockOn',parseInt(document.getElementById('Sel_MultiplySkipTime').checked));
+    console.log(document.getElementById('Chk_AutoLoclOn').checked);
+    window.api.setConfig('autoLockOn',document.getElementById('Chk_AutoLoclOn').checked);
 }
 
 function changeMultiplyJumpSec() {
