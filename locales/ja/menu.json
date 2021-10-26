@@ -1,10 +1,10 @@
 {
-    "ABOUT": "{{name}} について...",
+    "ABOUT": "動画眼 について",
     "SERVICE": "サービス",
-    "HIDE": "{{name}} を隠す",
+    "HIDE": "動画眼 を隠す",
     "HIDEOTHERS": "ほかを隠す",
     "UNHIDE": "すべて表示",
-    "QUIT-MAC": "{{name}} を終了",
+    "QUIT-MAC": "動画眼 を終了",
   
     "FILE": "ファイル",
     "OPEN-MOVIE": "動画/音声ファイルを開く...",

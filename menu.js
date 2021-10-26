@@ -19,7 +19,10 @@ const setTemplate = (lang='ja') => {
     ...(isMac ? [{
         label: app.name,
         submenu: [
-          {role:'about', label: _.t('ABOUT') },
+          /* {role:'about', label: _.t('ABOUT') }, */
+          {label: _.t('ABOUT'), click: ()=>{
+            dialog.openAboutDialog();
+          }},
           {type:'separator'},
           {role:'services', label: _.t('SERVICE')},
           {type:'separator'},

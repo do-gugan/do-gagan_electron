@@ -75,7 +75,7 @@ app.whenReady().then(()=>{
   //const locale = 'en'; //英語UIテスト時に有効化する
   // メニューを適用する
   menu.setTemplate(locale);
- 
+
   // ウィンドウを開く
   createWindow();
 });
