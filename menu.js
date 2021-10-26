@@ -85,13 +85,13 @@ const setTemplate = (lang='ja') => {
                     //console.log('PLAY-PAUSE');
                     common.playPauseToPlayer();
                 }},
-                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, accelerator: 'CmdOrCtrl+W', click: ()=>{
+                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, accelerator: 'CmdOrCtrl+W', click: (event)=>{
                     //console.log('JUMP_F');
-                    common.skipForwardToPlayer();
+                    common.skipForwardToPlayer(event);
                 }},
-                {id:'JUMP_R', label: _.t('JUMP_R'), enabled: false, accelerator: 'CmdOrCtrl+Q', click: ()=>{
+                {id:'JUMP_R', label: _.t('JUMP_R'), enabled: false, accelerator: 'CmdOrCtrl+Q', click: (event)=>{
                     //console.log('JUMP_R');
-                    common.skipBackwardToPlayer();
+                    common.skipBackwardToPlayer(event);
                 }},
                 {type: 'separator'},
                 {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),

@@ -19,6 +19,9 @@ let functionSnippet4 = null;
 let functionSnippet5 = null;
 let autoLockOn= true;
 let multiPlyJumpIndex = 2;
+let multiPlyJumpTimes = 2;
+
+let isShiftKeyPressing = false;
 
 //対応形式
 const validTypes = [
@@ -55,9 +58,20 @@ const validTypes = [
 
     //キーボードイベント
     //アプリ全体で効くコマンド
+    document.body.addEventListener('keydown', (event)=>{
+        if (event.shiftKey) {
+            isShiftKeyPressing = true;
+            console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
+        }
+    });
+
     document.body.addEventListener('keyup', (event)=>{
         // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
-        // console.log("Key:" + event.key);
+        console.log("Key:" + event.shiftKey);
+        if (event.shiftKey) {
+            isShiftKeyPressing = false;
+            console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
+        }
 
         //Ctrl+LまたはAlt+Lでロックオン
         if ((event.ctrlKey || event.altKey) && event.key == 'l') {
@@ -101,8 +115,11 @@ async function loadConfig() {
     document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5;
 
     await window.api.getConfig('autoLockOn').then((result) => { autoLockOn = result;});
-    await window.api.getConfig('multiPlyJumpIndex').then((result) => { multiPlyJumpIndex = result;});
-
+    await window.api.getConfig('multiPlyJumpIndex').then((result) => {
+        multiPlyJumpIndex = result;
+        const multis = [0.1,0.5, 2, 3, 5, 10];
+        multiPlyJumpTimes = multis[multiPlyJumpIndex];
+    });
 
     //スキップ秒数
     window.api.getConfig('skipForwardIndex').then(function(result){
@@ -338,11 +355,15 @@ function togglePlayPause() {
 
 
 //前後ジャンプ
-function skipForward(sec = 0){
+function skipForward(event = null){
     var sec = document.getElementById('Sel_ForwardSec').value;
+    if (isShiftKeyPressing == true) {
+        console.log("Shift Pressed");
+        sec = sec * multiPlyJumpIndex
+    }
     jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec));
 }
-function skipBackward(sec = 0){
+function skipBackward(event = null){
     var sec = document.getElementById('Sel_BackwardSec').value;
     jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
 }
@@ -437,6 +458,7 @@ function minSecToSec(minsec) {
  * タイムコードがクリックされたら当該シーンにジャンプする
  */
 function timeClicked(event) {
+    console.log(event.key);
     const tcell = event.target;
     jumpToTimeIndex(minSecToSec(tcell.innerText)); //当該位置にジャンプ
 

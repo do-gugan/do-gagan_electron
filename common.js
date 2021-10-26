@@ -107,7 +107,7 @@ class Common {
   skipForwardToPlayer() {
     this.mainWin.webContents.send('skip-forward');
   }
-  skipBackwardToPlayer() {
+  skipBackwardToPlayer(event) {
     this.mainWin.webContents.send('skip-backward');
   }
 

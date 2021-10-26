@@ -52,7 +52,7 @@ function createWindow() {
     mainWin.setPosition(top, left);
   
     if (!app.isPackaged) {
-      //mainWin.webContents.openDevTools(); //Devツールを開く
+      mainWin.webContents.openDevTools(); //Devツールを開く
     }
   });
 
@@ -62,7 +62,6 @@ function createWindow() {
   //------------------------------------
   // ウィンドウが閉じられたとき処理
   mainWin.on('close', () => {
-    console.log("close");
     //console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
     //最小の800x600を下回らないよう補正
     config.set('windowSizeWidth',mainWin.getSize()[0]-1);

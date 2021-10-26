@@ -16,6 +16,7 @@ const store = new Store({
   schema:{
     locale:{
       type: 'string',
+      default: 'jp',
       minLength: 2,
       maxLength: 6
     },
