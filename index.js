@@ -41,11 +41,21 @@ function createWindow() {
     });
     mainWin.loadFile('./index.html');
     mainWin.setMinimumSize(800,600);
-    mainWin.setPosition(config.get('windowPosTop'),config.get('windowPosLeft'));
+    //mainWin.setPosition(config.get('windowPosTop'),config.get('windowPosLeft'));
 
+  //------------------------------------
+  // [mainWin] 準備できたら呼ばれる
+  //------------------------------------
+  mainWin.on('ready-to-show', () => {
+    let top = config.get('windowPosTop');
+    let left = config.get('windowPosLeft');
+    mainWin.setPosition(top, left);
+  
     if (!app.isPackaged) {
-      mainWin.webContents.openDevTools(); //Devツールを開く
+      //mainWin.webContents.openDevTools(); //Devツールを開く
     }
+  });
+
 
   //------------------------------------
   // [mainWin] 設定保存
