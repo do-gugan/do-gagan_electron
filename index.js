@@ -24,7 +24,7 @@ common.menu = menu;
 common.lang = config.get('locale') || app.getLocale();
 
 function createWindow() {
-  //console.log("load size width: "+config.get('windowSizeWidth') + " height: "+ config.get('windowSizeHeight'));
+  console.log("load size width: "+config.get('windowSizeWidth') + " height: "+ config.get('windowSizeHeight'));
   //console.log("load pose top: "+config.get('windowPosTop') + " left: "+ config.get('windowPosLeft'));
   const mainWin = new BrowserWindow({
         width: config.get('windowSizeWidth'),
@@ -52,11 +52,11 @@ function createWindow() {
   //------------------------------------
   // ウィンドウが閉じられたとき処理
   mainWin.on('close', () => {
-    //console.log("close");
-    //console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
+    console.log("close");
+    console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
     //最小の800x600を下回らないよう補正
     config.set('windowSizeWidth',mainWin.getSize()[0]-1);
-    config.set('windowSizeHeight',mainWin.getSize()[1]+20);
+    config.set('windowSizeHeight',mainWin.getSize()[1]-2);
 
     //console.log("save pos top: "+ (mainWin.getPosition()[0]) + " left: "+ (mainWin.getPosition()[1]));
     config.set('windowPosTop',mainWin.getPosition()[0]);
