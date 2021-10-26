@@ -87,25 +87,6 @@ const store = new Store({
   }
 });
 
-
-//--------------------------------
-// グローバル変数
-//--------------------------------
-// const Config = {
-//   locale: this.get('locale'),
-//   skipForwardIndex: this.get('skipForwardIndex'),
-//   skipBackwardIndex: this.get('skipBackwardIndex'),
-//   functionSnippet1: this.get('functionSnippet1'),
-//   functionSnippet2: this.get('functionSnippet2'),
-//   functionSnippet3: this.get('functionSnippet3'),
-//   functionSnippet4: this.get('functionSnippet4'),
-//   functionSnippet5: this.get('functionSnippet5'),
-//   autoSaveInterval: this.get('autoSaveInterval'),
-//   autoLockOn: this.get('autoLockOn'),
-//   multiPlyJump: this.get('multiPlyJump'),
-//   window: this.get('window'),
-// }
-
 /**
  * 設定情報を返却
  *

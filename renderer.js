@@ -11,6 +11,13 @@ let playerBox = document.getElementById("player-box");
 let memolist = document.getElementById("scripts");
 let lastFocusedRow; //最後の選択された行のdivエレメント
 
+//各種設定をオンメモリで保持する
+let functionSnippet1 = null;
+let functionSnippet2 = null;
+let functionSnippet3 = null;
+let functionSnippet4 = null;
+let functionSnippet5 = null;
+
 //対応形式
 const validTypes = [
     'video/mp4',
@@ -41,11 +48,17 @@ const validTypes = [
 
     document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
 
-    document.getElementById('Btn_F1').innerHTML = "F1: " + eliminateTemplateCode(_.t('F1_DEFAULT',locale));
-    document.getElementById('Btn_F2').innerHTML = "F2: " + eliminateTemplateCode(_.t('F2_DEFAULT',locale));
-    document.getElementById('Btn_F3').innerHTML = "F3: " + eliminateTemplateCode(_.t('F3_DEFAULT',locale));
-    document.getElementById('Btn_F4').innerHTML = "F4: " + eliminateTemplateCode(_.t('F4_DEFAULT',locale));
-    document.getElementById('Btn_F5').innerHTML = "F5: " + eliminateTemplateCode(_.t('F5_DEFAULT',locale));
+    await window.api.getConfig('functionSnippet1').then((result) => { functionSnippet1 = result;});
+    await window.api.getConfig('functionSnippet2').then((result) => { functionSnippet2 = result;});
+    await window.api.getConfig('functionSnippet3').then((result) => { functionSnippet3 = result;});
+    await window.api.getConfig('functionSnippet4').then((result) => { functionSnippet4 = result;});
+    await window.api.getConfig('functionSnippet5').then((result) => { functionSnippet5 = result;});
+
+    document.getElementById('Btn_F1').innerText = "F1: " + functionSnippet1;
+    document.getElementById('Btn_F2').innerText = "F2: " + functionSnippet2;
+    document.getElementById('Btn_F3').innerText = "F3: " + functionSnippet3;
+    document.getElementById('Btn_F4').innerText = "F4: " + functionSnippet4;
+    document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5;
 
     //キーボードイベント
     //アプリ全体で効くコマンド
@@ -642,19 +655,19 @@ function inputFromFunctionTemplate(key) {
     const memo = document.getElementById('Txt_memo');
     switch (key) {
         case 'F1':
-            txt = _.t('F1_DEFAULT',locale);           
+            txt = functionSnippet1;
             break;
         case 'F2':
-            txt = _.t('F2_DEFAULT',locale);           
+            txt = functionSnippet2;
             break;
         case 'F3':
-            txt = _.t('F3_DEFAULT',locale);           
+            txt = functionSnippet3;
             break;
         case 'F4':
-            txt = _.t('F4_DEFAULT',locale);           
+            txt = functionSnippet4;
             break;
         case 'F5':
-            txt = _.t('F5_DEFAULT',locale);           
+            txt = functionSnippet5;
             break;                                        
     }
 
