@@ -59,7 +59,7 @@ function changeSnippet(fnum) {
             window.api.setConfig('functionSnippet4',document.getElementById('Txt_templateF4').value);
             break;
         case "F5":
-            window.api.setConfig('functionSnippet1',document.getElementById('Txt_templateF5').value);
+            window.api.setConfig('functionSnippet5',document.getElementById('Txt_templateF5').value);
             break;
     }
 }

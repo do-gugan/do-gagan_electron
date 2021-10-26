@@ -154,12 +154,12 @@ class Common {
   // レンダリングが完了したら呼ばれる
   settingsWindow.once('ready-to-show', () => {
     settingsWindow.show();
-    //this.replaceWin = settingsWindow;
   });
 
   //ウインドウが閉じられる時呼ばれる
   settingsWindow.on('closed', () => {
-    //this.replaceWin = null;
+    //console.log("settings window closed.");
+    this.mainWin.webContents.send('load-config');
   });
   return settingsWindow;
 

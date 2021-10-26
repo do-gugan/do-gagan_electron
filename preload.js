@@ -41,6 +41,9 @@ contextBridge.exposeInMainWorld(
     //メニューからのスキップ秒数の変更
     setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, idx)=>callback(direction, idx)),
 
+    //メインプロセスの設定変更を通知
+    loadConfig: (callback) => ipcRenderer.on("load-config", ()=>callback()),
+
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
     // --------------------------------------------

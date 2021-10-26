@@ -17,6 +17,8 @@ let functionSnippet2 = null;
 let functionSnippet3 = null;
 let functionSnippet4 = null;
 let functionSnippet5 = null;
+let autoLockOn= true;
+let multiPlyJumpIndex = 2;
 
 //対応形式
 const validTypes = [
@@ -48,17 +50,8 @@ const validTypes = [
 
     document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
 
-    await window.api.getConfig('functionSnippet1').then((result) => { functionSnippet1 = result;});
-    await window.api.getConfig('functionSnippet2').then((result) => { functionSnippet2 = result;});
-    await window.api.getConfig('functionSnippet3').then((result) => { functionSnippet3 = result;});
-    await window.api.getConfig('functionSnippet4').then((result) => { functionSnippet4 = result;});
-    await window.api.getConfig('functionSnippet5').then((result) => { functionSnippet5 = result;});
-
-    document.getElementById('Btn_F1').innerText = "F1: " + functionSnippet1;
-    document.getElementById('Btn_F2').innerText = "F2: " + functionSnippet2;
-    document.getElementById('Btn_F3').innerText = "F3: " + functionSnippet3;
-    document.getElementById('Btn_F4').innerText = "F4: " + functionSnippet4;
-    document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5;
+    //設定をグローバル変数に読み込み
+    await loadConfig();
 
     //キーボードイベント
     //アプリ全体で効くコマンド
@@ -95,7 +88,21 @@ const validTypes = [
 
 //起動時、設定を呼び出して画面に反映させる
 async function loadConfig() {
-    console.log('Loading Settings...');
+    //console.log('Loading Settings...');
+    await window.api.getConfig('functionSnippet1').then((result) => { functionSnippet1 = result;});
+    await window.api.getConfig('functionSnippet2').then((result) => { functionSnippet2 = result;});
+    await window.api.getConfig('functionSnippet3').then((result) => { functionSnippet3 = result;});
+    await window.api.getConfig('functionSnippet4').then((result) => { functionSnippet4 = result;});
+    await window.api.getConfig('functionSnippet5').then((result) => { functionSnippet5 = result;});
+    document.getElementById('Btn_F1').innerText = "F1: " + functionSnippet1;
+    document.getElementById('Btn_F2').innerText = "F2: " + functionSnippet2;
+    document.getElementById('Btn_F3').innerText = "F3: " + functionSnippet3;
+    document.getElementById('Btn_F4').innerText = "F4: " + functionSnippet4;
+    document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5;
+
+    await window.api.getConfig('autoLockOn').then((result) => { autoLockOn = result;});
+    await window.api.getConfig('multiPlyJumpIndex').then((result) => { multiPlyJumpIndex = result;});
+
 
     //スキップ秒数
     window.api.getConfig('skipForwardIndex').then(function(result){
@@ -106,8 +113,9 @@ async function loadConfig() {
         setSkipTime('backward', result); //GUI
         window.api.setSkipTimeFromGUI('backward', result); //メニュー
     });
-
 }
+//メインプロセスで設定が変更されたら↑を呼んで反映
+window.api.loadConfig(()=>loadConfig());
 
 /**
  * ファンクションキーテンプレート中の制御文字を除去
