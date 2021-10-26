@@ -13,34 +13,41 @@
         <fieldset id="fieldset1">
             <legend id="Legend_FunctionTemplates"></legend>
                 <div id="fieldset_inner_left">
-                    <div>F1:<input id="Txt_templateF1" type="search" /></div>
-                    <div>F2:<input id="Txt_templateF2" type="search" /></div>
-                    <div>F3:<input id="Txt_templateF3" type="search" /></div>
-                    <div>F4:<input id="Txt_templateF4" type="search" /></div>
-                    <div>F5:<input id="Txt_templateF5" type="search" /></div>    
+                    <div>F1:<input id="Txt_templateF1" type="search" onchange="changeSnippet('F1');" /></div>
+                    <div>F2:<input id="Txt_templateF2" type="search" onchange="changeSnippet('F2');" /></div>
+                    <div>F3:<input id="Txt_templateF3" type="search" onchange="changeSnippet('F3');" /></div>
+                    <div>F4:<input id="Txt_templateF4" type="search" onchange="changeSnippet('F4');" /></div>
+                    <div>F5:<input id="Txt_templateF5" type="search" onchange="changeSnippet('F5');" /></div>    
                 </div>
                 <div id="fieldset_inner_right">
                     <div id="Lbl_TemplateGuideT" class="guide">a</div>
                     <div id="Lbl_TemplateGuideC" class="guide">b</div>
-                    <button id="Btn_Reset" >RESET</button>
+                    <button id="Btn_Reset" onclick="resetSnippets();">RESET</button>
                 </div>
         </fieldset>
         </div>
         <div class=grid2>
             <div>
                 <span id="Lbl_AutoSave_before"></span>
-                <input type="text" id="Txt_AutoSave" />
+                <input type="number" id="Txt_AutoSave" step='1' min='1' onchange="changeAutoSaveDur();"/>
                 <span id="Lbl_AutoSave_after"></span>
             </div>
             <div>
                 <label>
-                    <input type="checkbox" id="Chk_AutoLoclOn" />
+                    <input type="checkbox" id="Chk_AutoLoclOn" onchange="changeAutoLocSetting();"/>
                     <span id="Lbl_AutoLockOn_after"></span>    
                 </label>
             </div>
             <div>
                 <span id="Lbl_MultiplySkipTime_before"></span>
-                <input type="text" id="Txt_MultiplySkipTime" />
+                <select id="Sel_MultiplySkipTime" onchange="changeMultiplyJumpSec();">
+                    <option >0.1x</option>
+                    <option >0.5x</option>
+                    <option >2x</option>
+                    <option >3x</option>
+                    <option >5x</option>
+                    <option >10x</option>
+                </select>
                 <span id="Lbl_MultiplySkipTime_after"></span>
             </div>
             <div>
@@ -48,7 +55,7 @@
             </div>
         </div>
         <div class=grid3>
-            <button id="Btn_Close" >Close</button>
+            <button id="Btn_Close" onclick="closeSettings();">Close</button>
         </div>
     </div>
     </body>

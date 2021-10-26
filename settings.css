@@ -2,61 +2,79 @@
     display: flex;
     height:100%;
     margin: 1em;
+    font-size:0.9em;
 
     flex-direction: column;
 }
 
-.grid1 {
-
-}
-
 .grid2 {
-    
+    margin-top: 2em;
+    padding: 0.2em;
 }
 
-.grid3 {
-    background-color: #888;
-    margin: 0.5em;
+.grid2 div {
+    margin-bottom: 1em;
+}
 
-    display: flex;
-    justify-content: end;
+.grid2 div:last-child {
+    margin:1em 0;
+}
+.grid3 {
+    text-align: right;
 }
 
 #fieldset1 {
     display: flex;
     flex-direction: row;
+    padding: 0.5em;
 }
 #fieldset_inner_left {
-    background-color: red;
-
     display: flex;
     flex-direction: column;
+}
+#fieldset_inner_left div {
+    width: 15em;
+    margin:0.3em;
 }
 
 #fieldset_inner_left input {
     width:80%;
+    margin-left: 0.8em;
 }
 #fieldset_inner_right {
-    background-color: blue;
-
     display: flex;
     flex-grow: 1;
     flex-direction: column;
-
+    padding: 1em;
 }
 
 #Btn_Reset {
     flex-basis: 1.5em; /* 高さ */
     align-self: center; /* 水平センタリング */
     position: relative;
-    bottom: -3em;
+    bottom: -2.0em;
+}
+
+#Txt_AutoSave {
+    width: 2.2em;
+    text-align: center;
+    padding: 0.2em;
+}
+
+#Sel_MultiplySkipTime {
+    width: 4em;
+    text-align: center;
+    padding: 0.2em;
+}
+
+
+.guide {
+    color:#666;
+    font-size: 0.9em;
 }
 
 #Btn_Close {
-    flex-basis: 1.5em; /* 高さ */
-    align-self: center; /* 水平センタリング */
-}
-
-.guide {
-    color:888;
+    width: 6em;
+    height: 2em;
+    font-size: 1em;
 }

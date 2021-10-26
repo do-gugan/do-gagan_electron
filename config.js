@@ -60,11 +60,11 @@ const store = new Store({
       type:'boolean',
       default: true,
     },
-    multiPlyJump: {
+    multiPlyJumpIndex: {
       type: 'number',
       default: 2,
-      minimum: 1,
-      maximum: 10,
+      minimum: 0,
+      maximum: 5,
     },
     windowSizeWidth: {
         type: 'number',

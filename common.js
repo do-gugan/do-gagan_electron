@@ -123,8 +123,8 @@ class Common {
     let settingsWindow = new this.browserWindow({
     parent: mainWin,
     modal: true,
-    width: 1200,
-    height: 600,
+    width: 500,
+    height: 510,
     backgroundColor: 'white',
     resizable: false,
     minimizable: false,
@@ -147,7 +147,8 @@ class Common {
   settingsWindow.setMenu(null);
   settingsWindow.loadFile('settings.html');
   // if (!this.app.isPackaged) {
-     settingsWindow.webContents.openDevTools(); //Devツールを開く
+    settingsWindow.setSize (settingsWindow.getSize()[0]+600, settingsWindow.getSize()[1]);
+    settingsWindow.webContents.openDevTools(); //Devツールを開く
   // }
 
   // レンダリングが完了したら呼ばれる
