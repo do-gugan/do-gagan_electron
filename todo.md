@@ -10,11 +10,12 @@
 - [x] メニューからスキップ時間の変更
 - [x] 設定永続化
 - [] 設定画面
-    - [] ウインドウ作成
-    - [] ファンクションキーテンプレート
+    - [x] ウインドウ作成
+    - [x] ファンクションキーテンプレート
     - [] 自動保存間隔
     - [] ロックオン自動更新
     - [] Shiftキーを押すとn倍ジャンプ
+- [x] 新規メモ欄の開閉状態を保存／復帰
 - [x] 一括置換
 - [x] ログのフィルター
 - [] 自動スクロール？
@@ -25,6 +26,8 @@
 - [] アプリ自動更新 https://www.electronjs.org/docs/latest/tutorial/updates (公式API使用にはコード署名が必要)
     -[] 最低限、更新チェック機能はつける
 - [] タッチバーサポート？　https://www.electronjs.org/docs/latest/api/touch-bar
+- [] Tooltip整備
+
 ## 完成後
 - [] ビルド
     - [x] アプリアイコン https://www.electronjs.org/docs/latest/api/native-image

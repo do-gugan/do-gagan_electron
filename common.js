@@ -97,7 +97,7 @@ class Common {
    *   openMediaFile(path);
    */
   toggleNewMemoBlockFromMenu(result) {
-      this.mainWin.webContents.send('toggle-new-memo-block');
+      this.mainWin.webContents.send('toggle-new-memo-block', result);
   }
 
   //再生制御系

@@ -21,7 +21,7 @@ contextBridge.exposeInMainWorld(
 
     openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
     openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
-    toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(event, argv)),
+    toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(argv)),
 
     togglePlayPause: (callback) => ipcRenderer.on("play-pause", ()=>callback()),
     skipForward: (callback) => ipcRenderer.on("skip-forward", ()=>callback()),

@@ -113,6 +113,12 @@ async function loadConfig() {
         setSkipTime('backward', result); //GUI
         window.api.setSkipTimeFromGUI('backward', result); //メニュー
     });
+
+    //メモ欄 表示/非表示
+    await window.api.getConfig('newMemoBlockShown').then((result) => {
+        document.getElementById('Chk_ShowHideNewMemo').checked = result;
+        toglleNewMemoBlock();
+    });
 }
 //メインプロセスで設定が変更されたら↑を呼んで反映
 window.api.loadConfig(()=>loadConfig());
@@ -271,6 +277,7 @@ async function changeWindowTitle(path) {
 
 /**
 * 新規メモ欄の表示／非表示を切り替え
+* （設定保存はメインプロセス呼んだ先で）
 */
 const toglleNewMemoBlock = function () {
     const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
@@ -286,10 +293,10 @@ const toglleNewMemoBlock = function () {
 /**
 * メインプロセスからのプッシュで新規メモ欄の表示／非表示を切り替え、結果をboolで返す
 */
-window.api.toggleNewMemoBlockFromMenu((event, result)=>{
+window.api.toggleNewMemoBlockFromMenu((result)=>{
     const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
     const main = document.getElementById('main');
-    if (main.style.gridTemplateRows == "2.5em 1fr 3em 0em") {
+    if (result === true) {
         //非表示だったら表示
         main.style.gridTemplateRows = "2.5em 1fr 3em 6em";
         checkbox.checked = true;
@@ -300,6 +307,7 @@ window.api.toggleNewMemoBlockFromMenu((event, result)=>{
         checkbox.checked = false;
         return false;
     }
+    //メニューから変更した場合の設定保存はmenu.jsのtoggleNewMemoBlockFromMenuで。
 });
 
 // #endregion
@@ -542,7 +550,6 @@ function resetSearch() {
 
 //メインプロセス（メニュー）から置換ウインドウを開く
 window.api.openReplaceWindow(()=>{
-    console.log("hoge");
     const childWindow = window.open('replace.html');
     //childWindow.document.write('<h1>Hello</h1>')
 });

@@ -84,7 +84,11 @@ const store = new Store({
         type: 'number',
         minimum: 0,
     },
-  }
+    newMemoBlockShown: {
+      type: 'boolean',
+      default: true,
+  },
+}
 });
 
 /**

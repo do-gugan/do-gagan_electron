@@ -2,6 +2,7 @@ const { app, Menu } = require('electron');
 const common = require('./common');
 const i18n = require('./i18n')
 const dialog = require('./dialog');
+const config = require('./config');
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -203,7 +204,9 @@ const toggleNewMemoBlockMenu = function (result) {
  */
 const toggleNewMemoBlockFromMenu = function () {
     const mItem = Menu.getApplicationMenu().getMenuItemById('MN_SHOW_NEW_MEMO_BLOCK');
-    common.toggleNewMemoBlockFromMenu(!mItem.checked);
+    common.toggleNewMemoBlockFromMenu(mItem.checked);
+    //設定保存
+    config.set('newMemoBlockShown', mItem.checked);
 }
 
 /**

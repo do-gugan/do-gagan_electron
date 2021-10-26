@@ -154,6 +154,9 @@ app.on('window-all-closed', () => {
   //「新規メモ欄」メニューのチェック状態を更新   
   ipcMain.on('toggleNewMemoBlockMenu', async (event, data) => {
     menu.toggleNewMemoBlockMenu(data);
+
+    //設定保存
+    config.set('newMemoBlockShown', data);
   });
 
   //GUIでスキップ秒数を変更したらメニューにも反映
