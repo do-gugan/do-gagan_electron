@@ -84,6 +84,15 @@ class Common {
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
   }
 
+//--------------------------------
+// #region 設定ウインドウ
+//--------------------------------
+
+
+
+
+// #endregion
+
 
   openSupportSite() {
     const shell = require('electron').shell;
