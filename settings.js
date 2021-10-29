@@ -20,7 +20,15 @@ let _ = null;
 
     document.getElementById('Lbl_AutoSave_before').innerText = _.t('AUTOSAVE_BEFORE',locale);
     document.getElementById('Lbl_AutoSave_after').innerText = _.t('AUTOSAVE_AFTER',locale);
-    document.getElementById('Lbl_AutoLockOn_after').innerText = _.t('AUTO_LOCKON_AFTER',locale);
+
+    document.getElementById('Lbl_AutoLockOn_Title').innerText = _.t('AUTO_LOCKON_TITLE',locale);
+    document.getElementById('Lbl_AutoLockOn_click').innerText = _.t('AUTO_LOCKON_CLICK',locale);
+    document.getElementById('Lbl_AutoLockOn_skip').innerText = _.t('AUTO_LOCKON_SKIP',locale);
+    document.getElementById('Lbl_AutoLockOn_type').innerText = _.t('AUTO_LOCKON_TYPE',locale);
+    document.getElementById('Lbl_AutoLockOn_speaker').innerText = _.t('AUTO_LOCKON_SPEAKER',locale);
+    document.getElementById('Lbl_AutoLockOn_snippets').innerText = _.t('AUTO_LOCKON_SNIPPETS',locale);
+    document.getElementById('Lbl_AutoLockOn_addmemo').innerText = _.t('AUTO_LOCKON_ADDMEMO',locale);
+    
     document.getElementById('Lbl_MultiplySkipTime_before').innerText = _.t('MULTIPLY_SKIPTIME_BEFORE',locale);
     document.getElementById('Lbl_MultiplySkipTime_after').innerText = _.t('MULTIPLY_SKIPTIME_AFTER',locale);
     document.getElementById('Lbl_Guide1').innerText = _.t('SKIPTIME_GUIDE',locale);
@@ -34,7 +42,12 @@ let _ = null;
     window.api.getConfig('functionSnippet4').then((result)=>{ document.getElementById('Txt_templateF4').value = result;});
     window.api.getConfig('functionSnippet5').then((result)=>{ document.getElementById('Txt_templateF5').value = result;});
     window.api.getConfig('autoSaveInterval').then((result)=>{ document.getElementById('Txt_AutoSave').value = result;});
-    window.api.getConfig('autoLockOn').then((result)=>{ document.getElementById('Chk_AutoLoclOn').checked = result;});
+    window.api.getConfig('autoLockOn_click').then((result)=>{ document.getElementById('Chk_AutoLockOn_click').checked = result;});
+    window.api.getConfig('autoLockOn_skip').then((result)=>{ document.getElementById('Chk_AutoLockOn_skip').checked = result;});
+    window.api.getConfig('autoLockOn_type').then((result)=>{ document.getElementById('Chk_AutoLockOn_type').checked = result;});
+    window.api.getConfig('autoLockOn_speaker').then((result)=>{ document.getElementById('Chk_AutoLockOn_speaker').checked = result;});
+    window.api.getConfig('autoLockOn_snippets').then((result)=>{ document.getElementById('Chk_AutoLockOn_snippets').checked = result;});
+    window.api.getConfig('autoLockOn_addmemo').then((result)=>{ document.getElementById('Chk_AutoLockOn_addmemo').checked = result;});
     window.api.getConfig('multiPlyJumpIndex').then((result)=>{ document.getElementById('Sel_MultiplySkipTime').selectedIndex = result;});
 
 
@@ -82,9 +95,11 @@ function changeAutoSaveDur() {
     window.api.setConfig('autoSaveInterval',parseInt(document.getElementById('Txt_AutoSave').value));
 }
 
-function changeAutoLocSetting() {
-    console.log(document.getElementById('Chk_AutoLoclOn').checked);
-    window.api.setConfig('autoLockOn',document.getElementById('Chk_AutoLoclOn').checked);
+function changeAutoLocSetting(trigger) {
+    if (trigger == 'click' || trigger == 'skip' || trigger == 'type' || trigger == 'speaker' || trigger == 'snippets' || trigger == 'addmemo'){
+        console.log(document.getElementById('Chk_AutoLockOn_'+trigger).checked);
+        window.api.setConfig('autoLockOn_'+trigger,document.getElementById('Chk_AutoLockOn_'+trigger).checked);    
+    }
 }
 
 function changeMultiplyJumpSec() {

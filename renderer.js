@@ -20,6 +20,7 @@ let functionSnippet5 = null;
 let autoLockOn= true;
 let multiPlyJumpIndex = 2;
 let multiPlyJumpTimes = 2;
+let lastMemoLength = 0; //メモを打ち始めかどうか判定するフラグ
 
 let isShiftKeyPressing = false;
 
@@ -67,7 +68,7 @@ const validTypes = [
 
     document.body.addEventListener('keyup', (event)=>{
         // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
-        console.log("Key:" + event.shiftKey);
+        //console.log("Key:" + event.shiftKey);
         if (event.shiftKey) {
             isShiftKeyPressing = false;
             console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
@@ -75,7 +76,7 @@ const validTypes = [
 
         //Ctrl+LまたはAlt+Lでロックオン
         if ((event.ctrlKey || event.altKey) && event.key == 'l') {
-            syncTimecode();
+            lockedTimeClicked();
         //Enter/Ctrl+←/→で話者コードの増減
         } else if ((event.ctrlKey || event.altKey) && event.key == 'ArrowRight') {
             incrementSpeaker();
@@ -91,6 +92,18 @@ const validTypes = [
         if (event.code == 'Enter'){
             addMemo();
         }
+
+    })
+
+
+
+    //空欄からの打ちはじめの場合、自動ロックオンを発動
+    document.getElementById('Txt_memo').addEventListener('input', (event)=>{
+        const Memo = document.getElementById('Txt_memo').value;
+        if (lastMemoLength == 0 && Memo.length > 0) {
+            doAutoLockOn('type');
+        }
+        lastMemoLength = Memo.length;
     })
 
     //初期ウインドウタイトル（バージョン表示）
@@ -421,7 +434,7 @@ function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();
     player.currentTime = sec;
     player.play();
-    syncTimecode();
+    doAutoLockOn('skip');
 }
 
 /** 秒インデックスを「分：秒」形式に変換
@@ -446,9 +459,28 @@ function minSecToSec(minsec) {
     return Number(d[0]*60) + Number(d[1]);
 }
 
+
+/**
+ * 自動ロックオンを発動すべきか設定を確認して判断 
+ * @param {string} trigger 6種類のトリガータイプいずれか
+ * @returns 更新を実施した時はtrue
+ */
+async function doAutoLockOn(trigger) {
+    console.log("doAutoLockOn trigger: "+trigger);
+    if (trigger == 'click' || trigger == 'skip' || trigger == 'type' || trigger == 'speaker' || trigger == 'snippets' || trigger == 'addmemo'){
+        await window.api.getConfig('autoLockOn_'+trigger).then((result) => {
+            console.log(result);
+            if (result == true ) { syncTimecode(); }
+            return result;
+        });
+    } else {
+        return false;
+    }
+}
+
+
+
 /* #endregion */
-
-
 
 //----------------------------------------------------
 // #region レコードセル関連
@@ -513,7 +545,7 @@ function openContextMenuOn(e) {
     window.api.openContextMenuOn(id);
 }
 
-//メインプロセスから指定ID行の話者クラスを変更
+//メインプロセスからリスト上の指定ID行の話者クラスを変更
 window.api.setSpeakerOfRow((id, speaker)=>{
     const el = document.querySelector('#'+ id + " .inTime");
     for (let i=0; i<8; i++){
@@ -638,6 +670,7 @@ function decrementSpeaker() {
         sp--;
         document.getElementById('Txt_speaker').value = sp;
         setSpeakerColor(sp);
+        doAutoLockOn('speaker');
     }
 }
 function incrementSpeaker() {
@@ -647,6 +680,7 @@ function incrementSpeaker() {
         sp++;
         document.getElementById('Txt_speaker').value = sp;
         setSpeakerColor(sp);
+        doAutoLockOn('speaker');
     }
 }
 function setSpeakerColor(sp){
@@ -674,6 +708,15 @@ function incrementTimecode() {
         jumpToTimeIndex(ct);
     }    
 }
+
+//タイムコード欄クリックまたはショートカットで、設定を確認してロックオン実行
+async function lockedTimeClicked(){
+    await window.api.getConfig('autoLockOn_click').then((result) => {
+        if (result == true ) { syncTimecode(); }
+    });
+}
+
+//自動ロックオン実行
 function syncTimecode() {
     if (player != undefined) {
         document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
@@ -715,16 +758,20 @@ function inputFromFunctionTemplate(key) {
         memo.focus();
         memo.setSelectionRange(cur, cur); //カーソルを移動
     }
+    doAutoLockOn('snippets');
 }
 
 
 //GUIからメインプロセスに新規メモ内容を送信
-function addMemo() {    
+async function addMemo() {    
+    await doAutoLockOn('addmemo'); //オートロックオンでタイムコードが更新されるなら待つ。
+
     const inTime = minSecToSec(document.getElementById('Txt_lockedTimecode').value);
     const script = document.getElementById('Txt_memo').value;
     const speaker = document.getElementById('Txt_speaker').value;
     window.api.addNewMemoFromGUI(inTime, script, speaker);
     document.getElementById('Txt_memo').value = "";
+    lastMemoLength = 0;
 }
 
 //GUIからメインプロセスに動画の静止画キャプチャを送信

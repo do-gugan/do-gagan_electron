@@ -124,7 +124,7 @@ class Common {
     parent: mainWin,
     modal: true,
     width: 500,
-    height: 510,
+    height: 565,
     backgroundColor: 'white',
     resizable: false,
     minimizable: false,

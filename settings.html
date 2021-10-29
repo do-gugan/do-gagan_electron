@@ -32,11 +32,34 @@
                 <input type="number" id="Txt_AutoSave" step='1' min='1' onchange="changeAutoSaveDur();"/>
                 <span id="Lbl_AutoSave_after"></span>
             </div>
-            <div>
-                <label>
-                    <input type="checkbox" id="Chk_AutoLoclOn" onchange="changeAutoLocSetting();"/>
-                    <span id="Lbl_AutoLockOn_after"></span>    
-                </label>
+            <div id="Lbl_AutoLockOn_Title"></div>
+            <div id="LockOnList_outer">
+                <div id="LockOnList_inner">
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_click" onchange="changeAutoLocSetting('click');"/>
+                        <span id="Lbl_AutoLockOn_click"></span>    
+                    </label>
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_skip" onchange="changeAutoLocSetting('skip');"/>
+                        <span id="Lbl_AutoLockOn_skip"></span>    
+                    </label>
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_type" onchange="changeAutoLocSetting('type');"/>
+                        <span id="Lbl_AutoLockOn_type"></span>    
+                    </label>
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_speaker" onchange="changeAutoLocSetting('speaker');"/>
+                        <span id="Lbl_AutoLockOn_speaker"></span>    
+                    </label>
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_snippets" onchange="changeAutoLocSetting('snippets');"/>
+                        <span id="Lbl_AutoLockOn_snippets"></span>    
+                    </label>
+                    <label>
+                        <input type="checkbox" id="Chk_AutoLockOn_addmemo" onchange="changeAutoLocSetting('addmemo');"/>
+                        <span id="Lbl_AutoLockOn_addmemo"></span>    
+                    </label>
+                </div>
             </div>
             <div>
                 <span id="Lbl_MultiplySkipTime_before"></span>

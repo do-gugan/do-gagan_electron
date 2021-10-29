@@ -31,7 +31,15 @@
   "RESET": "初期化",
   "AUTOSAVE_BEFORE": "自動保存間隔",
   "AUTOSAVE_AFTER": "分（有効化は「ファイル」メニューから）",
-  "AUTO_LOCKON_AFTER": "新規メモ欄のタイムコードを、新規入力開始時やジャンプ操作時に更新する",
+
+  "AUTO_LOCKON_TITLE": "以下の時に新規メモ欄のタイムコードを更新（ロックオン）する",
+  "AUTO_LOCKON_CLICK": "タイムコード欄をクリック(またはキーボードショートカット)",
+  "AUTO_LOCKON_SKIP": "再生箇所をスキップ移動",
+  "AUTO_LOCKON_TYPE": "空白状態のメモ欄で記入開始",
+  "AUTO_LOCKON_SPEAKER": "話者を変更",
+  "AUTO_LOCKON_SNIPPETS": "ファンクションキー定型文を使用",
+  "AUTO_LOCKON_ADDMEMO": "追加ボタン/Enterキーでメモを追加する直前",
+
   "MULTIPLY_SKIPTIME_BEFORE": "Shiftキーを押しながらジャンプした時の移動量を",
   "MULTIPLY_SKIPTIME_AFTER": "倍にする",
   "SKIPTIME_GUIDE": "基本スキップ秒数の変更は「再生」メニューまたは◀◀／▶▶ボタン下のプルダウンメニューで行えます。",

@@ -31,7 +31,15 @@
   "RESET": "Initialize",
   "AUTOSAVE_BEFORE": "Auto-save interval",
   "AUTOSAVE_AFTER": "min.(You can enable it from [File] menu.",
-  "AUTO_LOCKON_AFTER": "Update 'lock-on' time code when you start type new memo or jump playback point.",
+
+  "AUTO_LOCKON_TITLE": "Update new memo's timecode (lock-on) when,",
+  "AUTO_LOCKON_CLICK": "Click timecode field (or keyboard chortcut).",
+  "AUTO_LOCKON_SKIP": "Skipping playback point.",
+  "AUTO_LOCKON_TYPE": "Start input memo field from empty.",
+  "AUTO_LOCKON_SPEAKER": "Change speaker code.",
+  "AUTO_LOCKON_SNIPPETS": "Use functionKey snippets.",
+  "AUTO_LOCKON_ADDMEMO": "Just before adding memo to the list.",
+
   "MULTIPLY_SKIPTIME_BEFORE": "Multipley jump time by ",
   "MULTIPLY_SKIPTIME_AFTER": "x when Shift key pressed.",
   "SKIPTIME_GUIDE": "You can select base jump time from [Playback] menu of bottom menu of [◀◀][▶▶] buttons.",

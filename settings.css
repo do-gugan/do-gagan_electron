@@ -16,9 +16,6 @@
     margin-bottom: 1em;
 }
 
-.grid2 div:last-child {
-    margin:1em 0;
-}
 .grid3 {
     text-align: right;
 }
@@ -53,6 +50,31 @@
     align-self: center; /* 水平センタリング */
     position: relative;
     bottom: -2.0em;
+}
+
+#Lbl_AutoLockOn_Title {
+    margin-bottom: 0em;
+}
+
+#LockOnList_outer {
+    overflow: auto;
+    height: 4em;
+    border: 1px solid #ccc;
+    padding: 0.5em;
+    width: 85%;
+}
+#LockOnList_inner {
+    display: flex;
+    flex-direction: column;
+    margin: 0px;
+}
+
+#LockOnList_inner label {
+    display: block;
+}
+
+#LockOnList_inner input {
+    margin-right:0;
 }
 
 #Txt_AutoSave {

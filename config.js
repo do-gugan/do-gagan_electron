@@ -57,9 +57,29 @@ const store = new Store({
       default: 5,
       minimum: 1,
     },
-    autoLockOn: {
+    autoLockOn_click: {
       type:'boolean',
       default: true,
+    },
+    autoLockOn_skip: {
+      type:'boolean',
+      default: true,
+    },
+    autoLockOn_type: {
+      type:'boolean',
+      default: true,
+    },
+    autoLockOn_speaker: {
+      type:'boolean',
+      default: false,
+    },
+    autoLockOn_snippets: {
+      type:'boolean',
+      default: true,
+    },
+    autoLockOn_snippets: {
+      type:'boolean',
+      default: false,
     },
     multiPlyJumpIndex: {
       type: 'number',
