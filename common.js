@@ -68,6 +68,7 @@ class Common {
   openLogFile(pth, clear = false) {
       if (clear == true) {
             records.length = 0;
+            this.mainWin.webContents.send('clear-records');
       }
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
@@ -105,7 +106,7 @@ class Common {
     }
 
     //名前をつけて保存、自動上書き保存以外の時はバックアップファイルを作成
-    if (pth.length == 0 && isAutoSave == false) {
+    if (pth.length == 0 && isAutoSave == false && fs.existsSync(logpath)) {
       let shouldBackup = this.config.get('backupFile');  
       console.log("backup file:" + shouldBackup);
       if (shouldBackup == true) {
@@ -131,8 +132,14 @@ class Common {
     const _ = new this.i18n(this.lang, 'default');
 
     //Youtube用の注意書きを挿入（改行コードを置換）
-    if (format = 'youtube'){
+    if (format == 'youtube'){
       body += _.t('YOUTUBE_CHAPTER_GUIDE');//.repalce('\n', ret);
+
+      //先頭チャプターが0ではない場合、追加する
+      if (parseInt(records[0].inTime) != 0){
+        console.log("Adding 0 chapter.");
+        body += this.secToYoutubeChapterTimeCode(0, this.mediaDuration) + ` ` + _.t('YOUTUBE_CHAPTER_START') + ret;
+      };
     }
 
     records.forEach(r => {

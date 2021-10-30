@@ -115,6 +115,7 @@ const openVideoDialog = function() {
     } else {
       format = '1.0';
     }
+    console.log(format);
     common.saveLog(savePath, format, false);
   }
 }
