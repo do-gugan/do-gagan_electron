@@ -8,6 +8,7 @@ const fs = require('fs'); //ファイルアクセス
 const readline = require("readline"); //1行ずつ読む
 const dggRecord = require("./dggRecord"); //レコードクラス
 const i18n = require("./i18n");
+const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
 
 //グローバルオブジェクト
 const app = null;
@@ -19,6 +20,7 @@ const dialog = null;
 const config = null;
 const mediaPath = null;
 const mediaDuration = null;
+const isDirty = false; //未保存データがあるか管理するフラグ
 const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
 const _ = null;
@@ -83,6 +85,7 @@ class Common {
           console.log('Invalid line: ' + line);
         };
       }
+      this.setDirtyFlag(false); //ダーティフラグをクリア
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
   }
 
@@ -108,7 +111,7 @@ class Common {
     //名前をつけて保存、自動上書き保存以外の時はバックアップファイルを作成
     if (pth.length == 0 && isAutoSave == false && fs.existsSync(logpath)) {
       let shouldBackup = this.config.get('backupFile');  
-      console.log("backup file:" + shouldBackup);
+      //console.log("backup file:" + shouldBackup);
       if (shouldBackup == true) {
         let backupPath = logpath.replace(path.extname(logpath),".bak");
         //console.log(backupPath);
@@ -133,7 +136,8 @@ class Common {
 
     //Youtube用の注意書きを挿入（改行コードを置換）
     if (format == 'youtube'){
-      body += _.t('YOUTUBE_CHAPTER_GUIDE');//.repalce('\n', ret);
+      body += _.t('YOUTUBE_CHAPTER_GUIDE');
+      body = body.replace('\n', ret);
 
       //先頭チャプターが0ではない場合、追加する
       if (parseInt(records[0].inTime) != 0){
@@ -142,13 +146,13 @@ class Common {
       };
     }
 
+    //データ作成
     records.forEach(r => {
 
       switch (format) {
         case '1.0':
           //動画眼1.0形式
-          //charset = 'sjis';
-          //（未実装）
+          body += this.secToHHMMSS(r.inTime) + `\t${r.script}${ret}`;
           break;
         case 'youtube':
           body += this.secToYoutubeChapterTimeCode(r.inTime, this.mediaDuration) + ` ${r.script}${ret}`;
@@ -159,8 +163,17 @@ class Common {
           break;
       }
     });
-    //console.log(body);
-    fs.writeFileSync(logpath, body,charset);
+
+    //書き出し
+
+    //1.0形式ではShiftJIS
+    if (format == '1.0') {
+        body = iconv.encode(body, 'Shift_JIS');
+    }
+    fs.writeFileSync(logpath, body);
+
+    //上書き保存の時はダーティフラグをクリア
+    if (pth.length == 0) { this.setDirtyFlag(false); }
   }
 //
 /**
@@ -189,11 +202,22 @@ class Common {
       const min = Math.floor((secTotal - (hour * 60)) / 60);
       const sec = secTotal - (hour * 3600) - (min * 60);
       return ( '00' + hour ).slice( -2 ) + ":" +( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
-
     }
   }
+
+  secToHHMMSS(secTotal) {
+    const hour = Math.floor(secTotal / 3600);
+    const min = Math.floor((secTotal - (hour * 60)) / 60);
+    const sec = secTotal - (hour * 3600) - (min * 60);
+    return ( '00' + hour ).slice( -2 ) + ":" +( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+  }
+
   // #endregion
 
+  setDirtyFlag(flag) {
+    this.isDirty= flag;
+    this.mainWin.webContents.send('update-dirty-flag', flag);
+  }
 
   openSupportSite() {
     const shell = require('electron').shell;
@@ -340,6 +364,7 @@ class Common {
     records.forEach(r => {
       this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
     });
+    this.setDirtyFlag(true);
   }
 
   /**
@@ -364,14 +389,17 @@ class Common {
   //レンダラーから更新されたセルの情報を受け取りrecordに反映
   memoChanged(id,script) {
     records.find(r => r.id == id).script = script;
+    this.setDirtyFlag(true);
   }
 
   inTimeChanged(id,inTime) {
     records.find(r => r.id == id).inTime = inTime;
+    this.setDirtyFlag(true);
   }
 
   speakerChanged(id,speaker) {
     records.find(r => r.id == id).speaker = speaker;
+    this.setDirtyFlag(true);
   }
 
   getSpeakerFromId(id) {
@@ -407,6 +435,7 @@ class Common {
 
     //レンダラーにも反映
     this.mainWin.webContents.send('delete-row',id);
+    this.setDirtyFlag(true);
   }
 //--------------------------------
 // #region 置換ダイアログ用
