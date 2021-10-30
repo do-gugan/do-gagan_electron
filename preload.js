@@ -43,6 +43,9 @@ contextBridge.exposeInMainWorld(
     //メインプロセスの設定変更を通知
     loadConfig: (callback) => ipcRenderer.on("load-config", ()=>callback()),
 
+    //ダーティフラグ表示の更新
+    updateDirtyFlag: (callback) => ipcRenderer.on("update-dirty-flag", (event, flag)=>callback(flag)),
+
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
     // --------------------------------------------

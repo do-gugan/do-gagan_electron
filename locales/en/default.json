@@ -33,7 +33,7 @@
     "300": "5min.",
     "600": "10min.",
 
-    "YOUTUBE_CHAPTER_GUIDE" : "Paste list below into description of your youtube video. The jump point will not perfectly because of the characteistic of codec. \nYou also must care about\n- The first chapter should be 0sec.\n- You must have at least 3 chapters.\n- Each chapter must have >10sec interval\n-----\n",
+    "YOUTUBE_CHAPTER_GUIDE" : "Paste list below into description of your youtube video.\n The jump point will not perfectly because of the characteistic of codec. \nYou also must care about\n- The first chapter should be 0sec.\n- You must have at least 3 chapters.\n- Each chapter must have >10sec interval\n-----\n",
     "YOUTUBE_CHAPTER_START" : "Start"
 
 }

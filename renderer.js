@@ -304,7 +304,7 @@ function setMediaDuration() {
     window.api.setMediaDuration(player.duration);
 }
 
-async function changeWindowTitle(path) {
+async function changeWindowTitle(path, isDirty = false) {
     const filename = path.substring(path.lastIndexOf('\\') + 1); //macOSだとどうなる？
     document.title = _.t("APPNAME",locale) + "3 | " + filename;
 }
@@ -444,6 +444,17 @@ function jumpToTimeIndex(sec){
     player.play();
     //doAutoLockOn('skip'); //メディアのseekedイベントから呼ぶので不要
 }
+window.api.updateDirtyFlag((flag)=> {
+    //console.log('updateDirtyFlag:' + flag);
+    let newTitle = document.title;
+    if (!newTitle.endsWith('*') && flag == true){
+        newTitle += '*';
+    } else if (newTitle.endsWith('*') && flag == false) {
+        newTitle = newTitle.substring(0, newTitle.length -1);
+    }
+    document.title = newTitle;
+
+});
 
 /** 秒インデックスを「分：秒」形式に変換
  * @param (Number) secTotal
