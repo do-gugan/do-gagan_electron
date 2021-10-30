@@ -208,6 +208,8 @@ function mediaOpened (path) {
     //プレーヤーからのイベントリスナーを登録
     player.addEventListener('play', (event) => playerPlayed() );
     player.addEventListener('pause', (event) => playerPaused() );
+    player.addEventListener('seeked', (event) => playerSeeked() );
+    player.addEventListener('durationchange', (event) => setMediaDuration() );
 
     //UIを有効化
     document.getElementById('Btn_ScreenShot').disabled = false;
@@ -293,8 +295,14 @@ function playerPlayed() {
 function playerPaused() {
 
 }
+function playerSeeked() {
+    doAutoLockOn('skip');
+}
 /* #endregion */
 
+function setMediaDuration() {
+    window.api.setMediaDuration(player.duration);
+}
 
 async function changeWindowTitle(path) {
     const filename = path.substring(path.lastIndexOf('\\') + 1); //macOSだとどうなる？
@@ -434,7 +442,7 @@ function jumpToTimeIndex(sec){
     //document.getElementById('body').focus();
     player.currentTime = sec;
     player.play();
-    doAutoLockOn('skip');
+    //doAutoLockOn('skip'); //メディアのseekedイベントから呼ぶので不要
 }
 
 /** 秒インデックスを「分：秒」形式に変換
@@ -466,10 +474,10 @@ function minSecToSec(minsec) {
  * @returns 更新を実施した時はtrue
  */
 async function doAutoLockOn(trigger) {
-    console.log("doAutoLockOn trigger: "+trigger);
+    //console.log("doAutoLockOn trigger: "+trigger);
     if (trigger == 'click' || trigger == 'skip' || trigger == 'type' || trigger == 'speaker' || trigger == 'snippets' || trigger == 'addmemo'){
         await window.api.getConfig('autoLockOn_'+trigger).then((result) => {
-            console.log(result);
+            //console.log(result);
             if (result == true ) { syncTimecode(); }
             return result;
         });

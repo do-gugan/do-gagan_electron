@@ -28,7 +28,6 @@ contextBridge.exposeInMainWorld(
     skipBackward: (callback) => ipcRenderer.on("skip-backward", ()=>callback()),
 
     openReplaceWindow: (callback) => ipcRenderer.on("open-replace-window", ()=>callback()),
-   
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),
@@ -92,12 +91,7 @@ contextBridge.exposeInMainWorld(
     openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id),
 
     saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
-    //コンテクストメニューで実行された機能
 
-    //
- 
-    // ipcRenderer.on(''), (e.command) => {
-
-    // }
+    setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
   }
 );

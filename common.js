@@ -18,6 +18,7 @@ const cmenu = null;
 const dialog = null;
 const config = null;
 const mediaPath = null;
+const mediaDuration = null;
 const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
 const _ = null;
@@ -88,10 +89,103 @@ class Common {
 // #region 設定ウインドウ
 //--------------------------------
 
+  /**
+   * 保存。パスは指定されない限り動画と同じ。ファイルが存在しなければ作成
+   * @param {string} path 名前を指定して保存する時のパス 
+   * @param {string} format 保存形式（デフォルトは'2.0'） 
+   * @param {boolean} isAutoSave 自動保存ならtrue
+   */
+  async saveLog(pth = '', format = '2.0', isAutoSave = false){
+    //ファイル名の指定がない場合は動画パスから生成
+    let logpath = '';
+    if (pth.length == 0) {
+      logpath = this.mediaPath.replace(path.extname(this.mediaPath),".dggn.txt"); //ログ形式Ver.2の拡張子
+    } else {
+      logpath = pth;
+    }
 
+    //名前をつけて保存、自動上書き保存以外の時はバックアップファイルを作成
+    if (pth.length == 0 && isAutoSave == false) {
+      let shouldBackup = this.config.get('backupFile');  
+      console.log("backup file:" + shouldBackup);
+      if (shouldBackup == true) {
+        let backupPath = logpath.replace(path.extname(logpath),".bak");
+        //console.log(backupPath);
+        fs.copyFileSync(logpath, backupPath);
+      }
+    }
 
+    //改行コードの決定
+    var ret = '\r'; //デフォルトでUNIX系改行コード
+    if (process.platform == 'win32') {
+      //console.log("win");
+      ret = '\r\n';
+    } else if (process.platform == 'darwin') {
+      //console.log("mac");
+      ret = '\n';
+    }
 
-// #endregion
+    let body = "";
+    let charset = 'utf8';
+
+    const _ = new this.i18n(this.lang, 'default');
+
+    //Youtube用の注意書きを挿入（改行コードを置換）
+    if (format = 'youtube'){
+      body += _.t('YOUTUBE_CHAPTER_GUIDE');//.repalce('\n', ret);
+    }
+
+    records.forEach(r => {
+
+      switch (format) {
+        case '1.0':
+          //動画眼1.0形式
+          //charset = 'sjis';
+          //（未実装）
+          break;
+        case 'youtube':
+          body += this.secToYoutubeChapterTimeCode(r.inTime, this.mediaDuration) + ` ${r.script}${ret}`;
+          break;
+        default:
+          //2.0形式（デフォルト）
+          body += `${r.inTime}\t${r.script}\t${r.speaker}${ret}`;
+          break;
+      }
+    });
+    //console.log(body);
+    fs.writeFileSync(logpath, body,charset);
+  }
+//
+/**
+ * 秒インデックスをYoutubeチャプター形式形式に変換
+ * 動画の長さで、m:ss、mm:ss、hh:mm:ssを選択
+ * @param {*} sec 変換したい秒値
+ * @param {*} duration 動画の長さ
+ * @returns 変換後の文字列
+ */
+ secToYoutubeChapterTimeCode(secTotal , duration) {
+    if (duration < 600) {
+      //m:ss
+      const min = Math.floor(secTotal / 60);
+      const sec = secTotal - min*60;
+      return min + ":" + ( '00' + sec ).slice( -2 )
+    
+    } else if (duration < 3600) {
+      //mm:ss
+      const min = Math.floor(secTotal / 60);
+      const sec = secTotal - min*60;
+      return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+
+    } else {
+      //hh:mm:ss
+      const hour = Math.floor(secTotal / 3600);
+      const min = Math.floor((secTotal - (hour * 60)) / 60);
+      const sec = secTotal - (hour * 3600) - (min * 60);
+      return ( '00' + hour ).slice( -2 ) + ":" +( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+
+    }
+  }
+  // #endregion
 
 
   openSupportSite() {
@@ -277,11 +371,16 @@ class Common {
     return records.find(r => r.id == id).speaker;
   }
 
-    /**
-   * コンテクストメニューから話者フラグ変更を実行
-   * @param {string} id 
-   * @param {Number} speaker 
-   */
+  //レンダラーから通知されたメディアの総再生時間を保存
+  setMediaDuration(duration) {
+    this.mediaDuration = duration;
+  }
+
+  /**
+  * コンテクストメニューから話者フラグ変更を実行
+  * @param {string} id 
+  * @param {Number} speaker 
+  */
   setSpeakerOfRow(id, speaker) {
     //配列を更新
     this.speakerChanged(id, speaker);

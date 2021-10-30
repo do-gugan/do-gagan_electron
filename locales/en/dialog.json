@@ -6,8 +6,10 @@
   "ALLFIES": "All Files",
 
   "OPEN_LOG_FILE":"Choose a Log file to open...",
-  "LOGFILES": "Log Files",
-  
+  "LOGFILES": "Do-gagan 2.0 Format",
+  "LOGFILES1": "Do-gagan 1.0 Format",
+  "YOURUBE_CHAPTER": "Chapters for Youtube",
+
 
   "BUTTON-REBOOT": "Reboot",
   "BUTTON-LATER": "Later",
@@ -43,6 +45,8 @@
   "MULTIPLY_SKIPTIME_BEFORE": "Multipley jump time by ",
   "MULTIPLY_SKIPTIME_AFTER": "x when Shift key pressed.",
   "SKIPTIME_GUIDE": "You can select base jump time from [Playback] menu of bottom menu of [◀◀][▶▶] buttons.",
-  "CLOSE": "Close"
+  "CLOSE": "Close",
+
+  "SAVE_LOG_FILE_AS": "Choose location, name and format to non-standard log file..."
 
 }

@@ -150,10 +150,14 @@ app.on('window-all-closed', () => {
   });
 
    //レンダラーからキャプチャー画像を受け取る
-   ipcMain.handle('saveCapture', (event, dataURL, currentSec) => {
+  ipcMain.handle('saveCapture', (event, dataURL, currentSec) => {
     common.saveCapture(dataURL, currentSec);
   });
 
+  //レンダラーから通知されたメディアの総再生時間を保存
+  ipcMain.handle('setMediaDuration', (event, duration) => {
+    common.setMediaDuration(duration);
+  });
 
   //レンダラーからリスト内のログが更新されたら受け取る
   ipcMain.on('memoChanged', (event, id, script) => {

@@ -10,6 +10,7 @@ const { app, dialog, remote } = require('electron');
 const common = require('./common');
 const config = require('./config');
 const i18n = require('./i18n');
+const path = require('path');
 
 //--------------------------------
 // グローバル変数
@@ -58,7 +59,6 @@ const openAboutDialog = function() {
  * 動画／音声を開くファイルダイアログを表示
  */
 const openVideoDialog = function() {
-  p = require('./package.json');
   let result = dialog.showOpenDialogSync(common.mainWin, {
     title: _.t('OPEN_VIDEO_TITLE'),
     //defaultPath:"",
@@ -79,7 +79,6 @@ const openVideoDialog = function() {
  * ログファイルを開くダイアログを表示
  */
  const openLog = function() {
-  p = require('./package.json');
   let result = dialog.showOpenDialogSync(common.mainWin, {
     title: _.t('OPEN_LOG_FILE'),
     //defaultPath:"",
@@ -94,6 +93,31 @@ const openVideoDialog = function() {
   }
 }
 
+/**
+ * ログファイルの別名保存ダイアログを表示
+ */
+ const saveLogAs = function() {
+  let savePath = dialog.showSaveDialogSync(common.mainWin, {
+    title: _.t('SAVE_LOG_FILE_AS'),
+    defaultPath:path.dirname(common.mediaPath),
+    filters: [
+      { name: _.t('LOGFILES'), extensions: ['dggn.txt'] },
+      { name: _.t('LOGFILES1'), extensions: ['txt'] },
+      { name: _.t('YOURUBE_CHAPTER'), extensions: ['youtube.txt'] },
+    ]
+  });
+  if (savePath != undefined) {
+    let format = '';
+    if (savePath.endsWith('.dggn.txt')) {
+      format = '2.0';
+    } else if (savePath.endsWith('.youtube.txt')) {
+      format = 'youtube';
+    } else {
+      format = '1.0';
+    }
+    common.saveLog(savePath, format, false);
+  }
+}
 
 //--------------------------------
 // exports
@@ -103,4 +127,5 @@ module.exports = {
   openAboutDialog: openAboutDialog,
   openVideoDialog: openVideoDialog,
   openLog: openLog,
+  saveLogAs: saveLogAs,
 }

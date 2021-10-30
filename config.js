@@ -108,6 +108,10 @@ const store = new Store({
     newMemoBlockShown: {
       type: 'boolean',
       default: true,
+    },
+    backupFile: {
+      type: 'boolean',
+      default: true,
   },
 }
 });

@@ -47,13 +47,15 @@ const setTemplate = (lang='ja') => {
                 }},
                 {type: 'separator'},
                 {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false,accelerator: 'CmdOrCtrl+S',  click: ()=>{
-                    console.log('OVERWRITE');
+                    //console.log('OVERWRITE');
+                    common.saveLog('', '2.0', false);
                 }},
                 {id:'AUTOSAVE', label: _.t('AUTOSAVE'), type: 'checkbox', click: ()=>{
                     console.log('AUTOSAVE');
                 }},
                 {id:'SAVE-AS', label: _.t('SAVE-AS'), enabled: false, click: ()=>{
-                    console.log('SAVE-AS');
+                    //console.log('SAVE-AS');
+                    dialog.saveLogAs();
                 }},
                 {id:'EXPORT-LITE', label: _.t('EXPORT-LITE'), enabled: false, click: ()=>{
                     console.log('EXPORT-LITE');

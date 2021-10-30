@@ -6,7 +6,9 @@
   "ALLFILES": "すべてのファイル",
   
   "OPEN_LOG_FILE":"開くログファイルを選択してください。",
-  "LOGFILES": "ログファイル",
+  "LOGFILES": "動画眼2.0形式ログ",
+  "LOGFILES1": "動画眼1.0形式ログ",
+  "YOURUBE_CHAPTER": "Youtube用チャプター",
   
 
   "BUTTON-REBOOT": "再起動",
@@ -43,5 +45,8 @@
   "MULTIPLY_SKIPTIME_BEFORE": "Shiftキーを押しながらジャンプした時の移動量を",
   "MULTIPLY_SKIPTIME_AFTER": "倍にする",
   "SKIPTIME_GUIDE": "基本スキップ秒数の変更は「再生」メニューまたは◀◀／▶▶ボタン下のプルダウンメニューで行えます。",
-  "CLOSE": "閉じる"
+  "CLOSE": "閉じる",
+
+  "SAVE_LOG_FILE_AS": "標準ファイル以外にログを書きだす場所と形式を指定してください。"
+
 }
