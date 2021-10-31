@@ -212,6 +212,86 @@ class Common {
     return ( '00' + hour ).slice( -2 ) + ":" +( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
   }
 
+  /**
+   * 動画眼Lite形式のJSONファイルを出力
+   * @returns 
+   */
+  exportLite() {
+    const _ = new i18n(lang, 'dialog');
+    const jsonPath = this.mediaPath.replace(path.extname(this.mediaPath), '.json.js');
+    let options = null;
+    //存在をチェックして確認
+    if (fs.existsSync(jsonPath)) {
+      options = {
+        type: 'warning',
+        buttons: [_.t('LITE_OK'), _.t('LITE_CANCEL')],
+        title: _.t('LITE_JSON_TITLE'),
+        message: _.t('LITE_JSON_MESSAGE').replace('%1', path.basename(jsonPath)),
+      }; 
+      if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
+    }
+
+    //書き出し処理
+    const title = path.basename(this.mediaPath) + " | 動画眼Lite";
+    let body = "document.title=\"" + title + "\";\r\nconst scriptsJson = [\r\n";
+    let charset = 'utf8';
+
+    //データ作成
+    records.forEach(r => {
+        body += '\t{ in:' + r.inTime + ', script:"' + r.script.replace('\"','\\\"') + '", speaker:' + r.speaker + ' },\n';
+    });
+    body = body.substring(0, body.length - 2); //末尾のカンマ、\r、\nの3文字を削る
+    body += "\r\n];";
+    //書き出し
+    fs.writeFileSync(jsonPath, body);
+
+    //HTMLファイルの準備
+    
+    //ダウンドード意志の確認
+    options = {
+      type: 'warning',
+      buttons: [_.t('LITE_DOWNLOAD'), _.t('LITE_CANCEL')],
+      title: _.t('LITE_SUCCESS_TITLE'),
+      message: _.t('LITE_SUCCESS_MESSAGE').replace('%1', path.basename(jsonPath)),
+    }; 
+    if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
+
+    const htmlPath = this.mediaPath.replace(path.extname(this.mediaPath), '.html');
+    //上書き確認
+    if (fs.existsSync(htmlPath)) {
+      options = {
+        type: 'error',
+        buttons: [_.t('LITE_OK'), _.t('LITE_CANCEL')],
+        title: _.t('LITE_HTML_TITLE'),
+        message: _.t('LITE_HTML_MESSAGE').replace('%1', path.basename(htmlPath)),
+      }; 
+    if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
+    }
+
+    //サーバーからダウンロード
+    const {download} = require("electron-dl");
+    const dloptions = {
+      directory: path.dirname(htmlPath),
+      filename:path.basename(htmlPath),
+    }
+    download(this.mainWin, this.config.get('liteAutoDownloadURL'), dloptions).catch(err => {
+      //ダウンロードエラー時の処理
+      options = {
+        type: 'error',
+        buttons: [_.t('LITE_DOWNLOAD_MANUAL'), _.t('LITE_CANCEL')],
+        title: _.t('LITE_DOWNLOAD_FAIL_TITLE'),
+        message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(jsonPath)),
+      }; 
+      if (this.dialog.showConfirmation(options) == 1) return;
+      //ダウンロードページを開く
+      const shell = require('electron').shell;
+      shell.openExternal(this.config.get('liteManualDownloadURL'));
+    })
+
+
+
+}
+
   // #endregion
 
   setDirtyFlag(flag) {

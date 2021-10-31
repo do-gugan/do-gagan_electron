@@ -47,6 +47,19 @@
   "SKIPTIME_GUIDE": "基本スキップ秒数の変更は「再生」メニューまたは◀◀／▶▶ボタン下のプルダウンメニューで行えます。",
   "CLOSE": "閉じる",
 
-  "SAVE_LOG_FILE_AS": "標準ファイル以外にログを書きだす場所と形式を指定してください。"
+  "SAVE_LOG_FILE_AS": "標準ファイル以外にログを書きだす場所と形式を指定してください。",
 
+  "LITE_OK": "上書き",
+  "LITE_DOWNLOAD": "ダウンロード",
+  "LITE_DOWNLOAD_MANUAL": "手動ダウンロード",
+  "LITE_CANCEL": "キャンセル",
+  "LITE_JSON_TITLE": "JSファイル上書き確認",
+  "LITE_JSON_MESSAGE": "%1は存在します。\n上書きしますか？",
+  "LITE_HTML_TITLE": "HTMLファイル上書き確認",
+  "LITE_HTML_MESSAGE": "%1は存在します。\n上書きしますか？",
+  "LITE_SUCCESS_TITLE": "動画眼Liteのダウンロード確認",
+  "LITE_SUCCESS_MESSAGE": "動画眼Lite用データファイル「%1」を動画と同じフォルダに保存しました。\n動画眼Liteの最新HTMLファイルをダウンロードして配置しますか？\n（インターネット接続が必要です）",
+  "LITE_DOWNLOAD_FAIL_TITLE": "動画眼Liteのダウンロードエラー", 
+  "LITE_DOWNLAOD_FAIL_MESSAGE": "ダウンロードに失敗しました。\nOKでダウンロードページをブラウザで開きます。index.htmlをダウンロードし、動画ファイルと同じフォルダに拡張子違いの同名（%1）で保存してください。"
+  
 }

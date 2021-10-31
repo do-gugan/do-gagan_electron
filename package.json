@@ -9,6 +9,7 @@
   "author": "Kazuyoshi Furuta",
   "license": "MIT",
   "dependencies": {
+    "electron-dl": "^3.2.1",
     "electron-store": "^6.0.1",
     "iconv-lite": "^0.6.3"
   },

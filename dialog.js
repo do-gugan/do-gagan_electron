@@ -120,6 +120,11 @@ const openVideoDialog = function() {
   }
 }
 
+const showConfirmation = function(options) {
+  const result = dialog.showMessageBoxSync(common.mainWin, options);
+  return result;
+}
+
 //--------------------------------
 // exports
 //--------------------------------
@@ -129,4 +134,5 @@ module.exports = {
   openVideoDialog: openVideoDialog,
   openLog: openLog,
   saveLogAs: saveLogAs,
+  showConfirmation: showConfirmation,
 }

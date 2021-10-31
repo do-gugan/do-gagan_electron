@@ -47,6 +47,19 @@
   "SKIPTIME_GUIDE": "You can select base jump time from [Playback] menu of bottom menu of [◀◀][▶▶] buttons.",
   "CLOSE": "Close",
 
-  "SAVE_LOG_FILE_AS": "Choose location, name and format to non-standard log file..."
+  "SAVE_LOG_FILE_AS": "Choose location, name and format to non-standard log file...",
+
+  "LITE_OK": "Overwrite",
+  "LITE_DOWNLOAD": "Download",
+  "LITE_DOWNLOAD_MANUAL": "Download manually",
+  "LITE_CANCEL": "Cancel",
+  "LITE_JSON_TITLE": "Confirm overwrite JS file",
+  "LITE_JSON_MESSAGE": "%1 exists.\nOverwrite?",
+  "LITE_HTML_TITLE": "Confirm overwrite HTML file",
+  "LITE_HTML_MESSAGE": "%1 exists.\nOverwrite?",
+  "LITE_SUCCESS_TITLE": "Confirm download Do-gagan Lite",
+  "LITE_SUCCESS_MESSAGE": "A data file for Do-gagan Lite '%1' was created at same folder for media file.\nDo you also download the latest Do-gagan Lite html file from server?\n(requires internet connection.)",
+  "LITE_DOWNLOAD_FAIL_TITLE": "Error: Downloading Do-gagan Lite", 
+  "LITE_DOWNLAOD_FAIL_MESSAGE": "Doqnloading faild.\nPleas hit 'OK' to open manual download page. Then doanload 'index.html', place it to the same folder of media file, rename it to same filename '%1'."
 
 }

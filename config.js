@@ -112,7 +112,15 @@ const store = new Store({
     backupFile: {
       type: 'boolean',
       default: true,
-  },
+    },
+    liteAutoDownloadURL: {
+      type: 'string',
+      default: 'https://github.com/do-gugan/do-gagan_lite/releases/latest/download/index.html',
+    },
+    liteManualDownloadURL: {
+      type: 'string',
+      default: 'https://github.com/do-gugan/do-gagan_lite/releases/latest/',
+    },
 }
 });
 
