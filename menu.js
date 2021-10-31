@@ -58,7 +58,8 @@ const setTemplate = (lang='ja') => {
                     dialog.saveLogAs();
                 }},
                 {id:'EXPORT-LITE', label: _.t('EXPORT-LITE'), enabled: false, click: ()=>{
-                    console.log('EXPORT-LITE');
+                    //console.log('EXPORT-LITE');
+                    common.exportLite();
                 }},
                 {type: 'separator'},
                 {id:'SETTINGS', label: _.t('SETTINGS'), click: ()=>{
@@ -178,11 +179,11 @@ const setTemplate = (lang='ja') => {
             label: _.t('HELP'),
             submenu: [
                 {label: _.t('GOTO-SUPPORT-PAGE'), click: ()=>{
-                    console.log('GOTO-SUPPORT-PAGE');
+                    //console.log('GOTO-SUPPORT-PAGE');
                     common.openSupportSite();
                 }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
-                    console.log('VERSION-INFO');
+                    //console.log('VERSION-INFO');
                     dialog.openAboutDialog();
                 }}
             ]
