@@ -3,6 +3,7 @@ const common = require('./common');
 const i18n = require('./i18n')
 const dialog = require('./dialog');
 const config = require('./config');
+const path = require('path');
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -21,7 +22,7 @@ const setTemplate = (lang='ja') => {
         submenu: [
           /* {role:'about', label: _.t('ABOUT') }, */
           {label: _.t('ABOUT'), click: ()=>{
-            dialog.openAboutDialog();
+                common.showAbout();
           }},
           {type:'separator'},
           {role:'services', label: _.t('SERVICE')},
@@ -183,8 +184,7 @@ const setTemplate = (lang='ja') => {
                     common.openSupportSite();
                 }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
-                    //console.log('VERSION-INFO');
-                    dialog.openAboutDialog();
+                    common.showAbout();
                 }}
             ]
         }
