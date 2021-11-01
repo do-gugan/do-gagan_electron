@@ -61,8 +61,8 @@ function createWindow() {
   // [mainWin] 設定保存
   //------------------------------------
   // ウィンドウが閉じられたとき処理
-  mainWin.on('close', () => {
-    //console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
+  mainWin.on('close', (event) => {
+    console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
     //最小の800x600を下回らないよう補正
     config.set('windowSizeWidth',mainWin.getSize()[0]-1);
     config.set('windowSizeHeight',mainWin.getSize()[1]-2);
@@ -71,6 +71,27 @@ function createWindow() {
     config.set('windowPosTop',mainWin.getPosition()[0]);
     config.set('windowPosLeft',mainWin.getPosition()[1]);
 
+    //未保存データがある時は確認
+    if (common.isDirty == true) {
+      const lang = config.get('locale') || app.getLocale();
+      const _ = new i18n(lang, 'dialog');
+      const options = {
+        type: 'warning',
+        buttons: [_.t('UNSAVED_DATA_SAVE'), _.t('UNSAVED_DATA_DISPOSE'), _.t('UNSAVED_DATA_CANCEL')],
+        title: _.t('UNSAVED_DATA_TITLE'),
+        message: _.t('UNSAVED_DATA_MESSAGE').replace('%1', path.basename(common.mediaPath).replace(path.extname(common.mediaPath),".dggn.txt")),
+      }; 
+      switch (dialog.showConfirmation(options)) {
+        case 0: //上書き保存して終了
+        common.saveLog();
+          break;
+        case 1: //破棄して終了
+          break;
+        case 2: //キャンセル
+          event.preventDefault();
+          break;
+      }
+    }
   })
 
     //common下に参照を渡す
