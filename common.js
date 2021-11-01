@@ -265,7 +265,7 @@ class Common {
 
     //HTMLファイルの準備
     
-    //ダウンドード意志の確認
+    //ダウンロード意志の確認
     options = {
       type: 'warning',
       buttons: [_.t('LITE_DOWNLOAD'), _.t('LITE_CANCEL')],
@@ -315,6 +315,22 @@ class Common {
   setDirtyFlag(flag) {
     this.isDirty= flag;
     this.mainWin.webContents.send('update-dirty-flag', flag);
+  }
+
+  getCurrentRecordId(position) {
+    //指定された再生時間を超えるinTimeをもつ最初のレコードの1つ前のidを返す
+    const cur = records.find(r => r.inTime >= position);
+    if (cur != undefined) {
+       const rec = records[records.indexOf(cur) -1]; //1つ前
+       if (rec != undefined) {
+         return rec.id;
+       } else {
+         return undefined;
+       }
+      return records[records.indexOf(cur) -1].id;
+    } else {
+      return undefined;
+    }
   }
 
   openSupportSite() {

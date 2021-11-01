@@ -176,6 +176,10 @@ app.on('window-all-closed', () => {
   ipcMain.on('setSkipTimeFromGUI', (event, direction, idx) => {
     menu.setSkipTimeFromGUI(direction, idx);
   });
+
+  //現在の再生位置にもっとも近いレコードのIDを返す
+  ipcMain.handle('getCurrentRecordId', (event, position) => {return common.getCurrentRecordId(position);});
+
   // #endregion
 
 

@@ -21,8 +21,10 @@ let autoLockOn= true;
 let multiPlyJumpIndex = 2;
 let multiPlyJumpTimes = 2;
 let lastMemoLength = 0; //メモを打ち始めかどうか判定するフラグ
-
 let isShiftKeyPressing = false;
+let currentMarkerTimer = null;
+let markedRowId = null;
+
 
 //対応形式
 const validTypes = [
@@ -302,12 +304,31 @@ document.body.addEventListener('drop', function (e) {
 //#region プレーヤーのイベントハンドラー（状態変化検知）系
 //----------------------------------------------------
 function playerPlayed() {
-
+    //フォーカス更新タイマーを発火
+    currentMarkerTimer = setInterval(updateCurrentMarker, 1000);
 }
 
 function playerPaused() {
-
+    //フォーカス更新タイマーを停止
+    clearInterval(currentMarkerTimer);
 }
+
+//再生中の行をフォーカス表示
+function updateCurrentMarker() {
+    //現在の再生点に近い行を問い合わせ
+    window.api.getCurrentRecordId(player.currentTime).then((curId)=>{
+        if (curId != undefined) {
+            //現在フォーカスされている行を戻す
+            const lastFocus = document.getElementById(lastFocusedRow);
+            if (lastFocusedRow != undefined) {lastFocusedRow.classList.remove('focused');}
+            lastFocusedRow = document.getElementById(curId);
+            if (lastFocusedRow != undefined) {lastFocusedRow.classList.add('focused');}
+        }
+    })
+}
+
+
+
 function playerSeeked() {
     doAutoLockOn('skip');
 }
@@ -522,7 +543,7 @@ async function doAutoLockOn(trigger) {
  * タイムコードがクリックされたら当該シーンにジャンプする
  */
 function timeClicked(event) {
-    console.log(event.key);
+    //console.log(event.key);
     const tcell = event.target;
     jumpToTimeIndex(minSecToSec(tcell.innerText)); //当該位置にジャンプ
 

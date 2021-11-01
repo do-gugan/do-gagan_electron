@@ -98,5 +98,7 @@ contextBridge.exposeInMainWorld(
     saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
 
     setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
+
+    getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position).then(result => result),
   }
 );
