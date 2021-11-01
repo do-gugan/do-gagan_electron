@@ -121,6 +121,11 @@ const store = new Store({
       type: 'string',
       default: 'https://github.com/do-gugan/do-gagan_lite/releases/latest/',
     },
+    scrollPositionOfFocusedRow: {
+      type: 'string',
+      default: 'center',
+    },
+
 }
 });
 

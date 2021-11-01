@@ -24,7 +24,7 @@ let lastMemoLength = 0; //メモを打ち始めかどうか判定するフラグ
 let isShiftKeyPressing = false;
 let currentMarkerTimer = null;
 let markedRowId = null;
-
+let scrollPositionOfFocusedRow = null;
 
 //対応形式
 const validTypes = [
@@ -135,6 +135,8 @@ async function loadConfig() {
         const multis = [0.1,0.5, 2, 3, 5, 10];
         multiPlyJumpTimes = multis[multiPlyJumpIndex];
     });
+
+    await window.api.getConfig('scrollPositionOfFocusedRow').then((result) => { scrollPositionOfFocusedRow = result;});
 
     //スキップ秒数
     window.api.getConfig('skipForwardIndex').then(function(result){
@@ -323,6 +325,13 @@ function updateCurrentMarker() {
             if (lastFocusedRow != undefined) {lastFocusedRow.classList.remove('focused');}
             lastFocusedRow = document.getElementById(curId);
             if (lastFocusedRow != undefined) {lastFocusedRow.classList.add('focused');}
+
+            //特定のレコードをフォーカスしていない時は自動でセンタースクロール
+            var ae = document.activeElement.parentElement.parentElement;
+            if (ae != undefined && ae.id.startsWith('row')){
+            } else {
+                lastFocusedRow.scrollIntoView({behavior: "smooth", block: scrollPositionOfFocusedRow});
+            }
         }
     })
 }
