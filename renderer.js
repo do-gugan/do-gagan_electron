@@ -233,7 +233,7 @@ function mediaOpened (path) {
 
 //メインプロセスから1件のレコードを表示
 window.api.addRecordToList((record) => {
-    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);">${record.script}</textarea></div></div>`;
+    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);">${record.script}</textarea></div></div>`;
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
@@ -245,7 +245,7 @@ window.api.addRecordToList((record) => {
 window.api.addRecordsToList((records) => {
     let html = "";
     records.forEach(r => {
-        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);">${r.script}</textarea></div></div>`;
+        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);">${r.script}</textarea></div></div>`;
     });
     memolist.innerHTML = html;
 
@@ -585,6 +585,13 @@ function resizeTextarea(textarea) {
     textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
     textarea.style.height = (textarea.scrollHeight -3 ) + "px";
 }
+
+function keyupTextarea(event) {
+    if (event.key == 'Escape') {
+        event.target.blur();
+    }
+}
+
 /**
  * ウインドウがリサイズされた時にログ欄のセル高を調整する
  * 高さは自動で増えるが、↑を呼ばないと狭まらない
