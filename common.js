@@ -74,17 +74,35 @@ class Common {
       }
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+
+      // for (var line of lines) {
+      //   var cols = line.split("\t");
+      //   if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
+      //     let rec = new dggRecord(cols[0], cols[1], cols[2]);
+      //     records.push(rec);
+      //     this.mainWin.webContents.send('add-record-to-list',rec); //レンダラーに描画指示
+      //   } else {
+      //     //第一カラムが数値でなければスキップ
+      //     console.log('Invalid line: ' + line);
+      //   };
+      // }
+
+      //let tempRecords = [];
       for (var line of lines) {
         var cols = line.split("\t");
         if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
           let rec = new dggRecord(cols[0], cols[1], cols[2]);
+          //tempRecords.push(rec);
           records.push(rec);
-          this.mainWin.webContents.send('add-record-to-list',rec); //レンダラーに描画指示
         } else {
           //第一カラムが数値でなければスキップ
           console.log('Invalid line: ' + line);
         };
       }
+
+      this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+
+      
       this.setDirtyFlag(false); //ダーティフラグをクリア
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
   }

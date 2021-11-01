@@ -31,6 +31,8 @@ contextBridge.exposeInMainWorld(
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),
+    //まとまった数のレコードを一括で追加
+    addRecordsToList: (callback) => ipcRenderer.on("add-records-to-list", (event,records)=>callback(records)),
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
     //コンテクストメニューの選択からの処理

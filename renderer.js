@@ -227,16 +227,29 @@ function mediaOpened (path) {
 
 }
 
-//メインプロセスからレコードを表示
+//メインプロセスから1件のレコードを表示
 window.api.addRecordToList((record) => {
-    //console.log("displayRecords" + record.timeStamp);
-    const html = '<div class="row" id="'+record.id+'"><div class="inTime speaker'+record.speaker+'" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">'+secToMinSec(record.inTime)+'</div><div class="script"><textarea oninput="editTextarea(event.target);">'+record.script+'</textarea></div></div>';
+    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);">${record.script}</textarea></div></div>`;
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
-    const t = document.querySelector('#' + record.id + ' .script textarea');
+    const t = document.querySelector(`#${record.id} .script textarea`);
     resizeTextarea(t);
 });
+
+//まとまった数のレコードを一括で追加
+window.api.addRecordsToList((records) => {
+    let html = "";
+    records.forEach(r => {
+        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);">${r.script}</textarea></div></div>`;
+    });
+    memolist.innerHTML = html;
+
+    //セルの高さを文字数にあわせて調整
+    const textareas = document.querySelectorAll(`.script textarea`);
+    textareas.forEach(ta => resizeTextarea(ta));
+});
+
 //秒インデックスを「分：秒」形式に変換
 function secToMinSec(secTotal){
     const min = Math.floor(secTotal / 60);
