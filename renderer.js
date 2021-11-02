@@ -123,11 +123,11 @@ async function loadConfig() {
     await window.api.getConfig('functionSnippet3').then((result) => { functionSnippet3 = result;});
     await window.api.getConfig('functionSnippet4').then((result) => { functionSnippet4 = result;});
     await window.api.getConfig('functionSnippet5').then((result) => { functionSnippet5 = result;});
-    document.getElementById('Btn_F1').innerText = "F1: " + functionSnippet1;
-    document.getElementById('Btn_F2').innerText = "F2: " + functionSnippet2;
-    document.getElementById('Btn_F3').innerText = "F3: " + functionSnippet3;
-    document.getElementById('Btn_F4').innerText = "F4: " + functionSnippet4;
-    document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5;
+    document.getElementById('Btn_F1').innerText = "F1: " + functionSnippet1.replace('$t','').replace('$c','');
+    document.getElementById('Btn_F2').innerText = "F2: " + functionSnippet2.replace('$t','').replace('$c','');
+    document.getElementById('Btn_F3').innerText = "F3: " + functionSnippet3.replace('$t','').replace('$c','');
+    document.getElementById('Btn_F4').innerText = "F4: " + functionSnippet4.replace('$t','').replace('$c','');
+    document.getElementById('Btn_F5').innerText = "F5: " + functionSnippet5.replace('$t','').replace('$c','');
 
     await window.api.getConfig('autoLockOn').then((result) => { autoLockOn = result;});
     await window.api.getConfig('multiPlyJumpIndex').then((result) => {
@@ -229,6 +229,11 @@ function mediaOpened (path) {
     document.getElementById('Txt_memo').disabled = false;
     document.getElementById('Btn_add').disabled = false;
 
+    document.getElementById('Btn_F1').disabled = false;
+    document.getElementById('Btn_F2').disabled = false;
+    document.getElementById('Btn_F3').disabled = false;
+    document.getElementById('Btn_F4').disabled = false;
+    document.getElementById('Btn_F5').disabled = false;
 }
 
 //メインプロセスから1件のレコードを表示
