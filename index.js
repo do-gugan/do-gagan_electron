@@ -117,7 +117,9 @@ app.whenReady().then(()=>{
 app.on('window-all-closed', () => {
     // macOS以外はアプリを終了する
     if (process.platform !== 'darwin') {
-      app.quit()
+      app.quit();
+    } else {
+      common.mainWin.setTouchBar(null);
     }
   })
  

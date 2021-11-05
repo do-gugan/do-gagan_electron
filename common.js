@@ -24,6 +24,7 @@ const isDirty = false; //未保存データがあるか管理するフラグ
 const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
 const _ = null;
+const dggTouchBar = null; //TouchBarのシングルトンオブジェクト
 
 class Common {
   constructor() {
@@ -51,6 +52,16 @@ class Common {
 
       //OSの最近使ったファイルに登録する（Windowsはファイル形式が対応付けられていないと表示されない？）
       this.app.addRecentDocument(pth);
+
+          //TouchBar表示（macOS）
+      if (process.platform == 'darwin') {
+        this.mainWin.setTouchBar(null); //既存オブジェクトをパージ
+        
+        console.log("new dggTouchbar");
+        this.dggTouchBar = require('./dggTouchbar');
+        this.dggTouchBar.setCommon(this);
+        this.mainWin.setTouchBar(this.dggTouchBar.getTouchBar());
+      }
 
       //同名のログファイルが存在する場合は読み込む
       const logpath = pth.replace(path.extname(pth),".dggn.txt"); //ログ形式Ver.2の拡張子
@@ -317,7 +328,13 @@ class Common {
     this.mainWin.webContents.send('update-dirty-flag', flag);
   }
 
+  //1秒毎に呼ばれる
   getCurrentRecordId(position) {
+    //TouchBarがある場合、スライダー位置を更新
+    if (this.dggTouchBar != undefined) {
+      this.dggTouchBar.updateKnobPosition(position / this.mediaDuration * 100);
+    }
+
     //指定された再生時間を超えるinTimeをもつ最初のレコードの1つ前のidを返す
     const cur = records.find(r => r.inTime >= position);
     if (cur != undefined) {
@@ -358,7 +375,9 @@ class Common {
   skipBackwardToPlayer(event) {
     this.mainWin.webContents.send('skip-backward');
   }
-
+  changePositionFromSlider(pos) {
+    this.mainWin.webContents.send('change-position-from-touchbar', pos);
+  }
   setSkipTime(direction, index) {
     this.mainWin.webContents.send('set-skip-time', direction, index);
   }

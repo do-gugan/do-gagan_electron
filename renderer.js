@@ -345,6 +345,7 @@ function updateCurrentMarker() {
 
 function playerSeeked() {
     doAutoLockOn('skip');
+    updateCurrentMarker();
 }
 /* #endregion */
 
@@ -502,6 +503,12 @@ window.api.updateDirtyFlag((flag)=> {
     }
     document.title = newTitle;
 
+});
+
+//TouchBarのスライダー操作を受け付ける
+window.api.changePositionFromTouchbar((pos) => {
+    //console.log(`${pos}% = ` + player.duration * pos / 100);
+    jumpToTimeIndex(player.duration * pos /100);
 });
 
 /** 秒インデックスを「分：秒」形式に変換

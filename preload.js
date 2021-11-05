@@ -48,6 +48,9 @@ contextBridge.exposeInMainWorld(
     //ダーティフラグ表示の更新
     updateDirtyFlag: (callback) => ipcRenderer.on("update-dirty-flag", (event, flag)=>callback(flag)),
 
+    //touchbarのスライダー操作に連動して再生位置を更新
+    changePositionFromTouchbar: (callback) => ipcRenderer.on("change-position-from-touchbar", (event, pos)=>callback(pos)),
+
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
     // --------------------------------------------
