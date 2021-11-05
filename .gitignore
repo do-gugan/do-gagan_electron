@@ -1,3 +1,4 @@
 /dist/
 /exclude/
 node_modules/
+.DS_Store
