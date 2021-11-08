@@ -27,6 +27,7 @@
   "PLAY-PAUSE": "Play/Pause",
   "JUMP_F": "Jump Fowrward",
   "JUMP_R": "Jump Backward",
+  "PLAYBACK_SLIDER": "Playback Slider",
   "JUMP_F_SEC": "Forward Duration",
   "JUMP_R_SEC": "Backword Duration",
   "SEC_3": "3 sec",

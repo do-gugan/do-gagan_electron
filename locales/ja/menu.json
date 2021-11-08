@@ -27,6 +27,7 @@
     "PLAY-PAUSE": "再生/一時停止",
     "JUMP_F": "前へジャンプ",
     "JUMP_R": "後ろへジャンプ",
+    "PLAYBACK_SLIDER": "再生スライダー",
     "JUMP_F_SEC": "前ジャンプ秒数",
     "JUMP_R_SEC": "後ジャンプ秒数",
     "SEC_3": "3秒",
