@@ -31,6 +31,7 @@
 - [-] 最近使用したファイル https://www.electronjs.org/docs/latest/tutorial/recent-documents
     Windowsではそのファイル形式を関連付けしたアプリでないと表示されないぽい。メディアファイルだとあまり意味ない？
     一応セットしたので、ビルドした時に検証。
+- [] メモの分割
 
 - [] アプリ自動更新 https://www.electronjs.org/docs/latest/tutorial/updates (公式API使用にはコード署名が必要)
     -[] 最低限、更新チェック機能はつける
