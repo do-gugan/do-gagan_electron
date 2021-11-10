@@ -9,6 +9,7 @@ const readline = require("readline"); //1行ずつ読む
 const dggRecord = require("./dggRecord"); //レコードクラス
 const i18n = require("./i18n");
 const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
+const { builtinModules } = require('module');
 
 //グローバルオブジェクト
 const app = null;
@@ -111,14 +112,15 @@ class Common {
           records.length = 0;
           this.mainWin.webContents.send('clear-records');
     }
-    const text = fs.readFileSync(pth, "utf8");
+    let text = fs.readFileSync(pth, "utf8");
     let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
 
     //1行目をサンプルとしてファイル形式を推定（1.0形式 or Premiere Pro出力ファイル）
     const firstLine = lines[0];
-    const found = firstLine.match(/\d\d:\d\d:\d\d:\d\d - \d\d:\d\d:\d\d:\d\d/);
-    if (found != null && found.length == 1) {
-      //console.log("Format id Premiere transcribed txt.");
+    const premiereMatch = firstLine.match(/\d\d:\d\d:\d\d:\d\d - \d\d:\d\d:\d\d:\d\d/);
+    const dgg1Match = firstLine.match(/^\d\d:\d\d:\d\d\t/);
+    if (premiereMatch != null && premiereMatch.length == 1) {
+      //console.log("Format is Premiere transcribed txt.");
       lines= [];
       //改行2連続を1ブロックとして分割
       const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
@@ -126,7 +128,7 @@ class Common {
         const line = r.split(/\r\n|\r|\n/);
         console.log("length:" + line.length);
         if (line.length == 3) { //3行に満たないレコードは除外
-          const inTime = this.HHMMSSTosec(line[0].match(/^\d\d:\d\d:\d\d/)[0]);
+          const inTime = this.HHMMSSTosec(line[0].match(/\d\d:\d\d:\d\d/)[0]);
           const script = line[2];
           const speaker = line[1].match(/ (\d+)/)[1];
   
@@ -134,12 +136,42 @@ class Common {
           // console.log("script: " + script);
           // console.log("speaker: " + speaker);
           const rec = new dggRecord(inTime, script, speaker);
-          records.push(rec);  
+          records.push(rec);      
+        }
+        if (records.length > 0) {
+          console.log(records.length + "record(s) found.");
+          //レンダラーに一括挿入
+          this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+          this.setDirtyFlag(true); //ダーティフラグをクリア
         }
       });
-      //レンダラーに一括挿入
-      this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
-      this.setDirtyFlag(true); //ダーティフラグをクリア
+    } else if (dgg1Match != null && dgg1Match.length == 1) {
+      console.log("Format is do-gagan 1.0.");
+      //ShiftJISで再読み込み
+      var reader = fs.createReadStream(pth)
+          .on('error', (err)=>{reject(err)})
+          .pipe(iconv.decodeStream("windows-31j")
+          .collect((err,body)=>{
+            //console.log(body);
+            lines = body.split((/\r\n|\r|\n/));
+            lines.forEach( line => {
+              if (line.length == 0) return;
+              const cols = line.split('\t');
+              const inTime = this.HHMMSSTosec(cols[0]);
+              const script = cols[1];
+              console.log(`inTime:${inTime} script:${script}`);
+              const rec = new dggRecord(inTime, script, 0);
+              records.push(rec);
+            });
+            if (records.length > 0) {
+              console.log(records.length + "record(s) found.");
+              //レンダラーに一括挿入
+              this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+              this.setDirtyFlag(true); //ダーティフラグをクリア
+            }          
+            }))            
+    } else {
+      console.log("No known format found.");
     }
 
     // const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
