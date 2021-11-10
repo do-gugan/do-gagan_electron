@@ -40,7 +40,8 @@
 ## 完成後
 - [] ビルド
     - [x] アプリアイコン https://www.electronjs.org/docs/latest/api/native-image
-    - [x]] MacOS用対応
+    - [x] MacOS用対応
+        -[x] M1対応
     - [] Windows on ARM 対応　https://www.electronjs.org/docs/latest/tutorial/windows-arm
     - [] ストア出品？
 
