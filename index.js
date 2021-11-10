@@ -49,7 +49,9 @@ function createWindow() {
   mainWin.on('ready-to-show', () => {
     let top = config.get('windowPosTop');
     let left = config.get('windowPosLeft');
-    mainWin.setPosition(top, left);
+    if (top != undefined && left != undefined) {
+      mainWin.setPosition(top, left);
+    }
   
     if (!app.isPackaged) {
       mainWin.webContents.openDevTools(); //Devツールを開く
