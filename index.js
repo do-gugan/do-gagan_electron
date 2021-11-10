@@ -170,7 +170,11 @@ app.on('window-all-closed', () => {
 
   //ドロップされたメディアファイルを開く
   ipcMain.handle('openDroppedFile', (event, path) => {
-    common.openMediaFile(path);    
+    common.openMediaFile(path);
+    //Macでドラッグ＆ドロップ時、フォーカスがFinderのままになるので明示的にフォアグラウンドフロントにする
+    if (process.platform == 'darwin') {
+      app.focus({ steal: true });
+    }
   });
 
   //レンダラーから新規メモを受け取る
