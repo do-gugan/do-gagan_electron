@@ -113,13 +113,19 @@ app.whenReady().then(()=>{
 //------------------------------------
 // [app] イベント処理
 //------------------------------------
+//メインウインドウが閉じられようとする時
+app.on("BrowserWindow.close", () => {
+  if (process.platform == 'darwin') {
+    //TouchBarオブジェクトを破棄
+    common.mainWin.setTouchBar(null);
+  }
+});
+
 // すべてのウィンドウが閉じられたときの処理
 app.on('window-all-closed', () => {
     // macOS以外はアプリを終了する
     if (process.platform !== 'darwin') {
       app.quit();
-    } else {
-      common.mainWin.setTouchBar(null);
     }
   })
  
