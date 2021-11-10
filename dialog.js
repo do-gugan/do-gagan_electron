@@ -81,15 +81,23 @@ const openVideoDialog = function() {
  const openLog = function() {
   let result = dialog.showOpenDialogSync(common.mainWin, {
     title: _.t('OPEN_LOG_FILE'),
-    //defaultPath:"",
+    defaultPath: path.dirname(common.mediaPath),
     //message: "", //masOS only 
     properties: ['openFile'],
     filters: [
       { name: _.t('LOGFILES'), extensions: ['dggn.txt'] },
+      { name: _.t('PREMIERE_TXT'), extensions: ['txt'] },
     ]
   });
   if (result != undefined) {
-    common.openLogFile(result[0], false);
+    let format = '';
+    if (result[0].endsWith('.dggn.txt')) {
+      //動画眼2.0形式ログ
+      common.openLogFile(result[0], false);
+    } else if (result[0].endsWith('.txt')) {
+      //その他の.txt拡張子の形式
+      common.importLogFile(result[0], false);
+    }
   }
 }
 

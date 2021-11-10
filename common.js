@@ -86,19 +86,6 @@ class Common {
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
 
-      // for (var line of lines) {
-      //   var cols = line.split("\t");
-      //   if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
-      //     let rec = new dggRecord(cols[0], cols[1], cols[2]);
-      //     records.push(rec);
-      //     this.mainWin.webContents.send('add-record-to-list',rec); //レンダラーに描画指示
-      //   } else {
-      //     //第一カラムが数値でなければスキップ
-      //     console.log('Invalid line: ' + line);
-      //   };
-      // }
-
-      //let tempRecords = [];
       for (var line of lines) {
         var cols = line.split("\t");
         if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
@@ -117,6 +104,64 @@ class Common {
       this.setDirtyFlag(false); //ダーティフラグをクリア
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
   }
+
+  //他形式のログファイルをインポート
+  importLogFile(pth, clear = false) {
+    if (clear == true) {
+          records.length = 0;
+          this.mainWin.webContents.send('clear-records');
+    }
+    const text = fs.readFileSync(pth, "utf8");
+    let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+
+    //1行目をサンプルとしてファイル形式を推定（1.0形式 or Premiere Pro出力ファイル）
+    const firstLine = lines[0];
+    const found = firstLine.match(/\d\d:\d\d:\d\d:\d\d - \d\d:\d\d:\d\d:\d\d/);
+    if (found != null && found.length == 1) {
+      //console.log("Format id Premiere transcribed txt.");
+      lines= [];
+      //改行2連続を1ブロックとして分割
+      const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
+      pRecords.forEach(r => {
+        const line = r.split(/\r\n|\r|\n/);
+        console.log("length:" + line.length);
+        if (line.length == 3) { //3行に満たないレコードは除外
+          const inTime = this.HHMMSSTosec(line[0].match(/^\d\d:\d\d:\d\d/)[0]);
+          const script = line[2];
+          const speaker = line[1].match(/ (\d+)/)[1];
+  
+          // console.log("inTime: " + inTime);
+          // console.log("script: " + script);
+          // console.log("speaker: " + speaker);
+          const rec = new dggRecord(inTime, script, speaker);
+          records.push(rec);  
+        }
+      });
+      //レンダラーに一括挿入
+      this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+      this.setDirtyFlag(true); //ダーティフラグをクリア
+    }
+
+    // const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+
+    // for (var line of lines) {
+    //   var cols = line.split("\t");
+    //   if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
+    //     let rec = new dggRecord(cols[0], cols[1], cols[2]);
+    //     //tempRecords.push(rec);
+    //     records.push(rec);
+    //   } else {
+    //     //第一カラムが数値でなければスキップ
+    //     console.log('Invalid line: ' + line);
+    //   };
+    // }
+
+    //this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+
+    
+    //this.setDirtyFlag(false); //ダーティフラグをクリア
+}
+
 
 //--------------------------------
 // #region 設定ウインドウ
@@ -239,6 +284,16 @@ class Common {
     const min = Math.floor((secTotal - (hour * 60)) / 60);
     const sec = secTotal - (hour * 3600) - (min * 60);
     return ( '00' + hour ).slice( -2 ) + ":" +( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
+  }
+
+  HHMMSSTosec(hhmmss) {
+    console.log(hhmmss);
+    const e = hhmmss.split(":");
+    if (e.length == 3) {
+      return (parseInt(e[0]) * 3600) + (parseInt(e[1]) * 60) + parseInt(e[2]);
+    } else {
+      return 0;
+    }
   }
 
   /**
