@@ -22,6 +22,7 @@
     "COPY": "コピー",
     "PASTE": "貼り付け",
     "REPLACE": "置換...",
+    "SPLIT_HERE": "ここで分割",
   
     "PLAYBACK-CONTROL": "再生操作",
     "PLAY-PAUSE": "再生/一時停止",

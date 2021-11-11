@@ -657,6 +657,42 @@ class Common {
     this.mainWin.webContents.send('delete-row',id);
     this.setDirtyFlag(true);
   }
+
+  /**
+   * コンテクストメニューからログ分割を実行
+   * @param {Number} id 
+   * @param {Number} index キャレット位置
+   * @param {Number} length 選択文字数（1以上の時は分割不可）
+   */
+   splitLog(id, selectionStart, selectionEnd) {
+    console.log("split here");
+    console.log("id:" + id);
+    console.log("selectionStart:" + selectionStart);
+    console.log("selectionEnd:" + selectionEnd);
+    const _ = new this.i18n(this.lang, 'dialog');
+    if (selectionStart != selectionEnd) {
+              //"1文字以上の文字を選択していると分割できません。",
+              const options = {
+                type: 'error',
+                buttons: [_.t('SPLIT_OK')],
+                title: _.t('SPLIT_ERROR'),
+                message: _.t('CANNNOT_SPLIT_CHARACTER_SELECTED'),
+              }; 
+              if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了            
+            } else if (selectionStart == 0) {
+              //"この位置では分割できません。",
+              const options = {
+                type: 'error',
+                buttons: [_.t('SPLIT_OK')],
+                title: _.t('SPLIT_ERROR'),
+                message: _.t('CANNNOT_SPLIT_HERE'),
+              }; 
+              if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了            
+            } else {
+              //分割実行
+            
+            }              
+  }
 //--------------------------------
 // #region 置換ダイアログ用
 //--------------------------------
