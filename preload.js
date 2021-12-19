@@ -96,7 +96,8 @@ contextBridge.exposeInMainWorld(
     //speakerChanged:(id,speaker)=>ipcRenderer.send('speakerChanged', id, speaker),
 
     //右クリックからコンテクストメニューを開く
-    openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id),
+    openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id), //ログのタイムコード上
+    openContextMenuOnText:(event, id, selectionStart, selectionEnd)=>ipcRenderer.send('openContextMenuOnText', event, id, selectionStart, selectionEnd), //ログのテキストエリア上
 
     saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
 

@@ -240,7 +240,7 @@ function mediaOpened (path) {
 
 //メインプロセスから1件のレコードを表示
 window.api.addRecordToList((record) => {
-    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);">${record.script}</textarea></div></div>`;
+    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)">${record.script}</textarea></div></div>`;
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
@@ -252,7 +252,7 @@ window.api.addRecordToList((record) => {
 window.api.addRecordsToList((records) => {
     let html = "";
     records.forEach(r => {
-        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);">${r.script}</textarea></div></div>`;
+        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)">${r.script}</textarea></div></div>`;
     });
     memolist.innerHTML = html;
 
@@ -620,12 +620,20 @@ window.addEventListener('resize',function(){
     resizeAllTextArea();
 })
 
-//行の右クリックでコンテクストメニューを表示
+//ログのタイムコード上の右クリックでコンテクストメニューを表示
 function openContextMenuOn(e) {
     e.preventDefault();
     const id = e.target.parentElement.id;
     window.api.openContextMenuOn(id);
 }
+
+//ログのタイムコード上の右クリックでコンテクストメニューを表示
+function openContextMenuOnText(e) {
+    e.preventDefault();
+    const id = e.target.parentElement.parentElement.id;
+    window.api.openContextMenuOnText(id, e.target.selectionStart , e.target.selectionEnd);
+}
+
 
 //メインプロセスからリスト上の指定ID行の話者クラスを変更
 window.api.setSpeakerOfRow((id, speaker)=>{

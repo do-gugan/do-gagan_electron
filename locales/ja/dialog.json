@@ -67,6 +67,11 @@
   "UNSAVED_DATA_MESSAGE": "%1に保存されていないデータがあります。保存してから終了しますか？",
   "UNSAVED_DATA_SAVE": "上書き保存して終了",
   "UNSAVED_DATA_DISPOSE": "破棄して終了",
-  "UNSAVED_DATA_CANCEL": "キャンセル"
+  "UNSAVED_DATA_CANCEL": "キャンセル",
+
+  "SPLIT_ERROR" : "分割エラー",
+  "SPLIT_OK" : "OK",
+  "CANNNOT_SPLIT_CHARACTER_SELECTED":"1文字以上の文字を選択していると分割できません。",
+  "CANNNOT_SPLIT_HERE":"この位置では分割できません。"
 
 }

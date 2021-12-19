@@ -49,7 +49,9 @@ function createWindow() {
   mainWin.on('ready-to-show', () => {
     let top = config.get('windowPosTop');
     let left = config.get('windowPosLeft');
-    mainWin.setPosition(top, left);
+    if (top != undefined && left != undefined) {
+      mainWin.setPosition(top, left);
+    }
   
     if (!app.isPackaged) {
       mainWin.webContents.openDevTools(); //Devツールを開く
@@ -215,8 +217,9 @@ app.on('window-all-closed', () => {
 
   // #endregion
 
-
-  //ログ上のコンテクストメニューを開く
+  //--------------------------------
+  // #region ログ（タイムスタンプ）上のコンテクストメニューを開く
+  //--------------------------------
   ipcMain.on('openContextMenuOn', (event, id) => {
     const lang = config.get('locale') || app.getLocale();
     const _ = new i18n(lang, 'menu');
@@ -272,6 +275,37 @@ app.on('window-all-closed', () => {
     
   });
 // #endregion
+
+
+  //--------------------------------
+  // #region ログ（テキストボックス）上のコンテクストメニューを開く
+  //--------------------------------
+  ipcMain.on('openContextMenuOnText', (event, id, selectionStart, selectionEnd) => {
+    const lang = config.get('locale') || app.getLocale();
+    const _ = new i18n(lang, 'menu');
+    const template = [
+      {id:'CUT', label: _.t('CUT'), role: 'cut'},
+      {id:'COPY', label: _.t('COPY'), role: 'copy'},
+      {id:'PASTE', label: _.t('PASTE'), role: 'paste'},
+      {type: 'separator'},
+      {
+          label: _.t('SPLIT_HERE'), click: ()=>{
+              common.splitLog(id, selectionStart, selectionEnd);
+          }
+      }
+    ];
+
+    //--------------------------------
+    // #region 右クリックメニュー
+    //--------------------------------
+
+    const m = Menu.buildFromTemplate(template);
+    //コンテクストメニューを表示
+    m.popup(BrowserWindow.fromWebContents(event.sender));
+    
+  });
+// #endregion
+
 
 //--------------------------------
 // #region 置換ダイアログ用

@@ -22,7 +22,8 @@
   "COPY": "Copy",
   "PASTE": "Paste",
   "REPLACE": "Replace...",
-
+  "SPLIT_HERE": "Split here",
+  
   "PLAYBACK-CONTROL": "Playback",
   "PLAY-PAUSE": "Play/Pause",
   "JUMP_F": "Jump Fowrward",
