@@ -128,11 +128,30 @@ body {
     justify-content: center;
 }
 
+
 #player-controls button{
     height: 100%;
-    width : 4em;
-    
+    width : 5em;    
 }
+
+#player-controls button svg {
+    width: 1.3em;
+    height: 1.3em;
+    fill: #aaa;
+}
+
+svg#play {
+    transform: scale(0.8,1)translate(7px,0px);
+}
+
+svg#slash {
+    transform: rotate(65deg)scale(0.7)translate(0px,0px);
+}
+
+svg#pause {
+    transform: scale(0.8,1)translate(-7px,0px);
+}
+
 .Btn_Jump{
     display:flex;
     flex-direction: column;
@@ -143,6 +162,10 @@ body {
     font-size: 1.42em;
     position: relative;
     top: 0.22em;
+}
+
+#Btn_PlayPause{
+    width:6em !important;
 }
 
 #Btn_JumpForward, #Btn_JumpBackward {
@@ -385,14 +408,6 @@ div.current {
 }
 .subgrid.row3 button{
     flex-grow: 1;
-}
-
-.webdings {
-    font-family: Webdings;
-}
-
-.calibri {
-    font-family: Calibri;
 }
 
 .label {

@@ -220,6 +220,8 @@ function mediaOpened (path) {
     document.getElementById('Btn_JumpBackward').disabled = false;
     document.getElementById('Btn_PlayPause').disabled = false;
     document.getElementById('Btn_JumpForward').disabled = false;
+    document.getElementById('Btn_JumpForward').disabled = false;
+    document.querySelectorAll('.control_svg').forEach(svg => svg.style.fill="#444");
 
     document.getElementById('Txt_Search').disabled = false;
 
