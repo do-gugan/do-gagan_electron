@@ -64,7 +64,7 @@ const validTypes = [
     document.body.addEventListener('keydown', (event)=>{
         if (event.shiftKey) {
             isShiftKeyPressing = true;
-            console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
+            //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
         }
     });
 
@@ -428,7 +428,6 @@ function togglePlayPause() {
 function skipForward(event = null){
     var sec = document.getElementById('Sel_ForwardSec').value;
     if (isShiftKeyPressing == true) {
-        console.log("Shift Pressed");
         sec = sec * multiPlyJumpIndex
     }
     jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec));
