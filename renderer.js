@@ -356,8 +356,15 @@ function setMediaDuration() {
 }
 
 async function changeWindowTitle(path, isDirty = false) {
-    const filename = path.substring(path.lastIndexOf('\\') + 1); //macOSだとどうなる？
-    document.title = _.t("APPNAME",locale) + "3 | " + filename;
+    let delimiter = '\\';
+    //macOSの場合はデリミタを刺し替える
+    window.api.isDarwin().then((isDarwin)=> {
+        if ( isDarwin== true) {
+            delimiter = '/';
+        }
+        const filename = path.substring(path.lastIndexOf(delimiter) + 1);
+        document.title = _.t("APPNAME",locale) + "3 | " + filename;
+    });
 }
 
 //----------------------------------------------------

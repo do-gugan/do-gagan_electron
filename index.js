@@ -215,6 +215,16 @@ app.on('window-all-closed', () => {
   //現在の再生位置にもっとも近いレコードのIDを返す
   ipcMain.handle('getCurrentRecordId', (event, position) => {return common.getCurrentRecordId(position);});
 
+  //OSがmacOSかどうかを返す
+  ipcMain.handle('isDarwin', () => {
+    if (process.platform == 'darwin') {
+      console.log("macOS");
+      return true;
+    } else {
+      console.log("not acOS");
+      return false;
+    }
+  });
   // #endregion
 
   //--------------------------------

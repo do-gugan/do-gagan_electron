@@ -62,6 +62,7 @@ contextBridge.exposeInMainWorld(
     //結果を受け取りたい場合は.invoke
     //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
     //レンダラーからの呼び出し例： console.log(window.api.getSomeInfoFromMain());
+    //非同期での結果受け取り: window.api.getSomeInfoFromMain().then((result)=>{ 処理...})}
 
     //GUIでスキップ秒数を変更したらメニューに反映
     setSkipTimeFromGUI:(direction, index) => ipcRenderer.send('setSkipTimeFromGUI', direction, index),
@@ -104,5 +105,8 @@ contextBridge.exposeInMainWorld(
     setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
 
     getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position).then(result => result),
+
+    //OSがmacOSか調べる
+    isDarwin: () => ipcRenderer.invoke("isDarwin").then(result => result).catch(err => console.log(err)),
   }
 );
