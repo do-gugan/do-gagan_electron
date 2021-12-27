@@ -49,6 +49,7 @@ function createWindow() {
   mainWin.on('ready-to-show', () => {
     let top = config.get('windowPosTop');
     let left = config.get('windowPosLeft');
+    common.setAutoSaveInterval(config.get('autoSaveInterval'));
     if (top != undefined && left != undefined) {
       mainWin.setPosition(top, left);
     }
@@ -333,6 +334,17 @@ ipcMain.handle('executeRaplace', async (event, before, after ) => {
 });
 
 // #endregion
+
+//--------------------------------
+// #region 設定ダイアログ用
+//--------------------------------
+
+ipcMain.on('setAutoSaveIntervalOnMemory', () => {
+  common.setAutoSaveInterval(config.get('autoSaveInterval'));
+});
+
+// #endregion
+
 
 
 //--------------------------------

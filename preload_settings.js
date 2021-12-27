@@ -24,6 +24,8 @@ contextBridge.exposeInMainWorld(
     // getMatchCount:(word) => ipcRenderer.invoke('getMatchCount', word),
     // executeRaplace:(before,after) => ipcRenderer.invoke('executeRaplace', before,after),
 
+    setAutoSaveIntervalOnMemory: () => ipcRenderer.send('setAutoSaveIntervalOnMemory'),
+
 
   }
 );

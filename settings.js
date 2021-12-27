@@ -93,11 +93,12 @@ function resetSnippets() {
 
 function changeAutoSaveDur() {
     window.api.setConfig('autoSaveInterval',parseInt(document.getElementById('Txt_AutoSave').value));
+    window.api.setAutoSaveIntervalOnMemory(); //即時反映
 }
 
 function changeAutoLocSetting(trigger) {
     if (trigger == 'click' || trigger == 'skip' || trigger == 'type' || trigger == 'speaker' || trigger == 'snippets' || trigger == 'addmemo'){
-        console.log(document.getElementById('Chk_AutoLockOn_'+trigger).checked);
+        //console.log(document.getElementById('Chk_AutoLockOn_'+trigger).checked);
         window.api.setConfig('autoLockOn_'+trigger,document.getElementById('Chk_AutoLockOn_'+trigger).checked);    
     }
 }
@@ -107,6 +108,6 @@ function changeMultiplyJumpSec() {
 }
 
 function closeSettings() {
-    console.log("close");
+    //console.log("close");
     window.close();
 }

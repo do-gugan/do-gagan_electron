@@ -10,6 +10,7 @@ const dggRecord = require("./dggRecord"); //レコードクラス
 const i18n = require("./i18n");
 const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
 const { builtinModules } = require('module');
+const { common } = require('./dggTouchbar');
 
 //グローバルオブジェクト
 const app = null;
@@ -26,6 +27,8 @@ const lang = null;
 const records = []; //ログ（dggRecordsオブジェクト）を保持する配列
 const _ = null;
 const dggTouchBar = null; //TouchBarのシングルトンオブジェクト
+let autoSaveTimer; //自動保存のタイマー配列
+let autoSaveInterval;
 
 class Common {
   constructor() {
@@ -70,6 +73,9 @@ class Common {
       if (fs.existsSync(logpath)) {
         this.openLogFile(logpath,true);
     }
+
+    //自動保存タイマーを初期化
+    this.toggleAutoSave(this.config.get('autoSaveSwitch'),false);
   }
 
   /**
@@ -282,10 +288,41 @@ class Common {
     if (pth.length == 0) { this.setDirtyFlag(false); }
   }
 
-  toggleAutoSave(result) {
-    this.config.set('autoSaveSwitch', result);
+  /**
+   * メニューから自動保存設定が変更されたら呼ばれる
+   * @param {boolean} result 
+   * @param {boolean} update //GUIから更新された時はtrueを指定し、保存する
+   */
+  toggleAutoSave(result, update = false) {
+    //設定に保存
+    if (update == true) {
+      this.config.set('autoSaveSwitch', result);
+    }
 
+    //タイマーを無効化（リセット）
+    //console.log("Disableing AutoSaveTimer.");
+    clearInterval(autoSaveTimer);
 
+    //trueの場合は新インターバルで再有効化
+    if (result == true && this.autoSaveInterval != undefined) {
+      //タイマーを有効化
+      //console.log(`Enableing AutoSaveTimer. interval:${this.autoSaveInterval}`);
+      autoSaveTimer = setInterval(()=> {
+        //console.log(`Timer countup interval:${this.autoSaveInterval}`);
+        //レコードが0の時、ダーティフラグが立ってない時はは自動保存をしない        
+        if (records.length > 0 && this.isDirty == true) {
+          this.saveLog('','2.0',true);
+        }
+      }, this.autoSaveInterval);
+    }
+  }
+
+  //自動保存インターバル設定を読み込んで保持（起動時や設定更新時）
+  setAutoSaveInterval(min) {
+    this.autoSaveInterval = min * 60000; //60sec * 1000ms
+    if (this.config != null) {
+      this.toggleAutoSave(this.config.get('autoSaveSwitch'), false);  
+    }
   }
 
 
