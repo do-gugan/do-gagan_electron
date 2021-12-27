@@ -64,7 +64,7 @@ function createWindow() {
   //------------------------------------
   // ウィンドウが閉じられたとき処理
   mainWin.on('close', (event) => {
-    console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
+    //console.log("save size width: "+ (mainWin.getSize()[0]-1) + " height: "+ (mainWin.getSize()[1]+20));
     //最小の800x600を下回らないよう補正
     config.set('windowSizeWidth',mainWin.getSize()[0]-1);
     config.set('windowSizeHeight',mainWin.getSize()[1]-2);

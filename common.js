@@ -281,6 +281,14 @@ class Common {
     //上書き保存の時はダーティフラグをクリア
     if (pth.length == 0) { this.setDirtyFlag(false); }
   }
+
+  toggleAutoSave(result) {
+    this.config.set('autoSaveSwitch', result);
+
+
+  }
+
+
 //
 /**
  * 秒インデックスをYoutubeチャプター形式形式に変換

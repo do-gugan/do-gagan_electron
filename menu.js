@@ -51,8 +51,8 @@ const setTemplate = (lang='ja') => {
                     //console.log('OVERWRITE');
                     common.saveLog('', '2.0', false);
                 }},
-                {id:'AUTOSAVE', label: _.t('AUTOSAVE'), type: 'checkbox', click: ()=>{
-                    console.log('AUTOSAVE');
+                {id:'AUTOSAVE', label: _.t('AUTOSAVE'), type: 'checkbox', click: (menuItem)=>{
+                    common.toggleAutoSave(menuItem.checked);
                 }},
                 {id:'SAVE-AS', label: _.t('SAVE-AS'), enabled: false, click: ()=>{
                     //console.log('SAVE-AS');
@@ -191,8 +191,11 @@ const setTemplate = (lang='ja') => {
     
     ]);
 
-
+  
   Menu.setApplicationMenu(template);
+
+  //自動保存のチェック状態を設定から復帰
+  Menu.getApplicationMenu().getMenuItemById('AUTOSAVE').checked = config.get('autoSaveSwitch');
 }
 
 /**

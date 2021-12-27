@@ -57,6 +57,10 @@ const store = new Store({
       default: 5,
       minimum: 1,
     },
+    autoSaveSwitch: {
+      type: 'boolean',
+      default: false,
+    },
     autoLockOn_click: {
       type:'boolean',
       default: true,
