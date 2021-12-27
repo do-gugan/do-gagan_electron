@@ -354,7 +354,7 @@ class Common {
 
     //データ作成
     records.forEach(r => {
-        body += '\t{ in:' + r.inTime + ', script:"' + r.script.replace('\"','\\\"') + '", speaker:' + r.speaker + ' },\n';
+        body += '\t{ in:' + r.inTime + ', script:"' + r.script.replace(/"/g,'&quot;').replace(/'/g,'&apos;') + '", speaker:' + r.speaker + ' },\n';
     });
     body = body.substring(0, body.length - 2); //末尾のカンマ、\r、\nの3文字を削る
     body += "\r\n];";
