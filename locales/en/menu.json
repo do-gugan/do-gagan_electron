@@ -8,6 +8,7 @@
 
   "FILE": "File",
   "OPEN-MOVIE": "Open Movie/Audio File...",
+  "CLOSE-WINDOW": "Close Window",
   "ADD-LOG": "Add Log...",
   "OVERWRITE": "Save",
   "AUTOSAVE": "Auto Save",

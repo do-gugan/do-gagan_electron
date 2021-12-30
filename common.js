@@ -840,7 +840,9 @@ showAbout = function() {
   });
 }
 
-
+closeWindow = function() {
+  this.mainWin.close();
+}
 
 }
 

@@ -8,6 +8,7 @@
   
     "FILE": "ファイル",
     "OPEN-MOVIE": "動画/音声ファイルを開く...",
+    "CLOSE-WINDOW": "ウインドウを閉じる",
     "ADD-LOG": "ログを追加する...",
     "OVERWRITE": "上書き保存",
     "AUTOSAVE": "自動上書き",
