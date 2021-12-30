@@ -218,6 +218,8 @@ handleUnsavedLog(event) {
       buttons: [_.t('UNSAVED_DATA_SAVE'), _.t('UNSAVED_DATA_DISPOSE'), _.t('UNSAVED_DATA_CANCEL')],
       title: _.t('UNSAVED_DATA_TITLE'),
       message: _.t('UNSAVED_DATA_MESSAGE').replace('%1', path.basename(this.mediaPath).replace(path.extname(this.mediaPath),".dggn.txt")),
+      defaultId: 3,
+      cancelId: 2
     }; 
     switch (this.dialog.showConfirmation(options)) {
       case 0: //上書き保存して終了
@@ -421,7 +423,9 @@ handleUnsavedLog(event) {
         buttons: [_.t('LITE_OK'), _.t('LITE_CANCEL')],
         title: _.t('LITE_JSON_TITLE'),
         message: _.t('LITE_JSON_MESSAGE').replace('%1', path.basename(jsonPath)),
-      }; 
+        defaultId: 0,
+        cancelId: 1,
+        }; 
       if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
     }
 
@@ -447,6 +451,8 @@ handleUnsavedLog(event) {
       buttons: [_.t('LITE_DOWNLOAD'), _.t('LITE_CANCEL')],
       title: _.t('LITE_SUCCESS_TITLE'),
       message: _.t('LITE_SUCCESS_MESSAGE').replace('%1', path.basename(jsonPath)),
+      defaultId: 0,
+      cancelId: 1,
     }; 
     if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
 
@@ -458,7 +464,9 @@ handleUnsavedLog(event) {
         buttons: [_.t('LITE_OK'), _.t('LITE_CANCEL')],
         title: _.t('LITE_HTML_TITLE'),
         message: _.t('LITE_HTML_MESSAGE').replace('%1', path.basename(htmlPath)),
-      }; 
+        defaultId: 0,
+        cancelId: 1,
+        }; 
     if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
     }
 
@@ -475,6 +483,8 @@ handleUnsavedLog(event) {
         buttons: [_.t('LITE_DOWNLOAD_MANUAL'), _.t('LITE_CANCEL')],
         title: _.t('LITE_DOWNLOAD_FAIL_TITLE'),
         message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(jsonPath)),
+        defaultId: 0,
+        cancelId: 1,
       }; 
       if (this.dialog.showConfirmation(options) == 1) return;
       //ダウンロードページを開く
@@ -755,6 +765,8 @@ handleUnsavedLog(event) {
                 buttons: [_.t('SPLIT_OK')],
                 title: _.t('SPLIT_ERROR'),
                 message: _.t('CANNNOT_SPLIT_CHARACTER_SELECTED'),
+                defaultId: 0,
+                cancelId: 0,
               }; 
               if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了            
             } else if (selectionStart == 0) {
@@ -764,6 +776,8 @@ handleUnsavedLog(event) {
                 buttons: [_.t('SPLIT_OK')],
                 title: _.t('SPLIT_ERROR'),
                 message: _.t('CANNNOT_SPLIT_HERE'),
+                defaultId: 0,
+                cancelId: 0,
               }; 
               if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了            
             } else {
