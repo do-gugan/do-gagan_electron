@@ -61,7 +61,7 @@ class Common {
       if (process.platform == 'darwin') {
         this.mainWin.setTouchBar(null); //既存オブジェクトをパージ
         
-        console.log("new dggTouchbar");
+        //console.log("new dggTouchbar");
         this.dggTouchBar = require('./dggTouchbar');
         this.dggTouchBar.setCommon(this);
         this.mainWin.setTouchBar(this.dggTouchBar.getTouchBar());
@@ -87,8 +87,7 @@ class Common {
    */
   openLogFile(pth, clear = false) {
       if (clear == true) {
-            records.length = 0;
-            this.mainWin.webContents.send('clear-records');
+        this.clearLog();
       }
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
@@ -115,8 +114,7 @@ class Common {
   //他形式のログファイルをインポート
   importLogFile(pth, clear = false) {
     if (clear == true) {
-          records.length = 0;
-          this.mainWin.webContents.send('clear-records');
+      this.clearLog();
     }
     let text = fs.readFileSync(pth, "utf8");
     let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
@@ -200,6 +198,41 @@ class Common {
     //this.setDirtyFlag(false); //ダーティフラグをクリア
 }
 
+clearLog() {
+  records.length = 0;
+  this.mainWin.webContents.send('clear-records');
+  this.isDirty = false;
+}
+
+
+/**
+ * 未保存データ消える前にダイアログを出して処理する
+ * @param {*} event 
+ */
+handleUnsavedLog(event) {
+  if (this.isDirty == true) {
+    const lang = this.config.get('locale') || app.getLocale();
+    const _ = new i18n(lang, 'dialog');
+    const options = {
+      type: 'warning',
+      buttons: [_.t('UNSAVED_DATA_SAVE'), _.t('UNSAVED_DATA_DISPOSE'), _.t('UNSAVED_DATA_CANCEL')],
+      title: _.t('UNSAVED_DATA_TITLE'),
+      message: _.t('UNSAVED_DATA_MESSAGE').replace('%1', path.basename(this.mediaPath).replace(path.extname(this.mediaPath),".dggn.txt")),
+    }; 
+    switch (this.dialog.showConfirmation(options)) {
+      case 0: //上書き保存して終了
+        this.saveLog();
+        this.clearLog();
+        break;
+      case 1: //破棄して終了
+        this.clearLog();
+        break;
+      case 2: //キャンセル
+        event.preventDefault();
+        break;
+    }
+  }
+}
 
 //--------------------------------
 // #region 設定ウインドウ
@@ -710,10 +743,10 @@ class Common {
    * @param {Number} length 選択文字数（1以上の時は分割不可）
    */
    splitLog(id, selectionStart, selectionEnd) {
-    console.log("split here");
-    console.log("id:" + id);
-    console.log("selectionStart:" + selectionStart);
-    console.log("selectionEnd:" + selectionEnd);
+    // console.log("split here");
+    // console.log("id:" + id);
+    // console.log("selectionStart:" + selectionStart);
+    // console.log("selectionEnd:" + selectionEnd);
     const _ = new this.i18n(this.lang, 'dialog');
     if (selectionStart != selectionEnd) {
               //"1文字以上の文字を選択していると分割できません。",
@@ -735,7 +768,18 @@ class Common {
               if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了            
             } else {
               //分割実行
-            
+              const r = records.find(record => record.id==id);
+              //console.log(`${r.inTime} ${r.script} ${r.speaker}`);
+              const first = r.script.substr(0,selectionStart);
+              const latter = r.script.substr(selectionStart);
+              //console.log(`前半:${first}`);
+              //1)既存idから後半文字列を除去
+              this.memoChanged(id,first);
+
+              //2)後半文字列で新規レコードを作成
+              //console.log(`後半:${latter}`);
+              const newInTime = parseInt(r.inTime) + 1;
+              this.addNewMemoFromGUI(newInTime, latter, r.speaker); //ここでレンダラーのログも全更新される
             }              
   }
 //--------------------------------

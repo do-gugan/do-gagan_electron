@@ -75,32 +75,34 @@ function createWindow() {
     config.set('windowPosLeft',mainWin.getPosition()[1]);
 
     //未保存データがある時は確認
-    if (common.isDirty == true) {
-      const lang = config.get('locale') || app.getLocale();
-      const _ = new i18n(lang, 'dialog');
-      const options = {
-        type: 'warning',
-        buttons: [_.t('UNSAVED_DATA_SAVE'), _.t('UNSAVED_DATA_DISPOSE'), _.t('UNSAVED_DATA_CANCEL')],
-        title: _.t('UNSAVED_DATA_TITLE'),
-        message: _.t('UNSAVED_DATA_MESSAGE').replace('%1', path.basename(common.mediaPath).replace(path.extname(common.mediaPath),".dggn.txt")),
-      }; 
-      switch (dialog.showConfirmation(options)) {
-        case 0: //上書き保存して終了
-        common.saveLog();
-          break;
-        case 1: //破棄して終了
-          break;
-        case 2: //キャンセル
-          event.preventDefault();
-          break;
-      }
-    }
+    // if (common.isDirty == true) {
+      common.handleUnsavedLog(event);
+    //   const lang = config.get('locale') || app.getLocale();
+    //   const _ = new i18n(lang, 'dialog');
+    //   const options = {
+    //     type: 'warning',
+    //     buttons: [_.t('UNSAVED_DATA_SAVE'), _.t('UNSAVED_DATA_DISPOSE'), _.t('UNSAVED_DATA_CANCEL')],
+    //     title: _.t('UNSAVED_DATA_TITLE'),
+    //     message: _.t('UNSAVED_DATA_MESSAGE').replace('%1', path.basename(common.mediaPath).replace(path.extname(common.mediaPath),".dggn.txt")),
+    //   }; 
+    //   switch (dialog.showConfirmation(options)) {
+    //     case 0: //上書き保存して終了
+    //     common.saveLog();
+    //       break;
+    //     case 1: //破棄して終了
+    //       break;
+    //     case 2: //キャンセル
+    //       event.preventDefault();
+    //       break;
+    //   }
+    //}
   })
 
     //common下に参照を渡す
     //common.mainWin = mainWin;
     common.mainWin = mainWin; 
 }
+
 
 app.whenReady().then(()=>{
   // 言語設定を取得する
