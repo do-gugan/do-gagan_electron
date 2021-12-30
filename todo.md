@@ -37,7 +37,7 @@
     -[] 最低限、更新チェック機能はつける
 - [x] タッチバーサポート？　https://www.electronjs.org/docs/latest/api/touch-bar
 - [] Tooltip整備
-- [] 再生速度変更ボタン
+- [x] 再生速度変更ボタン
 
 ## 完成後
 - [] ビルド

@@ -166,6 +166,7 @@ svg#pause {
 
 #Btn_PlayPause{
     width:6em !important;
+    padding-top:0.75em;
 }
 
 #Btn_JumpForward, #Btn_JumpBackward {
@@ -176,6 +177,12 @@ svg#pause {
     font-size: 0.8em;
     position: relative;
     bottom: -9px;
+}
+
+.Sel_playbaclRate {
+    font-size: 0.8em;
+    position: relative;
+    bottom: -7px;
 }
 
 /* =============================================

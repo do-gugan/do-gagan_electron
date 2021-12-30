@@ -190,12 +190,12 @@ function updateJumpSecOptions(selected = '60') {
 //--------------------------------
 //メインプロセスからのプッシュでメディアファイルを開く
 window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" autoplay controls><source src="' + path + '"></video>';
+    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + path + '"></video>';
     playerBox.innerHTML = videotag;
     mediaOpened(path);
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" autoplay controls><source src="' + path + '"></audio>';
+    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + path + '"></audio>';
     playerBox.innerHTML = audiotag;
     mediaOpened(path);
 });
@@ -489,6 +489,19 @@ const skipTimeChanged = (direction, fromMenu=false) => {
     }
 
 }
+
+/**
+ * 再生速度がプルダウンメニューで変更された
+ */
+const playbackRateChanged = () => {
+    player.playbackRate = document.getElementById('Sel_PlaybackRate').value;
+}
+
+// videoエレメントUIで速度変更された時にプルダウンメニューを同期する
+const playbackRateChangedFromVideoElement = () => {
+    //console.log('再生レートが変わりました。'+ player.playbackRate);
+    document.getElementById('Sel_PlaybackRate').value = player.playbackRate;
+};
 
 //メインプロセス（メニュー）から
 window.api.skipForward(()=>skipForward()); //スキップ実行
