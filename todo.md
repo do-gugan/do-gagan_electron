@@ -36,7 +36,7 @@
 - [] アプリ自動更新 https://www.electronjs.org/docs/latest/tutorial/updates (公式API使用にはコード署名が必要)
     -[] 最低限、更新チェック機能はつける
 - [x] タッチバーサポート？　https://www.electronjs.org/docs/latest/api/touch-bar
-- [] Tooltip整備
+- [x] Tooltip整備
 - [x] 再生速度変更ボタン
 
 ## 完成後

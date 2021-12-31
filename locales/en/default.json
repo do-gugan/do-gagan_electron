@@ -34,6 +34,15 @@
     "600": "10min.",
 
     "YOUTUBE_CHAPTER_GUIDE" : "Paste list below into description of your youtube video.\n The jump point will not perfectly because of the characteistic of codec. \nYou also must care about\n- The first chapter should be 0sec.\n- You must have at least 3 chapters.\n- Each chapter must have >10sec interval\n-----\n",
-    "YOUTUBE_CHAPTER_START" : "Start"
+    "YOUTUBE_CHAPTER_START" : "Start",
 
+    "TIPS_LOCKED_TIMECODE" : "Locked-on timecode to insert memo。\nClick or Ctrl+L to update。\nYou can choose auto update triggers from \"Settings\"",
+    "TIPS_SPEAKER" : "Distinguish speaker by color coding.",
+    "TIPS_FUNCTION_BUTTONS" : "Snippets by F1-5 keys.\nYou can edit contents from \"Settings\"",
+    "TIPS_SCREEN_SHOT" : "Save current playback screen as still image file。\nSave location is same as source media file.",
+    "TIPS_JUMP_BACLWARD" : "Jump backward. You can choose distance with pull-down menu.",
+    "TIPS_PLAY_PAUSE" : "Toggle Play/Pause. You can choose playback speed (rate) with pull-down menu.",
+    "TIPS_JUMP_FORWARD" : "Jump forward. You can choose distance with pull-down menu.",
+    "TIPS_SEARCH_METHOD" : "Search specific word from memos.\n[Filter] will hide un-matched memo, [Emphasise] will color matched memo."
+  
 }

@@ -56,6 +56,17 @@ const validTypes = [
 
     document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
 
+    //UI要素にツールチップ（title属性）を付加
+    document.getElementById('lockedTimecode').title = _.t('TIPS_LOCKED_TIMECODE', locale);
+    document.getElementById('speaker').title = _.t('TIPS_SPEAKER', locale);
+    document.getElementById('function_buttons').title = _.t('TIPS_FUNCTION_BUTTONS', locale);
+    document.getElementById('Btn_ScreenShot').title = _.t('TIPS_SCREEN_SHOT', locale);
+    document.getElementById('Btn_JumpBackward').title = _.t('TIPS_JUMP_BACLWARD', locale);
+    document.getElementById('Btn_PlayPause').title = _.t('TIPS_PLAY_PAUSE', locale);
+    document.getElementById('Btn_JumpForward').title = _.t('TIPS_JUMP_FORWARD', locale);
+    document.getElementById('search-box1').title = _.t('TIPS_SEARCH_METHOD', locale);
+
+
     //設定をグローバル変数に読み込み
     await loadConfig();
 
