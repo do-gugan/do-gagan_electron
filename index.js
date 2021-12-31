@@ -174,8 +174,33 @@ app.on('window-all-closed', () => {
   });
 
   //ドロップされたメディアファイルを開く
-  ipcMain.handle('openDroppedFile', (event, path) => {
-    common.openMediaFile(path);
+  ipcMain.handle('openDroppedFile', (event, mediaPath) => {
+    //未保存データの処理
+    if (common.isDirty == true) {
+      const lang = common.config.get('locale') || app.getLocale();
+      const _ = new i18n(lang, 'dialog');
+      const options = {
+        type: 'warning',
+        buttons: [_.t('UNSAVED_DATA_SAVE_CONTINUE'), _.t('UNSAVED_DATA_DISPOSE_CONTINUE'), _.t('UNSAVED_DATA_CANCEL')],
+        title: _.t('UNSAVED_DATA_TITLE'),
+        message: _.t('UNSAVED_DATA_MESSAGE_CONTINUE').replace('%1', path.basename(common.mediaPath).replace(path.extname(common.mediaPath),".dggn.txt")),
+        defaultId: 3,
+        cancelId: 2
+      };
+      switch (dialog.showConfirmation(options)) {
+        case 0: //上書き保存して開く
+          common.saveLog();
+          common.clearLog();
+          break;
+        case 1: //破棄して開く
+          common.clearLog();
+          break;
+        case 2: //キャンセル
+          return;
+      }
+  
+    }
+    common.openMediaFile(mediaPath);
     //Macでドラッグ＆ドロップ時、フォーカスがFinderのままになるので明示的にフォアグラウンドフロントにする
     if (process.platform == 'darwin') {
       app.focus({ steal: true });
