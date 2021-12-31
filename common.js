@@ -527,7 +527,7 @@ handleUnsavedLog(event) {
 
   openSupportSite() {
     const shell = require('electron').shell;
-    shell.openExternal('https://do-gugan.com/tools/');
+    shell.openExternal('https://do-gugan.com/tools/do-gagan3/');
   }
 
   /**
