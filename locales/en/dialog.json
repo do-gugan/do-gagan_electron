@@ -63,6 +63,16 @@
   "LITE_DOWNLOAD_FAIL_TITLE": "Error: Downloading Do-gagan Lite", 
   "LITE_DOWNLAOD_FAIL_MESSAGE": "Doqnloading faild.\nPleas hit 'OK' to open manual download page. Then doanload 'index.html', place it to the same folder of media file, rename it to same filename '%1'.",
 
+  "UNSAVED_DATA_TITLE": "Confirm unsaved data",
+  "UNSAVED_DATA_MESSAGE": "%1 is not saved.\nSave before close?",
+  "UNSAVED_DATA_SAVE": "Save and Close.",
+  "UNSAVED_DATA_DISPOSE": "Dispose unsaved data.",
+  "UNSAVED_DATA_CANCEL": "Cancel",
+
+  "UNSAVED_DATA_MESSAGE_CONTINUE": "%1 is not saved.\nSave before continue?",
+  "UNSAVED_DATA_SAVE_CONTINUE": "Save and Continue",
+  "UNSAVED_DATA_DISPOSE_CONTINUE": "Dispose unsaved data and Continue",
+
   "SPLIT_ERROR" : "Split Error",
   "SPLIT_OK" : "OK",
   "CANNNOT_SPLIT_CHARACTER_SELECTED":"You can not split while selecting any letter(s).",

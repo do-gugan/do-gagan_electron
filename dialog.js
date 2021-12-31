@@ -59,6 +59,29 @@ const openAboutDialog = function() {
  * 動画／音声を開くファイルダイアログを表示
  */
 const openVideoDialog = function() {
+  //未保存データの処理
+  if (common.isDirty == true) {
+    const lang = common.config.get('locale') || app.getLocale();
+    const _ = new i18n(lang, 'dialog');
+    const options = {
+      type: 'warning',
+      buttons: [_.t('UNSAVED_DATA_SAVE_CONTINUE'), _.t('UNSAVED_DATA_DISPOSE_CONTINUE'), _.t('UNSAVED_DATA_CANCEL')],
+      title: _.t('UNSAVED_DATA_TITLE'),
+      message: _.t('UNSAVED_DATA_MESSAGE_CONTINUE').replace('%1', path.basename(common.mediaPath).replace(path.extname(common.mediaPath),".dggn.txt")),
+      defaultId: 3,
+      cancelId: 2
+    };
+    switch (this.showConfirmation(options)) {
+      case 0: //上書き保存して開く
+        common.saveLog();
+        break;
+      case 1: //破棄して開く
+        break;
+      case 2: //キャンセル
+        return;
+    }
+  }
+
   let result = dialog.showOpenDialogSync(common.mainWin, {
     title: _.t('OPEN_VIDEO_TITLE'),
     //defaultPath:"",
@@ -70,6 +93,7 @@ const openVideoDialog = function() {
     ]
   });
   if (result != undefined) {
+    common.clearLog();
     common.openMediaFile(result[0]);
   }
 }
