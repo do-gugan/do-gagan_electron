@@ -111,7 +111,11 @@ class Common {
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
   }
 
-  //他形式のログファイルをインポート
+  /**
+   * 他形式のログファイルをインポート（Premiere Pro/動画眼1.0形式）
+   * @param {*} pth ファイルのパス
+   * @param {*} clear trueなら既存のログを削除
+   */
   importLogFile(pth, clear = false) {
     if (clear == true) {
       this.clearLog();
@@ -142,13 +146,13 @@ class Common {
           const rec = new dggRecord(inTime, script, speaker);
           records.push(rec);      
         }
-        if (records.length > 0) {
-          console.log(records.length + "record(s) found.");
-          //レンダラーに一括挿入
-          this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
-          this.setDirtyFlag(true); //ダーティフラグをクリア
-        }
       });
+      if (records.length > 0) {
+        console.log(records.length + "record(s) found.");
+        //レンダラーに一括挿入
+        this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+        this.setDirtyFlag(true); //ダーティフラグを立てる
+      }
     } else if (dgg1Match != null && dgg1Match.length == 1) {
       console.log("Format is do-gagan 1.0.");
       //ShiftJISで再読み込み
@@ -171,9 +175,9 @@ class Common {
               console.log(records.length + "record(s) found.");
               //レンダラーに一括挿入
               this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
-              this.setDirtyFlag(true); //ダーティフラグをクリア
+              this.setDirtyFlag(true); //ダーティフラグを立てる
             }          
-            }))            
+            }))
     } else {
       console.log("No known format found.");
     }
@@ -196,6 +200,46 @@ class Common {
 
     
     //this.setDirtyFlag(false); //ダーティフラグをクリア
+}
+
+  /**
+   * SRT形式の字幕ファイルをインポート
+   * @param {*} pth ファイルのパス
+   * @param {*} clear trueなら既存のログを削除
+   */
+   importSrtFile(pth, clear = false) {
+    if (clear == true) {
+      this.clearLog();
+    }
+    let text = fs.readFileSync(pth, "utf8");
+    let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+
+    //console.log("Format is Premiere transcribed txt.");
+    lines= [];
+    //改行2連続を1ブロックとして分割
+    const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
+    pRecords.forEach(r => {
+      const line = r.split(/\r\n|\r|\n/);
+      if (line.length == 3) { //3行に満たないレコードは除外
+        const tc = line[1].split(" --> ")[0].split(",");
+
+        const inTime = this.HHMMSSTosec(tc[0].match(/\d\d:\d\d:\d\d/)[0]);
+        const script = line[2];
+        const speaker = 0; //SRTに含まれないので常に0とする
+
+        // console.log("inTime: " + inTime);
+        // console.log("script: " + script);
+        // console.log("speaker: " + speaker);
+        const rec = new dggRecord(inTime, script, speaker);
+        records.push(rec);      
+      }
+    });
+    if (records.length > 0) {
+      console.log(records.length + "record(s) found.");
+      //レンダラーに一括挿入
+      this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+      this.setDirtyFlag(true); //ダーティフラグを立てる
+    }
 }
 
 clearLog() {

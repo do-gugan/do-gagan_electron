@@ -33,6 +33,7 @@ contextBridge.exposeInMainWorld(
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),
     //まとまった数のレコードを一括で追加
     addRecordsToList: (callback) => ipcRenderer.on("add-records-to-list", (event,records)=>callback(records)),
+    //レコードを全削除
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
 
     //コンテクストメニューの選択からの処理
