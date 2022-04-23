@@ -928,6 +928,5 @@ window.api.clearRecords(()=>{
 //自動スクロールのチェックボックス状態を設定に保存
 function toglleAutoScroll(){
     const result = document.getElementById("Chk_AutoScroll").checked;
-    console.log("Chk_AutoScroll:" + result);
     window.api.setConfig("autoScroll", result);
 }

@@ -1,6 +1,6 @@
 {
   "name": "do-gagan",
-  "version": "2.9.9",
+  "version": "2.9.10",
   "description": "動画眼 Electron Ver.",
   "main": "index.js",
   "scripts": {
@@ -21,6 +21,14 @@
     "productName": "動画眼3",
     "copyright": "Copyright © 2021 ${author}",
     "appId": "com.do-gugan.electron.do-gagan",
+    "extraFiles": [
+      {
+        "from": "build",
+        "to": "resources",
+        "filter": [
+            "**/*"
+        ]
+      }],
     "mac": {
       "icon": "build/icon.png",
       "identity": "Kazuyoshi Furuta",

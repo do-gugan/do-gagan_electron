@@ -875,9 +875,8 @@ handleUnsavedLog(event) {
 
 showAbout = function() {
   const openAboutWindow = require('about-window').default;
-  console.log(__dirname);
   openAboutWindow({ 
-      icon_path: path.join(__dirname,'build','icon.png'),
+      icon_path: this.app.isPackaged ? path.join(process.resourcesPath, '/icon.png') : path.join(__dirname, 'build/icon.png'),
       //copyright: 'Copyright (c) 2021 Kazuyoshi Furuta,Do-gagan',
       package_json_dir: __dirname,
       //BrowserWindow: this.mainWin,
