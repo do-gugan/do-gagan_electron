@@ -66,7 +66,8 @@ const validTypes = [
     document.getElementById('Btn_PlayPause').title = _.t('TIPS_PLAY_PAUSE', locale);
     document.getElementById('Btn_JumpForward').title = _.t('TIPS_JUMP_FORWARD', locale);
     document.getElementById('search-box1').title = _.t('TIPS_SEARCH_METHOD', locale);
-
+    document.getElementById('Label_ShowHideNewMemo').title = _.t('TIPS_TOGGLE_NEW_MEMO', locale);
+    document.getElementById('Label_AutoScroll').title = _.t('TIPS_TOGGLE_AUTO_SCROLL', locale);
 
     //設定をグローバル変数に読み込み
     await loadConfig();
@@ -160,6 +161,11 @@ async function loadConfig() {
         window.api.setSkipTimeFromGUI('backward', result); //メニュー
     });
 
+    //自動スクロール ON/OFF
+    await window.api.getConfig('autoScroll').then((result) => {
+        document.getElementById('Chk_AutoScroll').checked = result;
+    });
+    
     //メモ欄 表示/非表示
     await window.api.getConfig('newMemoBlockShown').then((result) => {
         document.getElementById('Chk_ShowHideNewMemo').checked = result;
@@ -918,3 +924,10 @@ function sendCapturetoMain() {
 window.api.clearRecords(()=>{
     memolist.innerHTML = "";
 });
+
+//自動スクロールのチェックボックス状態を設定に保存
+function toglleAutoScroll(){
+    const result = document.getElementById("Chk_AutoScroll").checked;
+    console.log("Chk_AutoScroll:" + result);
+    window.api.setConfig("autoScroll", result);
+}

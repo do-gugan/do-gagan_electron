@@ -44,6 +44,8 @@
     "TIPS_JUMP_BACLWARD" : "Jump backward. You can choose distance with pull-down menu.",
     "TIPS_PLAY_PAUSE" : "Toggle Play/Pause. You can choose playback speed (rate) with pull-down menu.",
     "TIPS_JUMP_FORWARD" : "Jump forward. You can choose distance with pull-down menu.",
-    "TIPS_SEARCH_METHOD" : "Search specific word from memos.\n[Filter] will hide un-matched memo, [Emphasise] will color matched memo."
-  
+    "TIPS_SEARCH_METHOD" : "Search specific word from memos.\n[Filter] will hide un-matched memo, [Emphasise] will color matched memo.",
+    "TIPS_TOGGLE_NEW_MEMO" : "Show/Hide bottom block for add/edit memo.",
+    "TIPS_TOGGLE_AUTO_SCROLL" : "Enable/Disable auto scroll to syncronize playback position."
+
 }

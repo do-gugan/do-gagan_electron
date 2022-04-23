@@ -113,6 +113,10 @@ const store = new Store({
       type: 'boolean',
       default: true,
     },
+    autoScroll: {
+      type: 'boolean',
+      default: true,
+    },
     backupFile: {
       type: 'boolean',
       default: true,
