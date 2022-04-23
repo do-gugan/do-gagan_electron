@@ -47,6 +47,7 @@ const validTypes = [
     document.getElementById('Opt_Emphasise').innerHTML = _.t('EMPHASISE',locale);
     playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
     document.getElementById('Lbl_ShowHideNewMemo').innerHTML = _.t('NEW_MEMO_FIELD',locale);
+    document.getElementById('Lbl_AutoScroll').innerHTML = _.t('AUTO_SCROLL',locale);
     document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions();
     document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions();
 
@@ -348,7 +349,9 @@ function updateCurrentMarker() {
             var ae = document.activeElement.parentElement.parentElement;
             if (ae != undefined && ae.id.startsWith('row')){
             } else {
-                lastFocusedRow.scrollIntoView({behavior: "smooth", block: scrollPositionOfFocusedRow});
+                if (document.getElementById("Chk_AutoScroll").checked == true){
+                    lastFocusedRow.scrollIntoView({behavior: "smooth", block: scrollPositionOfFocusedRow});
+                }
             }
         }
     })

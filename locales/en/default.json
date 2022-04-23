@@ -7,6 +7,7 @@
     "EMPHASISE": "Emphasise",
     "CLEAR": "Clear",
     "NEW_MEMO_FIELD": "Adding Record",
+    "AUTO_SCROLL": "Auto Scroll",
 
     "DROP_ONLY_SINGLE_FILE": "Multiple files can not be dropped!",
     "INVALID_FILETYPE": "Unsupported file type!",
