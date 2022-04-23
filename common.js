@@ -582,7 +582,7 @@ handleUnsavedLog(event) {
       enableRemoteModule: true,
       contextIsolation: true,
       preload: path.join(__dirname, './preload_settings.js'),
-      nativeWindowOpen: true,
+      //nativeWindowOpen: true, //Electron 18で廃止
       accessibleTitle: _.t('SETTINGS_ACCESSIBLETITLE')
     }
   });
@@ -633,8 +633,8 @@ handleUnsavedLog(event) {
         enableRemoteModule: true,
         contextIsolation: true,
         preload: path.join(__dirname, './preload_replace.js'),
-        nativeWindowOpen: true,
-        accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
+      //nativeWindowOpen: true, //Electron 18で廃止
+      accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
       }
     });
 

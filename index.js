@@ -35,9 +35,9 @@ function createWindow() {
             nodeIntegration: false,
             enableRemoteModule: true,
             contextIsolation: true,
-            preload: path.join(__dirname, './preload.js'),
-            nativeWindowOpen: true,
-        }
+            preload: path.join(__dirname, './preload.js')
+            //nativeWindowOpen: true, //Electron 18で廃止
+    }
     });
     mainWin.loadFile('./index.html');
     mainWin.setMinimumSize(800,600);
