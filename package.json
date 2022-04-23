@@ -9,8 +9,8 @@
   "author": "Kazuyoshi Furuta",
   "license": "MIT",
   "dependencies": {
-    "about-window": "^1.15.1",
-    "electron-dl": "^3.2.1",
+    "about-window": "^1.15.2",
+    "electron-dl": "^3.3.1",
     "electron-store": "^6.0.1",
     "iconv-lite": "^0.6.3"
   },
@@ -26,9 +26,10 @@
         "from": "build",
         "to": "resources",
         "filter": [
-            "**/*"
+          "**/*"
         ]
-      }],
+      }
+    ],
     "mac": {
       "icon": "build/icon.png",
       "identity": "Kazuyoshi Furuta",

@@ -99,6 +99,16 @@ const validTypes = [
             decrementSpeaker();
         } else if (event.key == 'F1' || event.key == 'F2' || event.key == 'F3' || event.key == 'F4' || event.key == 'F5') {
             inputFromFunctionTemplate(event.key);
+        } else if (document.activeElement.nodeName != "INPUT" && document.activeElement.nodeName != "TEXTAREA") {
+            //テキスト入力欄以外でのキーイベント
+            //Premiere ProのJ/K/Lキーを再現
+            if (event.key == "l") {
+                player.playbackRate = 4.0;
+            } else if (event.key == "k") {
+                togglePlayPause();
+            } else if (event.key == "j") {
+                player.playbackRate = -2.0;
+            }
         }
     });
     
