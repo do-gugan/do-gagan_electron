@@ -134,11 +134,11 @@ class Common {
       const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
       pRecords.forEach(r => {
         const line = r.split(/\r\n|\r|\n/);
-        console.log("length:" + line.length);
+        //console.log("length:" + line.length);
         if (line.length == 3) { //3行に満たないレコードは除外
           const inTime = this.HHMMSSTosec(line[0].match(/\d\d:\d\d:\d\d/)[0]);
           const script = line[2];
-          const speaker = line[1].match(/ (\d+)/)[1];
+          const speaker = line[1].match(/ (\d+)/) ? line[1].match(/ (\d+)/)[1] : 0; //話者番号を切り出せたらその数字、NULLなら0を入れる
   
           // console.log("inTime: " + inTime);
           // console.log("script: " + script);
