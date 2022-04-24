@@ -81,6 +81,10 @@ const validTypes = [
         }
     });
 
+    //Premiere式再生速度制御の配列
+    const playbackRates = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 4.0, 8.0];
+    let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
+
     document.body.addEventListener('keyup', (event)=>{
         // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.shiftKey);
@@ -99,15 +103,31 @@ const validTypes = [
             decrementSpeaker();
         } else if (event.key == 'F1' || event.key == 'F2' || event.key == 'F3' || event.key == 'F4' || event.key == 'F5') {
             inputFromFunctionTemplate(event.key);
-        } else if (document.activeElement.nodeName != "INPUT" && document.activeElement.nodeName != "TEXTAREA") {
+        } else if (document.activeElement.nodeName != "INPUT" && document.activeElement.nodeName != "TEXTAREA" && player != undefined) {
             //テキスト入力欄以外でのキーイベント
             //Premiere ProのJ/K/Lキーを再現
             if (event.key == "l") {
-                player.playbackRate = 4.0;
+                if (player.paused == true) {
+                    player.play();
+                } else {
+                    if (currentPlaybackRate < playbackRates.length) { currentPlaybackRate++; }
+                    console.log(playbackRates[currentPlaybackRate] + "x");
+                    player.playbackRate = playbackRates[currentPlaybackRate];
+                }
             } else if (event.key == "k") {
+                currentPlaybackRate = 3;
+                player.playbackRate = 1.0;
                 togglePlayPause();
             } else if (event.key == "j") {
-                player.playbackRate = -2.0;
+                if (player.paused != true) {
+                    if (currentPlaybackRate > 0) { currentPlaybackRate--; }                
+                    console.log(playbackRates[currentPlaybackRate] + "x");
+                    player.playbackRate = playbackRates[currentPlaybackRate];
+                } else {
+                    currentPlaybackRate = 2;
+                    player.playbackRate = playbackRates[currentPlaybackRate];
+                    player.play();
+                }
             }
         }
     });
