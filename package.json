@@ -20,7 +20,8 @@
   "build": {
     "productName": "動画眼3",
     "copyright": "Copyright © 2021 ${author}",
-    "appId": "com.do-gugan.electron.do-gagan",
+    "appId": "com.do-gugan.do-gagan",
+    "afterSign": "scripts/notarize.js",
     "extraFiles": [
       {
         "from": "build",
@@ -33,12 +34,19 @@
     "mac": {
       "icon": "build/icon.png",
       "identity": "Kazuyoshi Furuta",
+      "hardenedRuntime": true,
+      "gatekeeperAssess": false,
+      "entitlements": "build/entitlements.mac.plist",
+      "entitlementsInherit": "build/entitlements.mac.plist",
       "target": {
         "target": "dmg",
         "arch": [
           "x64"
         ]
       }
+    },
+    "dmg": {
+      "sign": false
     },
     "win": {
       "icon": "build/icon.ico",
