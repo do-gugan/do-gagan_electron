@@ -33,11 +33,10 @@ function createWindow() {
         webPreferences: {
             worldSafeExecuteJavaScript: true,
             nodeIntegration: false,
-            sandbox: false,
+            sandbox: false, //Electron20への一時対処
             enableRemoteModule: true,
             contextIsolation: true,
             preload: path.join(__dirname, './preload.js')
-            //nativeWindowOpen: true, //Electron 18で廃止
     }
     });
     mainWin.loadFile('./index.html');
