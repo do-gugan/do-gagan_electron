@@ -33,6 +33,7 @@ function createWindow() {
         webPreferences: {
             worldSafeExecuteJavaScript: true,
             nodeIntegration: false,
+            sandbox: false,
             enableRemoteModule: true,
             contextIsolation: true,
             preload: path.join(__dirname, './preload.js')
