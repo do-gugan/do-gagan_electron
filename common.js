@@ -623,10 +623,10 @@ handleUnsavedLog(event) {
     webPreferences: {
       worldSafeExecuteJavaScript: true,
       nodeIntegration: false,
+      sandbox: false, //Electron20への一時対処
       enableRemoteModule: true,
       contextIsolation: true,
       preload: path.join(__dirname, './preload_settings.js'),
-      //nativeWindowOpen: true, //Electron 18で廃止
       accessibleTitle: _.t('SETTINGS_ACCESSIBLETITLE')
     }
   });
@@ -674,6 +674,7 @@ handleUnsavedLog(event) {
       webPreferences: {
         worldSafeExecuteJavaScript: true,
         nodeIntegration: false,
+        sandbox: false, //Electron20への一時対処
         enableRemoteModule: true,
         contextIsolation: true,
         preload: path.join(__dirname, './preload_replace.js'),
