@@ -5,6 +5,7 @@
 
 const path = require('path');
 const fs = require('fs'); //ファイルアクセス
+const util = require("util");
 const readline = require("readline"); //1行ずつ読む
 const dggRecord = require("./dggRecord"); //レコードクラス
 const i18n = require("./i18n");
@@ -29,6 +30,8 @@ const _ = null;
 const dggTouchBar = null; //TouchBarのシングルトンオブジェクト
 let autoSaveTimer; //自動保存のタイマー配列
 let autoSaveInterval;
+const stat = util.promisify(fs.stat);  // fs.statをPromise化
+
 
 class Common {
   constructor() {
@@ -96,15 +99,16 @@ class Common {
 
       //第一列が時刻（hh:mm:ss）形式だったら変換処理
       const firstTC = lines[0].split('\t')[0];
-      console.log(firstTC)
       if (/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/.test(firstTC) == true) {
         console.log("time");
         if (offset == 0) {
-          //offset = this.openSyncTimeWindow(); //時刻補正ダイアログを表示
+          offset = this.openSyncTimeWindow(); //時刻補正ダイアログを表示
           console.log("Opening syncTimeDialog");
           offset = this.openSyncTimeWindow();
           console.log("offset:"+offset);
         }
+      } else {
+        console.log("no");
       }
 
       //行数だけループ処理
@@ -720,7 +724,6 @@ handleUnsavedLog(event) {
        timeSyncWindow.setSize (timeSyncWindow.getSize()[0]+600, timeSyncWindow.getSize()[1]);
        timeSyncWindow.webContents.openDevTools(); //Devツールを開く
     // }
-
     // レンダリングが完了したら呼ばれる
     timeSyncWindow.once('ready-to-show', () => {
       timeSyncWindow.show();
@@ -956,6 +959,50 @@ handleUnsavedLog(event) {
 
 // #endregion
 
+//--------------------------------
+// #region タイムスタンプ変換ダイアログ用
+//--------------------------------
+
+  /**
+   * 現在のメディアファイル名を返す
+   * @returns 開いているメディアファイルのファイル名
+   */
+  getMediaFileName() {
+    let delimiter = '\\';
+    //macOSの場合はデリミタを刺し替える
+    if (process.platform == "darwin"){ delimiter = '/'; }
+    const filename = this.mediaPath.substring(this.mediaPath.lastIndexOf(delimiter) + 1);
+    return filename;
+  }
+
+  // getMediaBirthDateTime() {
+  //   fs.stat(this.mediaPath, (err, stats) => {
+  //     if (err) {
+  //       console.error(err);
+  //       result = err;
+  //     } else {
+  //       // ファイルの作成日時
+  //       const birthtime = stats.birthtime.toLocaleString();  //2016-04-04T13:35:58.000Zで返るのをtoLocalString()でPCのロケールにあわせた時刻に変換
+  //       return birthtime;
+  //     }
+  //   }).then(birthtime =>{return birthtime;
+  //   });
+  // }
+
+  async getMediaBirthDateTime() {
+    try {
+      // awaitで非同期処理の結果を待つ
+      const stats = await stat(this.mediaPath);
+      // ファイルの作成日時
+      const birthtime = stats.birthtime.toLocaleString();
+      return birthtime;
+    } catch (err) {
+      console.error(err);
+      return err;
+    }
+  }
+
+  // #endregion
 
 showAbout = function() {
   const openAboutWindow = require('about-window').default;

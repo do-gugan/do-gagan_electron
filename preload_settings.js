@@ -21,9 +21,6 @@ contextBridge.exposeInMainWorld(
 
     setConfig: (key, value) => ipcRenderer.invoke("setConfig", key, value).then(result => result).catch(err => console.log(err)),
 
-    // getMatchCount:(word) => ipcRenderer.invoke('getMatchCount', word),
-    // executeRaplace:(before,after) => ipcRenderer.invoke('executeRaplace', before,after),
-
     setAutoSaveIntervalOnMemory: () => ipcRenderer.send('setAutoSaveIntervalOnMemory'),
 
 

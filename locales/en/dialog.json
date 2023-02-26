@@ -84,6 +84,7 @@
   "INPUT_START_TIME" : "The time code seemd to recorded in time (of the day) format instead of 0 started seconds. <br>Please specify the start time of this video file.",
   "GET_FILE_CREATION_TIME" : "Get video file creation time",
   "GUESS_FROM_FILE_NAME" : "Guess from video file name",
-  "CONVERT" : "Convert"
+  "CONVERT" : "Convert",
+  "GUESS_FROM_FILENAME_FAILED" : "Guessing time from filename failed.\n\"(blank)hh-mm-ss\" format is needed."
 
 }

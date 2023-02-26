@@ -84,6 +84,6 @@
   "INPUT_START_TIME" : "タイムコード情報が0スタートではなく時刻で記録されているファイルのようです。<br>動画ファイルの記録開始時刻を24時間表記で指定してください。",
   "GET_FILE_CREATION_TIME" : "動画ファイルの生成日時から取得",
   "GUESS_FROM_FILE_NAME" : "動画ファイル名から推測",
-  "CONVERT" : "変換"
-
+  "CONVERT" : "変換",
+  "GUESS_FROM_FILENAME_FAILED" : "ファイル名から時刻を推測できませんでした。\n半角スペースに続き「hh-mm-ss」形式の文字列を含む必要があります。"
 }

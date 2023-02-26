@@ -372,6 +372,19 @@ ipcMain.on('setAutoSaveIntervalOnMemory', () => {
 
 // #endregion
 
+//--------------------------------
+// #region タイムスタンプ変換ダイアログ用
+//--------------------------------
+
+ipcMain.handle('getMediaFileName', async (event, ) => {
+  return common.getMediaFileName();
+});
+
+ipcMain.handle('getMediaBirthDateTime', async (event, ) => {
+  return common.getMediaBirthDateTime();
+});
+
+// #endregion
 
 
 //--------------------------------

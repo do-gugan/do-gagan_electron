@@ -2,6 +2,7 @@
 * レンダラープロセス（syncTime.html）用のJavaScriptファイル
 */
 "use strict";
+
 let locale = null;
 let _ = null;
 
@@ -20,31 +21,40 @@ let _ = null;
 
 })();
 
-//フィル生成時刻を取得
-function getFromCreationTime(){
-
+//ファイル生成時刻を取得
+const getFromCreationTime = ()=>{
+    console.log("getFromCreationTime");
+    window.api.getMediaBirthDateTime().then(birthDateTime =>{
+        console.log(birthDateTime);
+        const startTime = birthDateTime.split(" ")[1].split(":");
+        document.getElementById("Txt_hh").value = startTime[0];
+        document.getElementById("Txt_mm").value = startTime[1];
+        document.getElementById("Txt_ss").value = startTime[2];
+});
 }
 
 //ファイル名にある時刻を抽出
-function GuessFromFileName(){
-    
+const GuessFromFileName = ()=>{
+    console.log("GuessFromFileName");
+    window.api.getMediaFileName().then(fname =>{
+        //console.log("Media File Name: "+fname);
+        const regex = /\b([0-9]{2}-[0-9]{2}-[0-9]{2})/;        
+        if (regex.test(fname)) {
+            const startTime = fname.match(regex)[0].split("-");
+            document.getElementById("Txt_hh").value = startTime[0];
+            document.getElementById("Txt_mm").value = startTime[1];
+            document.getElementById("Txt_ss").value = startTime[2];
+        } else {
+            alert(_.t('GUESS_FROM_FILENAME_FAILED',locale));
+        }
+    });
 }
 
-
-//以下不要
-async function wordChanged() {
-    const word = document.getElementById('Txt_search').value;
-    if (word.length > 0){
-        window.api.getMatchCount(word).then(count =>{
-            document.getElementById('Lbl_count').innerText = count;
-        })    
-    } else {
-        document.getElementById('Lbl_count').innerText = "0";
-    }
-}
-
-async function execute() {
-    const before = document.getElementById('Txt_search').value;
-    const after = document.getElementById('Txt_replace').value;
-    window.api.executeRaplace(before,after);
+//オフセットを計算して補正を実行
+const convertTC = ()=>{
+    const hh = document.getElementById("Txt_hh").value;
+    const mm = document.getElementById("Txt_mm").value;
+    const ss = document.getElementById("Txt_ss").value;
+    const offset = hh*3600 + mm*60 + ss;
+    console.log("Offset:"+offset+"sec");
 }
