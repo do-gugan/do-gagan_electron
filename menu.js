@@ -101,6 +101,18 @@ const setTemplate = (lang='ja') => {
                     //console.log('JUMP_R');
                     common.skipBackwardToPlayer(event);
                 }},
+                {id:'SPEED_UP', label: _.t('SPEED_UP'), enabled: false, accelerator: 'Control+D', click: (event)=>{
+                    //console.log('SPEED_UP');
+                    common.playbackSpeedUp(event);
+                }},
+                {id:'SPEED_RESET', label: _.t('SPEED_RESET'), enabled: false, accelerator: 'Control+S', click: (event)=>{
+                    //console.log('SPEED_RESET');
+                    common.playbackSpeedReset(event);
+                }},
+                {id:'SPEED_DOWN', label: _.t('SPEED_DOWN'), enabled: false, accelerator: 'Control+A', click: (event)=>{
+                    //console.log('SPEED_DOWN');
+                    common.playbackSpeedDown(event);
+                }},
                 {type: 'separator'},
                 {id:'JUMP_F_SEC', label: _.t('JUMP_F_SEC'),
                 submenu: [
@@ -241,6 +253,9 @@ const enableMenuWhenMediaOpened = function () {
     Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('JUMP_F').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('JUMP_R').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('SPEED_UP').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('SPEED_RESET').enabled = true;
+    Menu.getApplicationMenu().getMenuItemById('SPEED_DOWN').enabled = true;
     Menu.getApplicationMenu().getMenuItemById('PLAY-PAUSE').enabled = true;
 }
 

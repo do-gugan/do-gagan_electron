@@ -36,6 +36,11 @@ const validTypes = [
     'audio/ogg'
 ];           
 
+//Premiere式再生速度制御の配列
+const playbackRates = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 4.0, 8.0];
+let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
+
+
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
@@ -81,10 +86,6 @@ const validTypes = [
         }
     });
 
-    //Premiere式再生速度制御の配列
-    const playbackRates = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 4.0, 8.0];
-    let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
-
     document.body.addEventListener('keyup', (event)=>{
         // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.shiftKey);
@@ -107,27 +108,11 @@ const validTypes = [
             //テキスト入力欄以外でのキーイベント
             //Premiere ProのJ/K/Lキーを再現
             if (event.key == "l") {
-                if (player.paused == true) {
-                    player.play();
-                } else {
-                    if (currentPlaybackRate < playbackRates.length) { currentPlaybackRate++; }
-                    console.log(playbackRates[currentPlaybackRate] + "x");
-                    player.playbackRate = playbackRates[currentPlaybackRate];
-                }
+                playbackSpeedUp();
             } else if (event.key == "k") {
-                currentPlaybackRate = 3;
-                player.playbackRate = 1.0;
-                togglePlayPause();
+                playbackSpeedReset();
             } else if (event.key == "j") {
-                if (player.paused != true) {
-                    if (currentPlaybackRate > 0) { currentPlaybackRate--; }                
-                    console.log(playbackRates[currentPlaybackRate] + "x");
-                    player.playbackRate = playbackRates[currentPlaybackRate];
-                } else {
-                    currentPlaybackRate = 2;
-                    player.playbackRate = playbackRates[currentPlaybackRate];
-                    player.play();
-                }
+                playbackSpeedDown();
             }
         }
     });
@@ -139,8 +124,6 @@ const validTypes = [
         }
 
     })
-
-
 
     //空欄からの打ちはじめの場合、自動ロックオンを発動
     document.getElementById('Txt_memo').addEventListener('input', (event)=>{
@@ -157,6 +140,7 @@ const validTypes = [
     await loadConfig();//設定をロード
     
 })();
+
 
 //起動時、設定を呼び出して画面に反映させる
 async function loadConfig() {
@@ -553,9 +537,42 @@ const playbackRateChangedFromVideoElement = () => {
     document.getElementById('Sel_PlaybackRate').value = player.playbackRate;
 };
 
+//キーボードショートカットで速度アップ
+const playbackSpeedUp = ()=>  {
+    if (player.paused == true) {
+        player.play();
+    } else {
+        if (currentPlaybackRate < playbackRates.length) { currentPlaybackRate++; }
+        //console.log(playbackRates[currentPlaybackRate] + "x");
+        player.playbackRate = playbackRates[currentPlaybackRate];
+    }
+}
+//キーボードショートカットで速度リセット
+const playbackSpeedReset = ()=> {
+        currentPlaybackRate = 3;
+        player.playbackRate = 1.0;
+        togglePlayPause();
+}
+//キーボードショートカットで速度ダウン
+const playbackSpeedDown = ()=>  {
+    if (player.paused != true) {
+        if (currentPlaybackRate > 0) { currentPlaybackRate--; }                
+        //console.log(playbackRates[currentPlaybackRate] + "x");
+        player.playbackRate = playbackRates[currentPlaybackRate];
+    } else {
+        currentPlaybackRate = 2;
+        player.playbackRate = playbackRates[currentPlaybackRate];
+        player.play();
+    }
+}
+
+
 //メインプロセス（メニュー）から
 window.api.skipForward(()=>skipForward()); //スキップ実行
 window.api.skipBackward(()=>skipBackward()); //スキップ実行
+window.api.playbackSpeedUp(()=>playbackSpeedUp()); //スピードアップ
+window.api.playbackSpeedDown(()=>playbackSpeedDown()); //スピードアップ
+window.api.playbackSpeedReset(()=>playbackSpeedReset()); //スピードアップ
 window.api.setSkipTime((direction, index)=>setSkipTime(direction, index)); //スキップ設定をselectに反映
 //動画再生位置を指定秒に移動する
 function jumpToTimeIndex(sec){

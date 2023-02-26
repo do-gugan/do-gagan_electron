@@ -27,6 +27,10 @@ contextBridge.exposeInMainWorld(
     skipForward: (callback) => ipcRenderer.on("skip-forward", ()=>callback()),
     skipBackward: (callback) => ipcRenderer.on("skip-backward", ()=>callback()),
 
+    playbackSpeedUp: (callback) => ipcRenderer.on("playback-speed-up", ()=>callback()),
+    playbackSpeedDown: (callback) => ipcRenderer.on("playback-speed-down", ()=>callback()),
+    playbackSpeedReset: (callback) => ipcRenderer.on("playback-speed-reset", ()=>callback()),
+   
     openReplaceWindow: (callback) => ipcRenderer.on("open-replace-window", ()=>callback()),
 
     //ログ1件の内容を受け取り、リストに追加する

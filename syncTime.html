@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <link rel="stylesheet" href="syncTime.css">
+        <title></title>
+     </head>
+    <body>
+    <div id="main">
+        <div id="grid1">
+            <div id="Lbl_inputStartTime">:</div>
+        </div>
+        <div id="grid2">
+            <input type="number" id="Txt_hh" class="number" value="0" min="0" max="23" placeholder="hh" />
+            <span id="Lbl_colon1" class="colon">:</span>
+            <input type="number" id="Txt_mm" class="number" value="0" min="0" max="59" placeholder="mm" />
+            <span id="Lbl_colon2" class="colon">:</span>
+            <input type="number" id="Txt_ss" class="number" value="0" min="0" max="59" placeholder="ss" />
+        </div>
+        <div id="grid3">
+            <Button id="Btn_getFileCreationTime" onclick="getFromCreationTime();">Get video file creation time</Button>
+            <Button id="Btn_getFileName" onclick="GuessFromFileName();">Guess from video file name</Button>
+        </div>
+    <div id="bottom">
+        <Button id="Btn_convert" onclick="convertTC();">Convert</Button>
+    </div>
+    </body>
+    <script src="syncTime.js"></script>
+</html>

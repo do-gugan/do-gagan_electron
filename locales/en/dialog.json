@@ -77,7 +77,13 @@
   "SPLIT_ERROR" : "Split Error",
   "SPLIT_OK" : "OK",
   "CANNNOT_SPLIT_CHARACTER_SELECTED":"You can not split while selecting any letter(s).",
-  "CANNNOT_SPLIT_HERE":"You can not split before the first letter."
+  "CANNNOT_SPLIT_HERE":"You can not split before the first letter.",
 
+  "SYNCTIME": "Time Conversion",
+  "SYNCTIME_ACCESSIBLETITLE": "Time Conversion",
+  "INPUT_START_TIME" : "The time code seemd to recorded in time (of the day) format instead of 0 started seconds. <br>Please specify the start time of this video file.",
+  "GET_FILE_CREATION_TIME" : "Get video file creation time",
+  "GUESS_FROM_FILE_NAME" : "Guess from video file name",
+  "CONVERT" : "Convert"
 
 }

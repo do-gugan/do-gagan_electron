@@ -91,12 +91,27 @@ class Common {
       }
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+      //let syncMethod = "";
+      let offset = 0;
 
+      //第一列が時刻（hh:mm:ss）形式だったら変換処理
+      const firstTC = lines[0].split('\t')[0];
+      console.log(firstTC)
+      if (/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/.test(firstTC) == true) {
+        console.log("time");
+        if (offset == 0) {
+          //offset = this.openSyncTimeWindow(); //時刻補正ダイアログを表示
+          console.log("Opening syncTimeDialog");
+          offset = this.openSyncTimeWindow();
+          console.log("offset:"+offset);
+        }
+      }
+
+      //行数だけループ処理
       for (var line of lines) {
         var cols = line.split("\t");
         if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
-          let rec = new dggRecord(cols[0], cols[1], cols[2]);
-          //tempRecords.push(rec);
+          let rec = new dggRecord(cols[0] + offset, cols[1], cols[2]);
           records.push(rec);
         } else {
           //第一カラムが数値でなければスキップ
@@ -109,6 +124,16 @@ class Common {
       
       this.setDirtyFlag(false); //ダーティフラグをクリア
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
+  }
+             
+
+  /**
+   * 指定方法で時刻を絶対タイムスタンプに変換して返す
+   * @param {*} timeOfDay hh:mm:ss形式の文字列
+   * @param {*} startTime 開始時刻 (hh:mm:ss形式の文字列)
+   */
+  ConvertTimeOfDay2TC(timeOfDay, startTime) {
+    return HHMMSSTosec(timeOfDay) - HHMMSSTosec(startTime);
   }
 
   /**
@@ -588,11 +613,20 @@ handleUnsavedLog(event) {
   playPauseToPlayer() {
     this.mainWin.webContents.send('play-pause');
   }
-  skipForwardToPlayer() {
+  skipForwardToPlayer(event) {
     this.mainWin.webContents.send('skip-forward');
   }
   skipBackwardToPlayer(event) {
     this.mainWin.webContents.send('skip-backward');
+  }
+  playbackSpeedUp(event) {
+    this.mainWin.webContents.send('playback-speed-up');
+  }
+  playbackSpeedDown(event) {
+    this.mainWin.webContents.send('playback-speed-down');
+  }
+  playbackSpeedReset(event) {
+    this.mainWin.webContents.send('playback-speed-reset');
   }
   changePositionFromSlider(pos) {
     this.mainWin.webContents.send('change-position-from-touchbar', pos);
@@ -648,9 +682,58 @@ handleUnsavedLog(event) {
     this.mainWin.webContents.send('load-config');
   });
   return settingsWindow;
+  };
 
+  //--------------------------------
+  // 時刻変換ダイアログウインドウ
+  //--------------------------------
+  openSyncTimeWindow() {
+    const _ = new this.i18n(this.lang, 'dialog');
+    let timeSyncWindow = new this.browserWindow({
+      parent: mainWin,
+      modal: true,
+      width: 470,
+      height: 300,
+      backgroundColor: 'white',
+      resizable: false,
+      minimizable: false,
+      maximizable: false,
+      alwaysOnTop: true,
+      fullscreenable: false,
+      skipTaskbar: true,
+      show: false,
+      title:_.t('SYNCTIME'),
+      webPreferences: {
+        worldSafeExecuteJavaScript: true,
+        nodeIntegration: false,
+        sandbox: false, //Electron20への一時対処
+        enableRemoteModule: true,
+        contextIsolation: true,
+        preload: path.join(__dirname, './preload_syncTime.js'),
+        accessibleTitle: _.t('SYNCTIME_ACCESSIBLETITLE')
+      }
+    });
+    timeSyncWindow.setMenu(null);
+    timeSyncWindow.loadFile('syncTime.html');
 
-  }
+    // if (!this.app.isPackaged) {
+       timeSyncWindow.setSize (timeSyncWindow.getSize()[0]+600, timeSyncWindow.getSize()[1]);
+       timeSyncWindow.webContents.openDevTools(); //Devツールを開く
+    // }
+
+    // レンダリングが完了したら呼ばれる
+    timeSyncWindow.once('ready-to-show', () => {
+      timeSyncWindow.show();
+    });
+
+    //ウインドウが閉じられる時呼ばれる
+    timeSyncWindow.on('closed', () => {
+      console.log("timeSync window closed.");
+      //this.mainWin.webContents.send('load-config');
+    });
+    return 123;    
+    };
+
 
   //--------------------------------
   // 置換ダイアログウインドウ

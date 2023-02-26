@@ -1,0 +1,46 @@
+#main {
+    display: flex;
+    height:100%;
+    margin: 1em;
+    font-size:0.9em;
+
+    flex-direction: column;
+}
+
+#grid1 {
+    margin-bottom: 1em;
+}
+
+#grid2 {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+#grid3 {
+    margin-bottom: 1em;
+    text-align: center;
+}
+
+.number {
+    font-size: 2.0em;
+    width: 2.0em;
+    padding-left: 0.5em;
+    text-align: center;
+}
+.number::placeholder {
+    font-size: 0.7em;
+}
+
+.colon {
+    font-size: 2.0em;
+}
+
+#bottom {
+    text-align: right;
+}
+
+#Btn_convert {
+    width: 6em;
+    height: 2em;
+    font-size: 1em;
+}

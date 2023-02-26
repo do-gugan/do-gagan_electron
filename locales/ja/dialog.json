@@ -77,6 +77,13 @@
   "SPLIT_ERROR" : "分割エラー",
   "SPLIT_OK" : "OK",
   "CANNNOT_SPLIT_CHARACTER_SELECTED":"1文字以上の文字を選択していると分割できません。",
-  "CANNNOT_SPLIT_HERE":"この位置では分割できません。"
+  "CANNNOT_SPLIT_HERE":"この位置では分割できません。",
+
+  "SYNCTIME": "時刻変換",
+  "SYNCTIME_ACCESSIBLETITLE": "時刻変換",
+  "INPUT_START_TIME" : "タイムコード情報が0スタートではなく時刻で記録されているファイルのようです。<br>動画ファイルの記録開始時刻を24時間表記で指定してください。",
+  "GET_FILE_CREATION_TIME" : "動画ファイルの生成日時から取得",
+  "GUESS_FROM_FILE_NAME" : "動画ファイル名から推測",
+  "CONVERT" : "変換"
 
 }
