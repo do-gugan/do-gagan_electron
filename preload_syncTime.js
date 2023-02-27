@@ -15,8 +15,8 @@ contextBridge.exposeInMainWorld(
     },
 
     getMediaFileName:() => ipcRenderer.invoke('getMediaFileName'),
-    getMediaBirthDateTime:() => ipcRenderer.invoke('getMediaBirthDateTime')
-
+    getMediaBirthDateTime:() => ipcRenderer.invoke('getMediaBirthDateTime'),
+    setTimeOffset:(offset) => ipcRenderer.invoke('setTimeOffset',offset)
   }
 );
 

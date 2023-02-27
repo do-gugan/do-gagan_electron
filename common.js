@@ -102,10 +102,9 @@ class Common {
       if (/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/.test(firstTC) == true) {
         console.log("time");
         if (offset == 0) {
-          offset = this.openSyncTimeWindow(); //時刻補正ダイアログを表示
           console.log("Opening syncTimeDialog");
           offset = this.openSyncTimeWindow();
-          console.log("offset:"+offset);
+          console.log("returned offset:"+offset);
         }
       } else {
         console.log("no");
@@ -694,7 +693,7 @@ handleUnsavedLog(event) {
   openSyncTimeWindow() {
     const _ = new this.i18n(this.lang, 'dialog');
     let timeSyncWindow = new this.browserWindow({
-      parent: mainWin,
+      parent: this.mainWin,
       modal: true,
       width: 470,
       height: 300,
@@ -721,21 +720,21 @@ handleUnsavedLog(event) {
     timeSyncWindow.loadFile('syncTime.html');
 
     // if (!this.app.isPackaged) {
-       timeSyncWindow.setSize (timeSyncWindow.getSize()[0]+600, timeSyncWindow.getSize()[1]);
-       timeSyncWindow.webContents.openDevTools(); //Devツールを開く
+      timeSyncWindow.setSize (timeSyncWindow.getSize()[0]+600, timeSyncWindow.getSize()[1]);
+      timeSyncWindow.webContents.openDevTools(); //Devツールを開く
     // }
     // レンダリングが完了したら呼ばれる
     timeSyncWindow.once('ready-to-show', () => {
       timeSyncWindow.show();
     });
 
-    //ウインドウが閉じられる時呼ばれる
-    timeSyncWindow.on('closed', () => {
+    //ウインドウが閉じられる時呼ばれるコールバック関数
+    timeSyncWindow.on('closed', (offset) => {
       console.log("timeSync window closed.");
       //this.mainWin.webContents.send('load-config');
+      //return 456;
     });
-    return 123;    
-    };
+  };
 
 
   //--------------------------------
@@ -1000,6 +999,11 @@ handleUnsavedLog(event) {
       console.error(err);
       return err;
     }
+  }
+
+  setTimeOffset(offset) {
+    console.log("Offset received from dialog: "+ offset);
+
   }
 
   // #endregion

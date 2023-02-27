@@ -6,7 +6,6 @@
 let locale = null;
 let _ = null;
 
-
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
     locale = await window.api.getConfig('locale');
@@ -57,4 +56,7 @@ const convertTC = ()=>{
     const ss = document.getElementById("Txt_ss").value;
     const offset = hh*3600 + mm*60 + ss;
     console.log("Offset:"+offset+"sec");
+    window.api.setTimeOffset(offset);
+    window.close();
 }
+

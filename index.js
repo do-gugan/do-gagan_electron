@@ -384,6 +384,10 @@ ipcMain.handle('getMediaBirthDateTime', async (event, ) => {
   return common.getMediaBirthDateTime();
 });
 
+ipcMain.handle('setTimeOffset', async (event, offset) => {
+  return common.setTimeOffset(offset);
+});
+
 // #endregion
 
 
