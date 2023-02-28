@@ -195,6 +195,10 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('HELP'),
             submenu: [
+                {label: _.t('GOTO-MARKER-PAGE'), click: ()=>{
+                    //console.log('GOTO-MARKER-PAGE');
+                    common.openMarkerPage();
+                }},
                 {label: _.t('GOTO-SUPPORT-PAGE'), click: ()=>{
                     //console.log('GOTO-SUPPORT-PAGE');
                     common.openSupportSite();

@@ -627,6 +627,11 @@ handleUnsavedLog(event) {
     shell.openExternal('https://do-gugan.com/tools/do-gagan3/');
   }
 
+  openMarkerPage() {
+    const shell = require('electron').shell;
+    shell.openExternal('https://do-gugan.com/tools/marker/');
+  }
+
   /**
    * レンダラーに下部UIの表示トグルイベントを伝え、結果を取得
    * @param {string} path メディアファイルのフルパス
