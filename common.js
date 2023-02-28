@@ -178,10 +178,10 @@ class Common {
 
     //1行目をサンプルとしてファイル形式を推定（1.0形式 or Premiere Pro出力ファイル）
     const firstLine = lines[0];
-    const premiereMatch = firstLine.match(/\d\d:\d\d:\d\d:\d\d - \d\d:\d\d:\d\d:\d\d/);
+    const premiereMatch = firstLine.match(/\d\d;\d\d;\d\d;\d\d - \d\d;\d\d;\d\d;\d\d/); //Ver.22辺りからセミコロン区切りに
     const dgg1Match = firstLine.match(/^\d\d:\d\d:\d\d\t/);
     if (premiereMatch != null && premiereMatch.length == 1) {
-      //console.log("Format is Premiere transcribed txt.");
+      console.log("Format is Premiere transcribed txt.");
       lines= [];
       //改行2連続を1ブロックとして分割
       const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
@@ -189,13 +189,10 @@ class Common {
         const line = r.split(/\r\n|\r|\n/);
         //console.log("length:" + line.length);
         if (line.length == 3) { //3行に満たないレコードは除外
-          const inTime = this.HHMMSSTosec(line[0].match(/\d\d:\d\d:\d\d/)[0]);
+          let inTime = line[0].match(/\d\d;\d\d;\d\d/)[0].replaceAll(";",":");
+          inTime = this.HHMMSSTosec(inTime);
           const script = line[2];
           const speaker = line[1].match(/ (\d+)/) ? line[1].match(/ (\d+)/)[1] : 0; //話者番号を切り出せたらその数字、NULLなら0を入れる
-  
-          // console.log("inTime: " + inTime);
-          // console.log("script: " + script);
-          // console.log("speaker: " + speaker);
           const rec = new dggRecord(inTime, script, speaker);
           records.push(rec);      
         }
@@ -496,7 +493,7 @@ handleUnsavedLog(event) {
   }
 
   HHMMSSTosec(hhmmss) {
-    console.log(hhmmss);
+    //console.log(hhmmss);
     const e = hhmmss.split(":");
     if (e.length == 3) {
       return (parseInt(e[0]) * 3600) + (parseInt(e[1]) * 60) + parseInt(e[2]);
@@ -713,6 +710,7 @@ handleUnsavedLog(event) {
   settingsWindow.on('closed', () => {
     //console.log("settings window closed.");
     this.mainWin.webContents.send('load-config');
+    settingsWindow = null;
   });
   return settingsWindow;
   };
@@ -759,9 +757,10 @@ handleUnsavedLog(event) {
     });
 
     //ウインドウが閉じられる時呼ばれるコールバック関数
-    // timeSyncWindow.on('closed', (offset) => {
+     timeSyncWindow.on('closed', (offset) => {
     //   console.log("timeSync window closed.");
-    // });
+      timeSyncWindow = null;
+     });
   };
 
 
@@ -811,6 +810,7 @@ handleUnsavedLog(event) {
     //ウインドウが閉じられる時呼ばれる
     replaceWindow.on('closed', () => {
       //this.replaceWin = null;
+      replaceWindow = null;
     });
     return replaceWindow;
   }

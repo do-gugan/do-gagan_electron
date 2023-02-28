@@ -93,6 +93,7 @@ const openVideoDialog = function() {
     ]
   });
   if (result != undefined) {
+    //common.app.createWindow();
     common.clearLog();
     common.openMediaFile(result[0]);
   }

@@ -124,14 +124,15 @@ app.on("BrowserWindow.close", () => {
     //TouchBarオブジェクトを破棄
     common.mainWin.setTouchBar(null);
   }
+  common.mainWin = null;
 });
 
 // すべてのウィンドウが閉じられたときの処理
 app.on('window-all-closed', () => {
     // macOS以外はアプリを終了する
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
+    //if (process.platform !== 'darwin') {
+    app.quit();
+    //}
   })
  
   // アプリがアクティブになった時の処理
