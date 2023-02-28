@@ -51,11 +51,11 @@ const GuessFromFileName = ()=>{
 
 //オフセットを計算して補正を実行
 const convertTC = ()=>{
-    const hh = document.getElementById("Txt_hh").value;
-    const mm = document.getElementById("Txt_mm").value;
-    const ss = document.getElementById("Txt_ss").value;
+    const hh = parseInt(document.getElementById("Txt_hh").value);
+    const mm = parseInt(document.getElementById("Txt_mm").value);
+    const ss = parseInt(document.getElementById("Txt_ss").value);
     const offset = hh*3600 + mm*60 + ss;
-    console.log("Offset:"+offset+"sec");
+    //console.log("Offset:"+offset+"sec");
     window.api.setTimeOffset(offset);
     window.close();
 }

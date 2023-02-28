@@ -95,40 +95,65 @@ class Common {
       const text = fs.readFileSync(pth, "utf8");
       const lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
       //let syncMethod = "";
-      let offset = 0;
 
       //第一列が時刻（hh:mm:ss）形式だったら変換処理
-      const firstTC = lines[0].split('\t')[0];
-      if (/[0-9][0-9]:[0-9][0-9]:[0-9][0-9]/.test(firstTC) == true) {
-        console.log("time");
-        if (offset == 0) {
-          console.log("Opening syncTimeDialog");
-          offset = this.openSyncTimeWindow();
-          console.log("returned offset:"+offset);
-        }
-      } else {
-        console.log("no");
-      }
+      const firstTC = lines[0].split('\t')[0]; //1行目1項目を取り出し
+      console.log(firstTC);
+      if (/[0-9]{2}:[0-9]{2}:[0-9]{2}/.test(firstTC) == true) {
+        console.log("Opening syncTimeDialog");
+        this.openSyncTimeWindow();
 
-      //行数だけループ処理
-      for (var line of lines) {
-        var cols = line.split("\t");
-        if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
-          let rec = new dggRecord(cols[0] + offset, cols[1], cols[2]);
-          records.push(rec);
-        } else {
-          //第一カラムが数値でなければスキップ
-          console.log('Invalid line: ' + line);
-        };
+        //hh:mm:ssを変換しながらインポート
+        for (var line of lines) {
+          var cols = line.split("\t");
+          const regex = /[0-9]{2}:[0-9]{2}:[0-9]{2}/;
+          if (regex.test(cols[0]) == true){ //第一カラム（タイムスタンプ）がhh:mm:ss形式か判定
+            console.log(cols[0] + "to" + this.HHMMSSTosec(cols[0]));
+            let rec = new dggRecord(this.HHMMSSTosec(cols[0]), cols[1], cols[2]);
+            records.push(rec);
+          } else {
+            //第一カラムがhh:mm:ss形式でなければスキップ
+            console.log('Invalid line: ' + line);
+          };
+        }
+
+        //計算したオフセットはここでは受け取れずコールバック関数setTimeOffset()で反映
+      } else {
+        //通常のインポート処理
+
+        //行数だけループ処理
+        for (var line of lines) {
+          var cols = line.split("\t");
+          if (isFinite(cols[0]) == true && cols[0].length > 0){ //第一カラム（タイムスタンプ）が数値か判定
+            let rec = new dggRecord(cols[0], cols[1], cols[2]);
+            records.push(rec);
+          } else {
+            //第一カラムが数値でなければスキップ
+            console.log('Invalid line: ' + line);
+          };
+        }
+
+  
       }
 
       this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
-
-      
       this.setDirtyFlag(false); //ダーティフラグをクリア
       //this.menu.enableMenuWhenLogOpened(); //ここでは呼ばれない
+
   }
              
+  //全レコードから指定秒数offsetだけ引く
+  setTimeOffset(offset) {
+    //console.log("Offset received from dialog: "+ offset);
+    this.mainWin.webContents.send('clear-records'); //一度リストをクリア
+
+    //オフセット秒数補正実行
+    records.forEach(r => {
+      //console.log(r.inTime +" " + r.script);
+      r.inTime = r.inTime - offset;
+      this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに表示
+    });
+  }
 
   /**
    * 指定方法で時刻を絶対タイムスタンプに変換して返す
@@ -729,11 +754,9 @@ handleUnsavedLog(event) {
     });
 
     //ウインドウが閉じられる時呼ばれるコールバック関数
-    timeSyncWindow.on('closed', (offset) => {
-      console.log("timeSync window closed.");
-      //this.mainWin.webContents.send('load-config');
-      //return 456;
-    });
+    // timeSyncWindow.on('closed', (offset) => {
+    //   console.log("timeSync window closed.");
+    // });
   };
 
 
@@ -1001,10 +1024,6 @@ handleUnsavedLog(event) {
     }
   }
 
-  setTimeOffset(offset) {
-    console.log("Offset received from dialog: "+ offset);
-
-  }
 
   // #endregion
 

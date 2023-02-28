@@ -293,14 +293,6 @@ window.api.addRecordsToList((records) => {
     textareas.forEach(ta => resizeTextarea(ta));
 });
 
-//秒インデックスを「分：秒」形式に変換
-function secToMinSec(secTotal){
-    const min = Math.floor(secTotal / 60);
-    const sec = secTotal - min*60;
-    return ( '00' + min ).slice( -2 ) + ":" + ( '00' + sec ).slice( -2 )
-}
-
-
 //ファイルのドラッグ&ドロップを受け付ける
 //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
 //標準動作をキャンセル
@@ -608,7 +600,8 @@ function secToMinSec(secTotal, minDigit = 2){
     const sec = Math.floor(secTotal - min*60);
     let minSkel = '00';
     let sl = -2;
-    if (minDigit == 3) {
+    //桁数指定されたか、100分以上の時は分を3桁で返す
+    if (minDigit == 3 || secTotal >= 6000) {
         minSkel = '000';
         sl = -3
     }
