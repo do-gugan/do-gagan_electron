@@ -761,7 +761,7 @@ handleUnsavedLog(event) {
       parent: this.mainWin,
       modal: true,
       width: 470,
-      height: 300,
+      height: 260,
       backgroundColor: 'white',
       resizable: false,
       minimizable: false,
@@ -784,10 +784,10 @@ handleUnsavedLog(event) {
     timeSyncWindow.setMenu(null);
     timeSyncWindow.loadFile('syncTime.html');
 
-    // if (!this.app.isPackaged) {
+    if (!this.app.isPackaged) {
       timeSyncWindow.setSize (timeSyncWindow.getSize()[0]+600, timeSyncWindow.getSize()[1]);
       timeSyncWindow.webContents.openDevTools(); //Devツールを開く
-    // }
+    }
     // レンダリングが完了したら呼ばれる
     timeSyncWindow.once('ready-to-show', () => {
       timeSyncWindow.show();
