@@ -292,6 +292,43 @@ class Common {
     }
 }
 
+/**
+   * Premiere Proのマーカーcsv形式のファイルをインポート
+   * @param {*} pth ファイルのパス
+   * @param {*} clear trueなら既存のログを削除
+   */
+importPremiereMarkerCSVFile(pth, clear = false) {
+  //console.log("Format is Premiere Pro Marker CSV.");
+  if (clear == true) {
+    this.clearLog();
+  }
+  let text = fs.readFileSync(pth, "UTF16LE");
+  let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
+
+  lines.forEach( line => {
+    if (line.length == 0) return;
+    const regex = /[0-9]{2};[0-9]{2};[0-9]{2};/;
+    const cols = line.split('\t');
+    if (regex.test(cols[2])){
+      const col2 = cols[2].split(";");
+      const inTime = this.HHMMSSTosec(`${col2[0]}:${col2[1]}:${col2[2]}`);
+      const script = cols[0];
+      const rec = new dggRecord(inTime, script, 0);
+      records.push(rec);
+    } else {
+      //第3項が"hh;mm;ss"形式でなければスキップ
+      console.log('Invalid line: ' + line);
+      return;
+    }
+  });
+  if (records.length > 0) {
+    console.log(records.length + "record(s) found.");
+    //レンダラーに一括挿入
+    this.mainWin.webContents.send('add-records-to-list',records); //レンダラーに描画指示
+    this.setDirtyFlag(true); //ダーティフラグを立てる
+  }
+}
+
 clearLog() {
   records.length = 0;
   this.mainWin.webContents.send('clear-records');

@@ -112,7 +112,8 @@ const openVideoDialog = function() {
     filters: [
       { name: _.t('LOGFILES'), extensions: ['dggn.txt'] },
       { name: _.t('PREMIERE_TXT'), extensions: ['txt'] },
-      { name: _.t('SRT_FILE'), extensions: ['srt'] },
+      { name: _.t('PREMIERE_MARKER_CSV'), extensions: ['csv'] },
+      { name: _.t('SRT_FILE'), extensions: ['srt'] }
     ]
   });
   if (result != undefined) {
@@ -123,6 +124,9 @@ const openVideoDialog = function() {
     } else if (result[0].endsWith('.txt')) {
       //その他の.txt拡張子の形式
       common.importLogFile(result[0], false);
+    } else if (result[0].endsWith('.csv')) {
+      //Premier Pro マーカーCSVファイル
+      common.importPremiereMarkerCSVFile(result[0], false);
     } else if (result[0].endsWith('.srt')) {
       //srt形式ファイル
       common.importSrtFile(result[0], false);
