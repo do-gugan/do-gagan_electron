@@ -25,6 +25,7 @@ let isShiftKeyPressing = false;
 let currentMarkerTimer = null;
 let markedRowId = null;
 let scrollPositionOfFocusedRow = null;
+let isPreviousFrameIsBlank = false; //黒ゴマ検出で連続検出を抑止するフラグ
 
 //対応形式
 const validTypes = [
@@ -246,6 +247,7 @@ function mediaOpened (path) {
     player.addEventListener('pause', (event) => playerPaused() );
     player.addEventListener('seeked', (event) => playerSeeked() );
     player.addEventListener('durationchange', (event) => setMediaDuration() );
+    player.addEventListener('timeupdate', (event) => AddChapeterForFrameBlank());
 
     //UIを有効化
     document.getElementById('Btn_ScreenShot').disabled = false;
@@ -958,6 +960,62 @@ function sendCapturetoMain() {
     //メインプロセスに
     var dataURL = canvas.toDataURL("image/jpeg",0.8);
     window.api.saveCapture(dataURL, secToMinSec(player.currentTime));
+}
+
+//再生中のフレームの左上の指定領域が真っ黒(blank)ならチャプターを挿入する
+function AddChapeterForFrameBlank () {
+    const canvas = document.createElement("canvas");
+    //ソース映像を一定のサイズに縮小したものを解析
+    const h = 50;
+    const w = h * (player.videoWidth / player.videoHeight);
+    canvas.height = h;
+    canvas.width = w;
+    //ビデオの元解像度からキャプチャサイズにスケールして保存
+    canvas.getContext('2d').drawImage(player, 0, 0, player.videoWidth, player.videoHeight, 0, 0, w, h);
+  
+    const context = canvas.getContext('2d');
+    const pixelBuffer = new Uint32Array(
+         context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
+    );
+    //全てのピクセルが黒だったらチャプターを挿入する
+    //if (!pixelBuffer.some(color => color !== 4278190080)){ //数字が黒を示すカラーコード
+    if (!pixelBuffer.some(color => isDark(color))){ //数字が黒を示すカラーコード
+            if (isPreviousFrameIsBlank == false) {
+            console.log(player.currentTime + " is blank.");
+            //チャプター挿入
+            const inTime = player.currentTime;
+            const script = "------";
+            const speaker = 2;
+            window.api.addNewMemoFromGUI(inTime, script, speaker);
+        }
+        isPreviousFrameIsBlank = true;
+    } else {
+        //console.log(player.currentTime + " is not blank.");
+        isPreviousFrameIsBlank = false;
+
+    }
+}
+
+//int形式で渡されたカラーコードが一定以下の暗さかどうかを返す
+function isDark(intColor) {
+    const hexColor = intColor.toString(16);
+    //console.log(hexColor)
+    let rgbArr = [];
+    for(let i=0; i<hexColor.length;i+=2){
+        rgbArr.push(parseInt(hexColor[i] + hexColor[i+1], 16));
+    }
+    //R: rgbArr[1];
+    //G: rgbArr[2];
+    //B: rgbArr[3];
+    //console.log(`r:${rgbArr[1]} g:${rgbArr[2]} b:${rgbArr[3]}`);
+    const threshold = 1; //閾値
+    //RGB全て閾値未満の時、"黒い"と判定する
+    if (rgbArr[1]<threshold && rgbArr[2]<threshold && rgbArr[3]<threshold) {
+        console.log(`r:${rgbArr[1]} g:${rgbArr[2]} b:${rgbArr[3]}`);
+    return true;
+    } else {
+        return false;
+    }
 }
 
 //ログリストをクリア
