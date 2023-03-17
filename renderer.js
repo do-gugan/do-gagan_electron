@@ -950,9 +950,9 @@ async function addMemo() {
 function sendCapturetoMain() {
     const canvas = document.createElement("canvas");
     //キャプチャするサイズ
-    canvas.height = 720;
+    canvas.height = 8;
     //縦横比を維持して高さ720に変換
-    canvas.width = 720 * (player.videoWidth / player.videoHeight);
+    canvas.width = 8 * (player.videoWidth / player.videoHeight);
 
     //ビデオの元解像度からキャプチャサイズにスケールして保存
     canvas.getContext('2d').drawImage(player, 0, 0, player.videoWidth, player.videoHeight,0,0,canvas.width,canvas.height);
@@ -962,42 +962,54 @@ function sendCapturetoMain() {
     window.api.saveCapture(dataURL, secToMinSec(player.currentTime));
 }
 
+
+//#region 黒フレーム検出関係
+
 //再生中のフレームの左上の指定領域が真っ黒(blank)ならチャプターを挿入する
 function AddChapeterForFrameBlank () {
-    const canvas = document.createElement("canvas");
+    const canvas = document.createElement("canvas"); //判定用の縮小画像を載せるキャンバス
     //ソース映像を一定のサイズに縮小したものを解析
-    const h = 50;
-    const w = h * (player.videoWidth / player.videoHeight);
+    const h = 12;
+    const w = Math.floor(h * (player.videoWidth / player.videoHeight));
     canvas.height = h;
     canvas.width = w;
+    //console.log("canvas size w:"+w+" h:"+h + " pixel num:"+h*w);
     //ビデオの元解像度からキャプチャサイズにスケールして保存
     canvas.getContext('2d').drawImage(player, 0, 0, player.videoWidth, player.videoHeight, 0, 0, w, h);
   
+    //テスト保存
+    //var dataURL = canvas.toDataURL("image/jpeg",0.8);
+    //window.api.saveCapture(dataURL, secToMinSec(player.currentTime));
+    
     const context = canvas.getContext('2d');
     const pixelBuffer = new Uint32Array(
          context.getImageData(0, 0, canvas.width, canvas.height).data.buffer
     );
+    //console.log(pixelBuffer);
     //全てのピクセルが黒だったらチャプターを挿入する
-    //if (!pixelBuffer.some(color => color !== 4278190080)){ //数字が黒を示すカラーコード
-    if (!pixelBuffer.some(color => isDark(color))){ //数字が黒を示すカラーコード
-            if (isPreviousFrameIsBlank == false) {
-            console.log(player.currentTime + " is blank.");
-            //チャプター挿入
-            const inTime = player.currentTime;
-            const script = "------";
-            const speaker = 2;
-            window.api.addNewMemoFromGUI(inTime, script, speaker);
+    const luminanceThreshold = 10;
+    if (!pixelBuffer.some(color => getLuminance(color) >= luminanceThreshold)){
+        //連続でチャプター挿入をしない
+        if (isPreviousFrameIsBlank == false) {
+            //console.log(player.currentTime + " is blank.");
+            //既に同じタイムコードのチャプターが存在しない場合、チャプターを挿入する
+            if (isChapterAlreadyExistAt(player.currentTime)) {
+                const inTime = player.currentTime;
+                const script = "------";
+                const speaker = 2;
+                window.api.addNewMemoFromGUI(inTime, script, speaker);
+            }
         }
         isPreviousFrameIsBlank = true;
     } else {
         //console.log(player.currentTime + " is not blank.");
         isPreviousFrameIsBlank = false;
-
     }
 }
 
-//int形式で渡されたカラーコードが一定以下の暗さかどうかを返す
-function isDark(intColor) {
+//int形式で渡されたRGBカラーコードの輝度値を返す
+function getLuminance(intColor) {
+
     const hexColor = intColor.toString(16);
     //console.log(hexColor)
     let rgbArr = [];
@@ -1007,16 +1019,26 @@ function isDark(intColor) {
     //R: rgbArr[1];
     //G: rgbArr[2];
     //B: rgbArr[3];
-    //console.log(`r:${rgbArr[1]} g:${rgbArr[2]} b:${rgbArr[3]}`);
-    const threshold = 1; //閾値
-    //RGB全て閾値未満の時、"黒い"と判定する
-    if (rgbArr[1]<threshold && rgbArr[2]<threshold && rgbArr[3]<threshold) {
-        console.log(`r:${rgbArr[1]} g:${rgbArr[2]} b:${rgbArr[3]}`);
-    return true;
-    } else {
-        return false;
-    }
+    //輝度を求める
+    // https://qiita.com/kozo002/items/97b3af1388ee4e04b876
+    const luminance = Math.floor(0.298912 * rgbArr[1] + 0.586611 + rgbArr[2] + 0.114478 * rgbArr[3]);
+    //console.log(`luminance:${luminance}`);
+    return luminance;
 }
+
+/**
+ * タイムコードが重複するチャプターが既に存在するか判定
+ * メインプロセスがもっているrecordsを参照すると0.1秒精度の照会になるが、
+ * 用途的に秒単位の方が都合が良く、同期処理もできるので、レンダラーの表示情報から検索する。
+ * @param {タイムコード} currentTime 
+ * @returns 存在すればtrue。なければfalse
+ */
+function isChapterAlreadyExistAt(currentTime) {
+    const inTimesArray = Array.from(document.querySelectorAll('.inTime')); //.someを使う為NodeListを配列に変換
+    return !inTimesArray.some(inTime => inTime.textContent === secToMinSec(currentTime));
+}
+
+//#endregion
 
 //ログリストをクリア
 window.api.clearRecords(()=>{
