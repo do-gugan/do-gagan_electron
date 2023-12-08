@@ -254,7 +254,7 @@ function mediaOpened (path) {
     player.addEventListener('pause', (event) => playerPaused() );
     player.addEventListener('seeked', (event) => playerSeeked() );
     player.addEventListener('durationchange', (event) => setMediaDuration() );
-    player.addEventListener('timeupdate', (event) => AddChapeterForFrameBlank());
+    //player.addEventListener('timeupdate', (event) => AddChapeterForFrameBlank());
 
     //UIを有効化
     document.getElementById('Btn_ScreenShot').disabled = false;
@@ -984,7 +984,7 @@ function sendCapturetoMain() {
 }
 
 
-//#region 黒フレーム検出関係
+//#region 黒フレーム検出関係（保留）
 
 //再生中のフレームの左上の指定領域が真っ黒(blank)ならチャプターを挿入する
 function AddChapeterForFrameBlank () {
