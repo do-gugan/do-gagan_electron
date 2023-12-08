@@ -733,10 +733,10 @@ handleUnsavedLog(event) {
   });
   settingsWindow.setMenu(null);
   settingsWindow.loadFile('settings.html');
-  // if (!this.app.isPackaged) {
+  if (!this.app.isPackaged) {
     settingsWindow.setSize (settingsWindow.getSize()[0]+600, settingsWindow.getSize()[1]);
     settingsWindow.webContents.openDevTools(); //Devツールを開く
-  // }
+  }
 
   // レンダリングが完了したら呼ばれる
   settingsWindow.once('ready-to-show', () => {
