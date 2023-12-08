@@ -88,11 +88,18 @@ let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
     });
 
     document.body.addEventListener('keyup', (event)=>{
-        // console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
-        //console.log("Key:" + event.shiftKey);
+        //console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
+        //console.log("Key:" + event.key);
         if (event.shiftKey) {
             isShiftKeyPressing = false;
-            console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
+            //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
+        }
+
+        //Shiftキー押してｎ倍ジャンプ
+        if ((event.ctrlKey && event.shiftKey) && event.key == 'W') {
+            skipForwardBig();
+        } else if ((event.ctrlKey && event.shiftKey) && event.key == 'Q') {
+            skipBackward();
         }
 
         //Ctrl+LまたはAlt+Lでロックオン
@@ -473,6 +480,20 @@ function skipBackward(event = null){
     var sec = document.getElementById('Sel_BackwardSec').value;
     jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
 }
+
+//Shiftキー押しながらジャンプ
+function skipForwardBig(event = null){
+    var sec = document.getElementById('Sel_ForwardSec').value;
+    jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec　* multiPlyJumpIndex));
+}
+function skipBackwardBig(event = null){
+    var sec = document.getElementById('Sel_BackwardSec').value;
+    jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec　* multiPlyJumpIndex));
+}
+
+
+
+
 /**
  * メニューからスキップ秒数をセット
  * @param {string} direction 'forward'または'backward'
