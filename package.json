@@ -1,6 +1,7 @@
 {
   "name": "do-gagan",
-  "version": "2.10.0",
+  "productName": "動画眼3",
+  "version": "2.10.1",
   "description": "動画眼 Electron Ver.",
   "main": "index.js",
   "scripts": {
