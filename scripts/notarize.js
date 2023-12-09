@@ -20,7 +20,7 @@ exports.default = async function notarizing(context) {
 
   //return await notarize({
   notarize({
-      appBundleId: 'com.do-gugan.do-gagan',
+    appBundleId: 'com.do-gugan.do-gagan',
     appPath: `${appOutDir}/${appName}.app`,
     appleId: process.env.APPLEID,
     appleIdPassword: process.env.APPLEIDPASS,
