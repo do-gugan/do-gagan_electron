@@ -971,9 +971,9 @@ async function addMemo() {
 function sendCapturetoMain() {
     const canvas = document.createElement("canvas");
     //キャプチャするサイズ
-    canvas.height = 8;
+    canvas.height = 720;
     //縦横比を維持して高さ720に変換
-    canvas.width = 8 * (player.videoWidth / player.videoHeight);
+    canvas.width = 720 * (player.videoWidth / player.videoHeight);
 
     //ビデオの元解像度からキャプチャサイズにスケールして保存
     canvas.getContext('2d').drawImage(player, 0, 0, player.videoWidth, player.videoHeight,0,0,canvas.width,canvas.height);
