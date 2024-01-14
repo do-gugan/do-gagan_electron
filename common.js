@@ -178,7 +178,7 @@ class Common {
 
     //1行目をサンプルとしてファイル形式を推定（1.0形式 or Premiere Pro出力ファイル）
     const firstLine = lines[0];
-    const premiereMatch = firstLine.match(/\d\d;\d\d;\d\d;\d\d - \d\d;\d\d;\d\d;\d\d/); //Ver.22辺りからセミコロン区切りに
+    const premiereMatch = firstLine.match(/\d\d:\d\d:\d\d:\d\d - \d\d:\d\d:\d\d:\d\d/);
     const dgg1Match = firstLine.match(/^\d\d:\d\d:\d\d\t/);
     if (premiereMatch != null && premiereMatch.length == 1) {
       console.log("Format is Premiere transcribed txt.");
@@ -187,10 +187,8 @@ class Common {
       const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
       pRecords.forEach(r => {
         const line = r.split(/\r\n|\r|\n/);
-        //console.log("length:" + line.length);
         if (line.length == 3) { //3行に満たないレコードは除外
-          let inTime = line[0].match(/\d\d;\d\d;\d\d/)[0].replaceAll(";",":");
-          inTime = this.HHMMSSTosec(inTime);
+          const inTime = this.HHMMSSTosec(line[0].match(/\d\d:\d\d:\d\d/)[0]);
           const script = line[2];
           const speaker = line[1].match(/ (\d+)/) ? line[1].match(/ (\d+)/)[1] : 0; //話者番号を切り出せたらその数字、NULLなら0を入れる
           const rec = new dggRecord(inTime, script, speaker);
