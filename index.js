@@ -250,11 +250,17 @@ app.on('window-all-closed', () => {
       console.log("macOS");
       return true;
     } else {
-      console.log("not acOS");
+      console.log("not macOS");
       return false;
     }
   });
   // #endregion
+
+  //レンダラーからメニュー項目を有効化・無効化する
+  ipcMain.on('enableOrDisableMenuItemMerge', (event, arg) => {
+    const bool = JSON.parse(arg);
+    menu.enableOrDisableMenuItemMerge(bool.key);
+  });
 
   //--------------------------------
   // #region ログ（タイムスタンプ）上のコンテクストメニューを開く

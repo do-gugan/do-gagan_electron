@@ -63,6 +63,8 @@ contextBridge.exposeInMainWorld(
     //.send(ch, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
     //sendMessageToMain: () => ipcRenderer.send("send-message-to-main"),
     //.sendSyncなら同期だが特に利用する必要はない
+    //値はJSONに変換する必要がある。　JSON.stringgy'{key:true})
+    //受け取った側でJSON.parse(arg)する。
 
     //結果を受け取りたい場合は.invoke
     //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
@@ -110,6 +112,9 @@ contextBridge.exposeInMainWorld(
     setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
 
     getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position).then(result => result),
+
+    //メニューアイテムの有効化・無効化
+    enableOrDisableMenuItemMerge: (bool) => ipcRenderer.send('enableOrDisableMenuItemMerge', JSON.stringify({key:bool})),
 
     //OSがmacOSか調べる
     isDarwin: () => ipcRenderer.invoke("isDarwin").then(result => result).catch(err => console.log(err)),
