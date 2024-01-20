@@ -83,8 +83,8 @@ const setTemplate = (lang='ja') => {
                 {id:'REPLACE', label: _.t('REPLACE'), enabled: false, click: ()=>{
                     common.openReplaceWindow();
                 }},
-                {id:'MERGE', label: _.t('MERGE'), enabled: false,accelerator: 'CmdOrCtrl+F', click: ()=>{
-                    common.margeNextCell();
+                {id:'MERGE', label: _.t('MERGE'), enabled: false,accelerator: 'Control+F', click: ()=>{
+                    //ここからは呼ばず、レンダラーのtextareaのkeyUpイベントから処理
                 }}
             ]
         },

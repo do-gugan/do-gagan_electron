@@ -263,6 +263,17 @@ app.on('window-all-closed', () => {
   });
 
   //--------------------------------
+  // 選択中のセルと次のセルを結合する（次のセルの中身を末尾に連結し、次のセルを削除）
+  //--------------------------------
+  ipcMain.on('mergeCurrentAndNextCells',(event, arg) => {
+    //実際の処理はレンダラー（renderer.js）側でtextareaのキーボードイベントから呼んで処理
+    const id = JSON.parse(arg);
+    //console.log("id:"+id.key);
+    common.mergeCurrentAndNextCells(id.key);
+  });
+
+
+  //--------------------------------
   // #region ログ（タイムスタンプ）上のコンテクストメニューを開く
   //--------------------------------
   ipcMain.on('openContextMenuOn', (event, id) => {

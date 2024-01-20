@@ -12,6 +12,7 @@ const i18n = require("./i18n");
 const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
 const { builtinModules } = require('module');
 const { common } = require('./dggTouchbar');
+const {shell} = require('electron');
 
 //グローバルオブジェクト
 const app = null;
@@ -891,6 +892,32 @@ handleUnsavedLog(event) {
   memoChanged(id,script) {
     records.find(r => r.id == id).script = script;
     this.setDirtyFlag(true);
+  }
+
+  //idで指定されたセルとその次のセルを結合
+  mergeCurrentAndNextCells(id) {
+    //console.log("received id:"+id);
+    const currentCell = records.find(r => r.id == id);
+    const currentCellIndex = records.findIndex((element) => element == currentCell);
+    //console.log("index:"+currentCellIndex+" length:"+records.length);
+    if (currentCellIndex < records.length -1) {
+      const nextCell = records[currentCellIndex + 1];
+      const nextCellIndex = records.findIndex((element) => element == nextCell);
+      //console.log("current:"+ currentCell.script + " next:"+ nextCell.script);
+      currentCell.script += nextCell.script; //次セルのテキストを現セルにアペンド
+      records.splice(nextCellIndex, 1);
+
+      //レンダラーにも反映
+      //console.log(currentCell.id, currentCell.script);
+      this.mainWin.webContents.send('update-row',currentCell.id, currentCell.script); //currentCellを更新
+      this.mainWin.webContents.send('delete-row',nextCell.id); //nextCellを削除
+      this.setDirtyFlag(true);
+
+    } else {
+      //選択しているのが最後のセルの場合はエラー音を鳴らして終了
+      //console.log("last cell");
+      shell.beep();
+    }
   }
 
   inTimeChanged(id,inTime) {

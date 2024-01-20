@@ -703,6 +703,14 @@ function resizeTextarea(textarea) {
 }
 
 function keyupTextarea(event) {
+    //Ctrl + Fが押されたらセルマージ処理
+    if (event.key == "f" && event.ctrlKey == true) {
+        const currentCellID = event.target.parentElement.parentElement.id;
+        //console.log("MergeCell on " + currentCellID);        
+        window.api.mergeCurrentAndNextCells(currentCellID);
+    }
+
+    //Escが押されたらフォーカスを外す
     if (event.key == 'Escape') {
         event.target.blur();
     }
@@ -762,7 +770,20 @@ window.api.setSpeakerOfRow((id, speaker)=>{
 
 //メインプロセスから指定ID行を削除
 window.api.deleteRow((id)=>{
+    //console.log("deleteRow:"+id);
     document.querySelector('#'+ id).remove();
+})
+
+//メインプロセスから指定ID行のメモを更新
+window.api.updateRow((id, script)=>{
+    //console.log("updateRow:"+id+"to "+script);
+    const div = document.querySelector('#'+ id);
+    const ta = div.querySelector('textarea');
+    ta.innerText = script;
+    //カーソルを最後の文字の後ろに移動
+    ta.setSelectionRange(ta.value.length,ta.value.length);
+    //テキストエリアの高さを更新
+    resizeTextarea(ta);
 })
 
 

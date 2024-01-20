@@ -43,6 +43,7 @@ contextBridge.exposeInMainWorld(
     //コンテクストメニューの選択からの処理
     setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (event, id, speaker)=>callback(id, speaker)),
     deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(id)),
+    updateRow: (callback) => ipcRenderer.on("update-row", (event, id, script)=>callback(id,script)),
 
     //メニューからのスキップ秒数の変更
     setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, idx)=>callback(direction, idx)),
@@ -115,6 +116,9 @@ contextBridge.exposeInMainWorld(
 
     //メニューアイテムの有効化・無効化
     enableOrDisableMenuItemMerge: (bool) => ipcRenderer.send('enableOrDisableMenuItemMerge', JSON.stringify({key:bool})),
+
+    //メモのセルをマージする
+    mergeCurrentAndNextCells: (id) => ipcRenderer.send('mergeCurrentAndNextCells', JSON.stringify({key:id})),
 
     //OSがmacOSか調べる
     isDarwin: () => ipcRenderer.invoke("isDarwin").then(result => result).catch(err => console.log(err)),
