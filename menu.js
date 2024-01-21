@@ -41,7 +41,7 @@ const setTemplate = (lang='ja') => {
                     //console.log('OPEN-MOVIE');
                     dialog.openVideoDialog();
                 }},
-                {label: _.t('CLOSE-WINDOW'), accelerator: 'CmdOrCtrl+W', click: ()=>{
+                {label: _.t('CLOSE-WINDOW'), accelerator: isMac?'Cmd+W':'', click: ()=>{
                     //console.log('CLOSE-WINDOW');
                     common.closeWindow();
                 }},
