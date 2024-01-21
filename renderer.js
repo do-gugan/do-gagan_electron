@@ -85,6 +85,12 @@ let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
             isShiftKeyPressing = true;
             //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
         }
+
+        //macOSでメニューアクセラレーターでCtr+Aが効かない問題の対応
+        if (event.metaKey && event.key==='a'){
+            //console.log("Ctrl+A");
+            playbackSpeedDown();
+        }
     });
 
     document.body.addEventListener('keyup', (event)=>{
