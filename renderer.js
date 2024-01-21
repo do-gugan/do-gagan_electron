@@ -745,6 +745,10 @@ function openContextMenuOnText(e) {
     window.api.openContextMenuOnText(id, e.target.selectionStart , e.target.selectionEnd);
 }
 
+//----------------------------------------------------
+// #region レコードのマージ関連
+//----------------------------------------------------
+
 //メモリスト中のセルが選択された
 function cellFocused(e) {
     //console.log("cell focused.");
@@ -758,6 +762,17 @@ function cellBlured(e) {
     //メニューの「」を無効化する
     window.api.enableOrDisableMenuItemMerge(false);
 }
+
+//メインメニューからセル結合を実行
+window.api.executeMergeCells(()=>{
+    //対象セルのIDを調べる
+    const recordId = document.activeElement.parentElement.parentElement.id;
+    console.log(recordId);
+    window.api.mergeCurrentAndNextCells(recordId);
+})
+
+
+/* #endregion */
 
 //メインプロセスからリスト上の指定ID行の話者クラスを変更
 window.api.setSpeakerOfRow((id, speaker)=>{

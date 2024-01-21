@@ -57,6 +57,9 @@ contextBridge.exposeInMainWorld(
     //touchbarのスライダー操作に連動して再生位置を更新
     changePositionFromTouchbar: (callback) => ipcRenderer.on("change-position-from-touchbar", (event, pos)=>callback(pos)),
 
+    //メニューからセル統合を実行
+    executeMergeCells: (callback) => ipcRenderer.on("execute-merge-cells", ()=>callback()),
+
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
     // --------------------------------------------

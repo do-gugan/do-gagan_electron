@@ -897,6 +897,13 @@ handleUnsavedLog(event) {
   //idで指定されたセルとその次のセルを結合
   mergeCurrentAndNextCells(id) {
     //console.log("received id:"+id);
+    if (id == undefined) {
+      //メインメニューからの実行などで対象セルが指定されていない時はレンダラーに問い合わせて取得する
+      id = this.mainWin.webContents.send('execute-merge-cells');
+      return;
+    }
+
+    //idが指定されている場合は実行継続
     const currentCell = records.find(r => r.id == id);
     const currentCellIndex = records.findIndex((element) => element == currentCell);
     //console.log("index:"+currentCellIndex+" length:"+records.length);

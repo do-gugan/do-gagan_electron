@@ -84,7 +84,8 @@ const setTemplate = (lang='ja') => {
                     common.openReplaceWindow();
                 }},
                 {id:'MERGE', label: _.t('MERGE'), enabled: false,accelerator: 'Control+F', click: ()=>{
-                    //ここからは呼ばず、レンダラーのtextareaのkeyUpイベントから処理
+                    //メインメニューから実行する場合、対象のセルがわからないので引数なしで呼び出す
+                    common.mergeCurrentAndNextCells();
                 }}
             ]
         },
