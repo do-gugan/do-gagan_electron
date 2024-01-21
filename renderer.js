@@ -90,6 +90,7 @@ let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
         if (event.metaKey && event.key==='a'){
             //console.log("Ctrl+A");
             playbackSpeedDown();
+            event.preventDefault();
         }
     });
 
