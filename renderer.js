@@ -774,7 +774,7 @@ function cellBlured(e) {
 window.api.executeMergeCells(()=>{
     //対象セルのIDを調べる
     const recordId = document.activeElement.parentElement.parentElement.id;
-    console.log(recordId);
+    //console.log(recordId);
     window.api.mergeCurrentAndNextCells(recordId);
 })
 
