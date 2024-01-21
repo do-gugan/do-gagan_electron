@@ -709,6 +709,13 @@ function resizeTextarea(textarea) {
 }
 
 function keyupTextarea(event) {
+    //Ctrl + Fが押されたらセルマージ処理（macOSでのみ必要。Windowsではメニューのアクセラレーター経由で実行されるのでここは抑止）
+    if (window.api.isDarwin() && event.key == "f" && event.ctrlKey == true) {
+        const currentCellID = event.target.parentElement.parentElement.id;
+        //console.log("MergeCell on " + currentCellID);        
+        window.api.mergeCurrentAndNextCells(currentCellID);
+    }
+
     //Escが押されたらフォーカスを外す
     if (event.key == 'Escape') {
         event.target.blur();
