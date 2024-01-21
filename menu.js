@@ -207,6 +207,10 @@ const setTemplate = (lang='ja') => {
                     //console.log('GOTO-SUPPORT-PAGE');
                     common.openSupportSite();
                 }},
+                {label: _.t('GOTO-SHORCUT-PAGE'), click: ()=>{
+                    //console.log('GOTO-SUPPORT-PAGE');
+                    common.openShortcutManual();
+                }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
                     common.showAbout();
                 }}

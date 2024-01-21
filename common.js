@@ -618,7 +618,6 @@ handleUnsavedLog(event) {
       }; 
       if (this.dialog.showConfirmation(options) == 1) return;
       //ダウンロードページを開く
-      const shell = require('electron').shell;
       shell.openExternal(this.config.get('liteManualDownloadURL'));
     })
 
@@ -656,12 +655,14 @@ handleUnsavedLog(event) {
   }
 
   openSupportSite() {
-    const shell = require('electron').shell;
     shell.openExternal('https://do-gugan.com/tools/do-gagan3/');
   }
 
+  openShortcutManual() {
+    shell.openExternal('https://do-gugan.com/tools/do-gagan3/#shortcuts');
+  }
+
   openMarkerPage() {
-    const shell = require('electron').shell;
     shell.openExternal('https://do-gugan.com/tools/marker/');
   }
 
@@ -980,10 +981,10 @@ handleUnsavedLog(event) {
    * @param {Number} length 選択文字数（1以上の時は分割不可）
    */
    splitLog(id, selectionStart, selectionEnd) {
-    // console.log("split here");
-    // console.log("id:" + id);
-    // console.log("selectionStart:" + selectionStart);
-    // console.log("selectionEnd:" + selectionEnd);
+     console.log("split here");
+     console.log("id:" + id);
+     console.log("selectionStart:" + selectionStart);
+     console.log("selectionEnd:" + selectionEnd);
     const _ = new this.i18n(this.lang, 'dialog');
     if (selectionStart != selectionEnd) {
               //"1文字以上の文字を選択していると分割できません。",
