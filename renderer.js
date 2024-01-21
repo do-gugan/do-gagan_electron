@@ -713,7 +713,7 @@ function keyupTextarea(event) {
     if (event.key == "f" && event.ctrlKey == true) {
         const currentCellID = event.target.parentElement.parentElement.id;
         //console.log("MergeCell on " + currentCellID);        
-        window.api.mergeCurrentAndNextCells(currentCellID);
+        //window.api.mergeCurrentAndNextCells(currentCellID);
     }
 
     //Escが押されたらフォーカスを外す
