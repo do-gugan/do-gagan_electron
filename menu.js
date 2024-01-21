@@ -82,6 +82,10 @@ const setTemplate = (lang='ja') => {
                 {type: 'separator'},
                 {id:'REPLACE', label: _.t('REPLACE'), enabled: false, click: ()=>{
                     common.openReplaceWindow();
+                }},
+                {id:'MERGE', label: _.t('MERGE'), enabled: false,accelerator: 'Control+F', click: ()=>{
+                    //メインメニューから実行する場合、対象のセルがわからないので引数なしで呼び出す
+                    common.mergeCurrentAndNextCells();
                 }}
             ]
         },
@@ -203,6 +207,10 @@ const setTemplate = (lang='ja') => {
                     //console.log('GOTO-SUPPORT-PAGE');
                     common.openSupportSite();
                 }},
+                {label: _.t('GOTO-SHORCUT-PAGE'), click: ()=>{
+                    //console.log('GOTO-SUPPORT-PAGE');
+                    common.openShortcutManual();
+                }},
                 {label: _.t('VERSION-INFO'), click: ()=>{
                     common.showAbout();
                 }}
@@ -286,6 +294,18 @@ const setSkipTimeFromGUI = function(direction, idx) {
     Menu.getApplicationMenu().getMenuItemById(direcKey+idx).checked = true;
 }
 
+/**
+ * メニューの「次のメモと統合」の有効化と無効化（いずれかのメモがフォーカスされると有効化）
+ * @param {boolean} bool 
+ */
+const enableOrDisableMenuItemMerge = function(bool) {
+    if (typeof bool === "boolean") {
+        Menu.getApplicationMenu().getMenuItemById('MERGE').enabled = bool;
+    } else {
+        console.log("[toggleMarge] The argument passed is not bool type. :" + bool);
+    }
+}
+
 //--------------------------------
 // exports
 //--------------------------------
@@ -294,4 +314,5 @@ module.exports = {
     toggleNewMemoBlockMenu : toggleNewMemoBlockMenu,
     enableMenuWhenMediaOpened : enableMenuWhenMediaOpened,
     setSkipTimeFromGUI: setSkipTimeFromGUI,
+    enableOrDisableMenuItemMerge: enableOrDisableMenuItemMerge
 }

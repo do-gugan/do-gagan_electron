@@ -24,6 +24,7 @@
   "PASTE": "Paste",
   "REPLACE": "Replace...",
   "SPLIT_HERE": "Split here",
+  "MERGE": "Merge with next Memo",
   
   "PLAYBACK-CONTROL": "Playback",
   "PLAY-PAUSE": "Play/Pause",
@@ -54,6 +55,7 @@
   "HELP": "Help",
   "GOTO-MARKER-PAGE": "Do-gagan Marker",
   "GOTO-SUPPORT-PAGE": "Support Page",
+  "GOTO-SHORCUT-PAGE": "Keyboard Shorcuts",
   "VERSION-INFO": "Version Info.",
 
   "SPEAKERLABEL": "Speaker label",

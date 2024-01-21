@@ -43,6 +43,7 @@ contextBridge.exposeInMainWorld(
     //コンテクストメニューの選択からの処理
     setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (event, id, speaker)=>callback(id, speaker)),
     deleteRow: (callback) => ipcRenderer.on("delete-row", (event, id)=>callback(id)),
+    updateRow: (callback) => ipcRenderer.on("update-row", (event, id, script)=>callback(id,script)),
 
     //メニューからのスキップ秒数の変更
     setSkipTime: (callback) => ipcRenderer.on("set-skip-time", (event, direction, idx)=>callback(direction, idx)),
@@ -56,6 +57,9 @@ contextBridge.exposeInMainWorld(
     //touchbarのスライダー操作に連動して再生位置を更新
     changePositionFromTouchbar: (callback) => ipcRenderer.on("change-position-from-touchbar", (event, pos)=>callback(pos)),
 
+    //メニューからセル統合を実行
+    executeMergeCells: (callback) => ipcRenderer.on("execute-merge-cells", ()=>callback()),
+
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
     // --------------------------------------------
@@ -63,6 +67,8 @@ contextBridge.exposeInMainWorld(
     //.send(ch, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
     //sendMessageToMain: () => ipcRenderer.send("send-message-to-main"),
     //.sendSyncなら同期だが特に利用する必要はない
+    //値はJSONに変換する必要がある。　JSON.stringgy'{key:true})
+    //受け取った側でJSON.parse(arg)する。
 
     //結果を受け取りたい場合は.invoke
     //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
@@ -110,6 +116,12 @@ contextBridge.exposeInMainWorld(
     setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
 
     getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position).then(result => result),
+
+    //メニューアイテムの有効化・無効化
+    enableOrDisableMenuItemMerge: (bool) => ipcRenderer.send('enableOrDisableMenuItemMerge', JSON.stringify({key:bool})),
+
+    //メモのセルをマージする
+    mergeCurrentAndNextCells: (id) => ipcRenderer.send('mergeCurrentAndNextCells', JSON.stringify({key:id})),
 
     //OSがmacOSか調べる
     isDarwin: () => ipcRenderer.invoke("isDarwin").then(result => result).catch(err => console.log(err)),

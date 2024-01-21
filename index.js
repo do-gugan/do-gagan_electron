@@ -250,11 +250,28 @@ app.on('window-all-closed', () => {
       console.log("macOS");
       return true;
     } else {
-      console.log("not acOS");
+      console.log("not macOS");
       return false;
     }
   });
   // #endregion
+
+  //レンダラーからメニュー項目を有効化・無効化する
+  ipcMain.on('enableOrDisableMenuItemMerge', (event, arg) => {
+    const bool = JSON.parse(arg);
+    menu.enableOrDisableMenuItemMerge(bool.key);
+  });
+
+  //--------------------------------
+  // 選択中のセルと次のセルを結合する（次のセルの中身を末尾に連結し、次のセルを削除）
+  //--------------------------------
+  ipcMain.on('mergeCurrentAndNextCells',(event, arg) => {
+    //実際の処理はレンダラー（renderer.js）側でtextareaのキーボードイベントから呼んで処理
+    const id = JSON.parse(arg);
+    //console.log("id:"+id.key);
+    common.mergeCurrentAndNextCells(id.key);
+  });
+
 
   //--------------------------------
   // #region ログ（タイムスタンプ）上のコンテクストメニューを開く
@@ -292,7 +309,7 @@ app.on('window-all-closed', () => {
             }}
         ]
     },
-    {
+  {
         label: _.t('DELETE_ITEM'), click: ()=>{
             common.deleteRow(id);
         }
@@ -328,6 +345,11 @@ app.on('window-all-closed', () => {
       {id:'PASTE', label: _.t('PASTE'), role: 'paste'},
       {type: 'separator'},
       {
+        label: _.t('MERGE')+'(^F)', click: ()=>{
+            common.mergeCurrentAndNextCells(id);
+      }
+      },
+        {
           label: _.t('SPLIT_HERE'), click: ()=>{
               common.splitLog(id, selectionStart, selectionEnd);
           }

@@ -12,6 +12,7 @@ const i18n = require("./i18n");
 const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
 const { builtinModules } = require('module');
 const { common } = require('./dggTouchbar');
+const {shell} = require('electron');
 
 //グローバルオブジェクト
 const app = null;
@@ -617,7 +618,6 @@ handleUnsavedLog(event) {
       }; 
       if (this.dialog.showConfirmation(options) == 1) return;
       //ダウンロードページを開く
-      const shell = require('electron').shell;
       shell.openExternal(this.config.get('liteManualDownloadURL'));
     })
 
@@ -655,12 +655,14 @@ handleUnsavedLog(event) {
   }
 
   openSupportSite() {
-    const shell = require('electron').shell;
     shell.openExternal('https://do-gugan.com/tools/do-gagan3/');
   }
 
+  openShortcutManual() {
+    shell.openExternal('https://do-gugan.com/tools/do-gagan3/#shortcuts');
+  }
+
   openMarkerPage() {
-    const shell = require('electron').shell;
     shell.openExternal('https://do-gugan.com/tools/marker/');
   }
 
@@ -893,6 +895,39 @@ handleUnsavedLog(event) {
     this.setDirtyFlag(true);
   }
 
+  //idで指定されたセルとその次のセルを結合
+  mergeCurrentAndNextCells(id) {
+    //console.log("received id:"+id);
+    if (id == undefined) {
+      //メインメニューからの実行などで対象セルが指定されていない時はレンダラーに問い合わせて取得する
+      id = this.mainWin.webContents.send('execute-merge-cells');
+      return;
+    }
+
+    //idが指定されている場合は実行継続
+    const currentCell = records.find(r => r.id == id);
+    const currentCellIndex = records.findIndex((element) => element == currentCell);
+    //console.log("index:"+currentCellIndex+" length:"+records.length);
+    if (currentCellIndex < records.length -1) {
+      const nextCell = records[currentCellIndex + 1];
+      const nextCellIndex = records.findIndex((element) => element == nextCell);
+      //console.log("current:"+ currentCell.script + " next:"+ nextCell.script);
+      currentCell.script += nextCell.script; //次セルのテキストを現セルにアペンド
+      records.splice(nextCellIndex, 1);
+
+      //レンダラーにも反映
+      //console.log(currentCell.id, currentCell.script);
+      this.mainWin.webContents.send('update-row',currentCell.id, currentCell.script); //currentCellを更新
+      this.mainWin.webContents.send('delete-row',nextCell.id); //nextCellを削除
+      this.setDirtyFlag(true);
+
+    } else {
+      //選択しているのが最後のセルの場合はエラー音を鳴らして終了
+      //console.log("last cell");
+      shell.beep();
+    }
+  }
+
   inTimeChanged(id,inTime) {
     records.find(r => r.id == id).inTime = inTime;
     this.setDirtyFlag(true);
@@ -946,10 +981,10 @@ handleUnsavedLog(event) {
    * @param {Number} length 選択文字数（1以上の時は分割不可）
    */
    splitLog(id, selectionStart, selectionEnd) {
-    // console.log("split here");
-    // console.log("id:" + id);
-    // console.log("selectionStart:" + selectionStart);
-    // console.log("selectionEnd:" + selectionEnd);
+     console.log("split here");
+     console.log("id:" + id);
+     console.log("selectionStart:" + selectionStart);
+     console.log("selectionEnd:" + selectionEnd);
     const _ = new this.i18n(this.lang, 'dialog');
     if (selectionStart != selectionEnd) {
               //"1文字以上の文字を選択していると分割できません。",

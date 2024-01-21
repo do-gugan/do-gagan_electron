@@ -281,7 +281,7 @@ function mediaOpened (path) {
 
 //メインプロセスから1件のレコードを表示
 window.api.addRecordToList((record) => {
-    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)">${record.script}</textarea></div></div>`;
+    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
     memolist.innerHTML += html;
 
     //セルの高さを文字数にあわせて調整
@@ -293,7 +293,7 @@ window.api.addRecordToList((record) => {
 window.api.addRecordsToList((records) => {
     let html = "";
     records.forEach(r => {
-        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)">${r.script}</textarea></div></div>`;
+        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${r.script}</textarea></div></div>`;
     });
     memolist.innerHTML = html;
 
@@ -703,6 +703,14 @@ function resizeTextarea(textarea) {
 }
 
 function keyupTextarea(event) {
+    //Ctrl + Fが押されたらセルマージ処理
+    if (event.key == "f" && event.ctrlKey == true) {
+        const currentCellID = event.target.parentElement.parentElement.id;
+        //console.log("MergeCell on " + currentCellID);        
+        window.api.mergeCurrentAndNextCells(currentCellID);
+    }
+
+    //Escが押されたらフォーカスを外す
     if (event.key == 'Escape') {
         event.target.blur();
     }
@@ -737,6 +745,34 @@ function openContextMenuOnText(e) {
     window.api.openContextMenuOnText(id, e.target.selectionStart , e.target.selectionEnd);
 }
 
+//----------------------------------------------------
+// #region レコードのマージ関連
+//----------------------------------------------------
+
+//メモリスト中のセルが選択された
+function cellFocused(e) {
+    //console.log("cell focused.");
+    //メニューの「」を有効化する    
+    window.api.enableOrDisableMenuItemMerge(true);
+}
+
+//メモリスト中のセル選択が解除された
+function cellBlured(e) {
+    //console.log("cell blured.");
+    //メニューの「」を無効化する
+    window.api.enableOrDisableMenuItemMerge(false);
+}
+
+//メインメニューからセル結合を実行
+window.api.executeMergeCells(()=>{
+    //対象セルのIDを調べる
+    const recordId = document.activeElement.parentElement.parentElement.id;
+    console.log(recordId);
+    window.api.mergeCurrentAndNextCells(recordId);
+})
+
+
+/* #endregion */
 
 //メインプロセスからリスト上の指定ID行の話者クラスを変更
 window.api.setSpeakerOfRow((id, speaker)=>{
@@ -749,7 +785,20 @@ window.api.setSpeakerOfRow((id, speaker)=>{
 
 //メインプロセスから指定ID行を削除
 window.api.deleteRow((id)=>{
+    //console.log("deleteRow:"+id);
     document.querySelector('#'+ id).remove();
+})
+
+//メインプロセスから指定ID行のメモを更新
+window.api.updateRow((id, script)=>{
+    //console.log("updateRow:"+id+"to "+script);
+    const div = document.querySelector('#'+ id);
+    const ta = div.querySelector('textarea');
+    ta.innerText = script;
+    //カーソルを最後の文字の後ろに移動
+    ta.setSelectionRange(ta.value.length,ta.value.length);
+    //テキストエリアの高さを更新
+    resizeTextarea(ta);
 })
 
 

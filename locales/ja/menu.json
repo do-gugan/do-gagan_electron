@@ -24,7 +24,8 @@
     "PASTE": "貼り付け",
     "REPLACE": "置換...",
     "SPLIT_HERE": "ここで分割",
-  
+    "MERGE": "次のメモと統合",
+
     "PLAYBACK-CONTROL": "再生操作",
     "PLAY-PAUSE": "再生/一時停止",
     "JUMP_F": "前へジャンプ",
@@ -54,6 +55,7 @@
     "HELP": "ヘルプ",
     "GOTO-MARKER-PAGE": "動画眼マーカー",
     "GOTO-SUPPORT-PAGE": "サポートページ",
+    "GOTO-SHORCUT-PAGE": "キーボードショートカット一覧",
     "VERSION-INFO": "バージョン情報",
 
     "SPEAKERLABEL": "話者ラベル",
