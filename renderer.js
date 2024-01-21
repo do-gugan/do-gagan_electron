@@ -709,9 +709,10 @@ function resizeTextarea(textarea) {
 }
 
 function keyupTextarea(event) {
+    //非同期でメインプロセスに問い合わせずに簡易OS判定
+    var ua = window.navigator.userAgent;
     //Ctrl + Fが押されたらセルマージ処理（macOSでのみ必要。Windowsではメニューのアクセラレーター経由で実行されるのでここは抑止）
-    console.log(window.api.isDarwin());
-    if (window.api.isDarwin() == "not macOS" && event.key == "f" && event.ctrlKey == true) {
+    if (ua.indexOf('Mac') !== -1 && event.key == "f" && event.ctrlKey == true) {
         const currentCellID = event.target.parentElement.parentElement.id;
         //console.log("MergeCell on " + currentCellID);        
         window.api.mergeCurrentAndNextCells(currentCellID);
@@ -724,8 +725,7 @@ function keyupTextarea(event) {
 }
 
 /**
- * ウインドウがリサイズされた時にログ欄のセル高を調整する
- * 高さは自動で増えるが、↑を呼ばないと狭まらない
+ * ウインドウがリサイズされた時にログ欄のセル高を調整する * 高さは自動で増えるが、↑を呼ばないと狭まらない
  * #dragBarのドラッグイベントからも呼んでいる。
  */
 function resizeAllTextArea() {
