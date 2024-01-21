@@ -309,7 +309,7 @@ app.on('window-all-closed', () => {
             }}
         ]
     },
-    {
+  {
         label: _.t('DELETE_ITEM'), click: ()=>{
             common.deleteRow(id);
         }
@@ -345,6 +345,11 @@ app.on('window-all-closed', () => {
       {id:'PASTE', label: _.t('PASTE'), role: 'paste'},
       {type: 'separator'},
       {
+        label: _.t('MERGE')+'(^F)', click: ()=>{
+            common.mergeCurrentAndNextCells(id);
+      }
+      },
+        {
           label: _.t('SPLIT_HERE'), click: ()=>{
               common.splitLog(id, selectionStart, selectionEnd);
           }
