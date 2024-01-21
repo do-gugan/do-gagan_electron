@@ -203,6 +203,7 @@ const setTemplate = (lang='ja') => {
                     //console.log('GOTO-MARKER-PAGE');
                     common.openMarkerPage();
                 }},
+                {type: 'separator'},
                 {label: _.t('GOTO-SUPPORT-PAGE'), click: ()=>{
                     //console.log('GOTO-SUPPORT-PAGE');
                     common.openSupportSite();
@@ -211,6 +212,7 @@ const setTemplate = (lang='ja') => {
                     //console.log('GOTO-SUPPORT-PAGE');
                     common.openShortcutManual();
                 }},
+                {type: 'separator'},
                 {label: _.t('VERSION-INFO'), click: ()=>{
                     common.showAbout();
                 }}
