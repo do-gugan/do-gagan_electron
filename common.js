@@ -1069,15 +1069,20 @@ handleUnsavedLog(event) {
    * @param {*} after 置換後
    */
    executeReplace(before, after) {
-    this.mainWin.webContents.send('clear-records'); //一度リストをクリア
-
     //置換実行
-    console.log(`replace ${before} to ${after}`);
+    //console.log(`replace ${before} to ${after}`);
+    let count = 0;
     records.forEach(r => {
-      r.script = r.script.replace(before, after);
-      this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに表示
+      if (r.script.includes(before)) {
+        r.script = r.script.replace(new RegExp(before.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), after);
+        this.mainWin.webContents.send('update-row',r.id, r.script); //レンダラーに表示
+        count++;
+      }
     });
-
+    //置換が発生していたらダーティフラグを立てる
+    if (count > 0) {
+      this.setDirtyFlag(true);
+    }
   }
 
 // #endregion
