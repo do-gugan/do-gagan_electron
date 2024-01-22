@@ -51,7 +51,7 @@ const setTemplate = (lang='ja') => {
                     dialog.openLog();
                 }},
                 {type: 'separator'},
-                {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false,accelerator: 'CmdOrCtrl+S',  click: ()=>{
+                {id:'OVERWRITE', label: _.t('OVERWRITE'), enabled: false,accelerator: isMac?'Cmd+S':'Shift+Ctrl+S',  click: ()=>{
                     //console.log('OVERWRITE');
                     common.saveLog('', '2.0', false);
                 }},
