@@ -91,25 +91,22 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
         //console.log("Key:" + event.key);
         if (event.shiftKey) {
             isShiftKeyPressing = true;
-            //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
         }
 
-        //macOSでOSショートカットのCtr+D/Aを上書き
-        if (isDarwin == 'macOS' && event.metaKey && event.key==='d'){
-            console.log("Ctrl+D");
-            playbackSpeedUp();
+        //macOSでOSショートカットのCtr+Aを上書き
+        if (isDarwin == 'macOS' && event.metaKey && event.key==='a'){
+            playbackSpeedDown();
             event.preventDefault();
         }
-        if (isDarwin == 'macOS' && event.metaKey && event.key==='a'){
-            console.log("Ctrl+A");
-            playbackSpeedDown();
+        //macOSでOSショートカットのCtr+Aを上書き
+        if (isDarwin == 'macOS' && event.ctrlKey && event.key==='d'){
+            playbackSpeedUp();
             event.preventDefault();
         }
 
 
         //WindowsでメニューアクセラレーターでCtr+Aが効かない問題の対応
         if (isDarwin == 'not macOS' && event.ctrlKey && event.key==='a'){
-            //console.log("Ctrl+A");
             playbackSpeedDown();
             event.preventDefault();
         }
@@ -599,7 +596,7 @@ const playbackSpeedUp = ()=>  {
     if (player.paused == true) {
         player.play();
     } else {
-        if (currentPlaybackRate < playbackRates.length) { currentPlaybackRate++; }
+        if (currentPlaybackRate < playbackRates.length -1) { currentPlaybackRate++; }
         //console.log(playbackRates[currentPlaybackRate] + "x");
         player.playbackRate = playbackRates[currentPlaybackRate];
     }
