@@ -39,6 +39,8 @@ contextBridge.exposeInMainWorld(
     addRecordsToList: (callback) => ipcRenderer.on("add-records-to-list", (event,records)=>callback(records)),
     //レコードを全削除
     clearRecords: (callback) => ipcRenderer.on("clear-records", ()=>callback()),
+    //指定したエレメントの後ろにレコードを追加
+    insertRecordToList: (callback) => ipcRenderer.on("insert-record-to-list", (event, newID, recJSON, targetId)=>callback(newID, recJSON, targetId)),
 
     //コンテクストメニューの選択からの処理
     setSpeakerOfRow: (callback) => ipcRenderer.on("set-speaker-of-row", (event, id, speaker)=>callback(id, speaker)),

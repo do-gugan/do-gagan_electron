@@ -856,18 +856,42 @@ handleUnsavedLog(event) {
     return this.mainWin;
   }
 
-  //レンダラーから新規メモを受け取る
-  addNewMemoFromGUI(inTime, script, speaker) {
+  /**
+   *  レンダラーから新規メモを受け取る
+   * @param {Number} inTime
+   * @param {String} script
+   * @param {Number} speaker
+   * @param {String} targetId //このidのセルの下に新規セルを挿入する
+   */  
+  addNewMemoFromGUI(inTime, script, speaker, targetId = undefined) { 
     const rec = new dggRecord(inTime, script, speaker);
     records.push(rec);
+    //recのidを取得
+    const id = records[records.length -1].id;
+    console.log("new record id:"+id);
     records.sort(function(a, b) {
       return a.inTime - b.inTime;
     });
-    this.mainWin.webContents.send('clear-records'); //一度リストをクリア
-    records.forEach(r => {
-      this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
-    });
+    
+    if (targetId == undefined) {
+      //方法1: 一度リストをクリアしてから全件追加
+      //console.log("Method1: Clear and add all records.");
+      this.mainWin.webContents.send('clear-records'); //一度リストをクリア
+      records.forEach(r => {
+        this.mainWin.webContents.send('add-record-to-list',r); //レンダラーに描画指示      
+      });
+    } else {
+      //方法2: 指定されたidのセルの下に挿入
+      //console.log("Method2: Insert record to list. targetId:" + targetId + " new id:" + id + " rec.script:" + rec.script);
+      const recJSON = JSON.stringify(rec);
+      console.log(recJSON);
+      this.mainWin.webContents.send('insert-record-to-list', id, recJSON, targetId);
+    }
+
+
     this.setDirtyFlag(true);
+
+    return id;
   }
 
   /**
@@ -981,10 +1005,10 @@ handleUnsavedLog(event) {
    * @param {Number} length 選択文字数（1以上の時は分割不可）
    */
    splitLog(id, selectionStart, selectionEnd) {
-     console.log("split here");
-     console.log("id:" + id);
-     console.log("selectionStart:" + selectionStart);
-     console.log("selectionEnd:" + selectionEnd);
+    //console.log("split here");
+    //console.log("id:" + id);
+    //console.log("selectionStart:" + selectionStart);
+    //console.log("selectionEnd:" + selectionEnd);
     const _ = new this.i18n(this.lang, 'dialog');
     if (selectionStart != selectionEnd) {
               //"1文字以上の文字を選択していると分割できません。",
@@ -1017,11 +1041,13 @@ handleUnsavedLog(event) {
               //console.log(`前半:${first}`);
               //1)既存idから後半文字列を除去
               this.memoChanged(id,first);
+              //レンダラーにも反映
+              this.mainWin.webContents.send('update-row',id, first); //currentCellを更新
 
               //2)後半文字列で新規レコードを作成
               //console.log(`後半:${latter}`);
               const newInTime = parseInt(r.inTime) + 1;
-              this.addNewMemoFromGUI(newInTime, latter, r.speaker); //ここでレンダラーのログも全更新される
+              const addedId = this.addNewMemoFromGUI(newInTime, latter, r.speaker, id); //ここでレンダラーのログも全更新される
             }              
   }
 //--------------------------------

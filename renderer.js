@@ -309,6 +309,20 @@ window.api.addRecordsToList((records) => {
     textareas.forEach(ta => resizeTextarea(ta));
 });
 
+//指定したエレメントの後ろにレコードを追加
+window.api.insertRecordToList((newID, recJSON, targetId) => {
+    //console.log("newID:" + newID + " recJSON:" + recJSON + " targetId:" + targetId);
+    const record = JSON.parse(recJSON);
+    //console.log("record.script:" + record.script);
+    const html = `<div class="row" id="${newID}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
+    const target = document.getElementById(targetId);
+    target.insertAdjacentHTML('afterend', html);
+
+    //セルの高さを文字数にあわせて調整
+    const t = document.querySelector(`#${record.id} .script textarea`);
+    resizeTextarea(t);
+});
+
 //ファイルのドラッグ&ドロップを受け付ける
 //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
 //標準動作をキャンセル
@@ -603,6 +617,8 @@ function jumpToTimeIndex(sec){
     player.play();
     //doAutoLockOn('skip'); //メディアのseekedイベントから呼ぶので不要
 }
+
+// 未保存データがあることを示す「*」をタイトルに付加
 window.api.updateDirtyFlag((flag)=> {
     //console.log('updateDirtyFlag:' + flag);
     let newTitle = document.title;
