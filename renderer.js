@@ -41,7 +41,13 @@ const validTypes = [
 const playbackRates = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 4.0, 8.0];
 let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
 
-
+//OS判定フラグ
+let isDarwin = '';
+if (window.navigator.userAgent.indexOf('Mac') !== -1) {
+    isDarwin = 'macOS';
+} else {
+    isDarwin = 'not macOS';
+}
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
@@ -81,13 +87,28 @@ let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
     //キーボードイベント
     //アプリ全体で効くコマンド
     document.body.addEventListener('keydown', (event)=>{
+        //console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
+        //console.log("Key:" + event.key);
         if (event.shiftKey) {
             isShiftKeyPressing = true;
             //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
         }
 
-        //macOSでメニューアクセラレーターでCtr+Aが効かない問題の対応
-        if (event.metaKey && event.key==='a'){
+        //macOSでOSショートカットのCtr+D/Aを上書き
+        if (isDarwin == 'macOS' && event.metaKey && event.key==='d'){
+            console.log("Ctrl+D");
+            playbackSpeedUp();
+            event.preventDefault();
+        }
+        if (isDarwin == 'macOS' && event.metaKey && event.key==='a'){
+            console.log("Ctrl+A");
+            playbackSpeedDown();
+            event.preventDefault();
+        }
+
+
+        //WindowsでメニューアクセラレーターでCtr+Aが効かない問題の対応
+        if (isDarwin == 'not macOS' && event.ctrlKey && event.key==='a'){
             //console.log("Ctrl+A");
             playbackSpeedDown();
             event.preventDefault();
