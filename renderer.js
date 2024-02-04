@@ -254,13 +254,18 @@ function updateJumpSecOptions(selected = '60') {
 // //#region メディアファイル再生周り
 //--------------------------------
 //メインプロセスからのプッシュでメディアファイルを開く
+function escapeMediaPath(path) {
+    //let escapeMediaPath = encodeURI(`file:///${path.replace(/\\/g, '/')}`); //encodeURI doesn't work with #.
+    let escapeMediaPath = `file:///${path.replace(/#/g, '%23').replace(/\\/g, '/').replace(/ /g, '%20')}`;
+    return escapeMediaPath;
+}
 window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + path + '"></video>';
+    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video>';
     playerBox.innerHTML = videotag;
     mediaOpened(path);
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + path + '"></audio>';
+    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio>';
     playerBox.innerHTML = audiotag;
     mediaOpened(path);
 });
