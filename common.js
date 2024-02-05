@@ -263,22 +263,31 @@ class Common {
     let text = fs.readFileSync(pth, "utf8");
     let lines = text.toString().split(/\r\n|\r|\n/); //macOSで動作確認すべし
 
-    //console.log("Format is Premiere transcribed txt.");
+    //Whisper等でスクリプトが空欄だと改行の連続数での分割に失敗するので、“　”に置換
+    //改行が三連続の場合、二番目に" "を挿入(改行コード別)
+    text = text.replace(/\r\n\r\n\r\n/g, "\r\n \r\n\r\n");
+    text = text.replace(/\r\r\r/g, "\r \r\r");
+    text = text.replace(/\n\n\n/g, "\n \n\n");
+
+    console.log("Format is srt.");
     lines= [];
     //改行2連続を1ブロックとして分割
     const pRecords = text.toString().split(/\r\n\r\n|\r\r|\n\n/);
     pRecords.forEach(r => {
       const line = r.split(/\r\n|\r|\n/);
       if (line.length == 3) { //3行に満たないレコードは除外
+        console.log("line[1]:" + line[1]);
         const tc = line[1].split(" --> ")[0].split(",");
-
+        console.log("tc[0]: " + tc[0]);
         const inTime = this.HHMMSSTosec(tc[0].match(/\d\d:\d\d:\d\d/)[0]);
         const script = line[2];
         const speaker = 0; //SRTに含まれないので常に0とする
 
-        // console.log("inTime: " + inTime);
-        // console.log("script: " + script);
+        console.log("No: " + line[0]);
+        console.log("inTime: " + inTime);
+        console.log("script: " + script);
         // console.log("speaker: " + speaker);
+        console.log("");
         const rec = new dggRecord(inTime, script, speaker);
         records.push(rec);      
       }
