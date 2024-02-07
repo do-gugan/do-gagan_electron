@@ -250,6 +250,21 @@ function updateJumpSecOptions(selected = '60') {
     return options;
 }
 
+//プレーヤー右上の再生ステータス表示
+function displayPlayerStatus(message) {
+    document.getElementById('player_status').innerText = message;
+}
+
+function preparePlayerRateChangeListener() {
+    player.addEventListener('ratechange', (event) => {
+        if (player.playbackRate != 1.0) {
+        displayPlayerStatus('x' + player.playbackRate);
+        } else {
+            displayPlayerStatus('');
+        }
+    });
+}
+
 //--------------------------------
 // //#region メディアファイル再生周り
 //--------------------------------
@@ -260,14 +275,18 @@ function escapeMediaPath(path) {
     return escapeMediaPath;
 }
 window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video>';
+    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video><div id="player_status"></div>';
     playerBox.innerHTML = videotag;
     mediaOpened(path);
+
+    preparePlayerRateChangeListener();
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio>';
+    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio><div id="player_status"></div>';
     playerBox.innerHTML = audiotag;
     mediaOpened(path);
+
+    preparePlayerRateChangeListener();
 });
 
 
