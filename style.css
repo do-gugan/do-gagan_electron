@@ -85,6 +85,8 @@ body {
     display: flex;
     align-items: stretch;
     justify-content: center;
+
+    position: relative; /* ステータス表示を右上からの相対配置するため */
 }
 
 #player-box.dragging {
@@ -94,7 +96,9 @@ body {
 /* 子要素にドラッグイベントを無視させる
     このままだとプレーヤー操作が効かないので、動画再生開始時に解除する
 */
-#player-box * {pointer-events: none;}
+#player-box * {
+    pointer-events: none;
+}
 
 #player {
     display: block;
@@ -117,6 +121,49 @@ body {
 #placeholderInPlayer {
     color:#ccc;
 }
+
+/* 親要素の右上に右揃えで配置する */
+#player_status {
+    position: absolute;
+    text-align: right;
+    width: 30rem;
+    height: 4rem;
+    top: 0;
+    right: 0;
+    z-index: 100;
+}
+
+#player_status_icon {
+    fill: white;
+    stroke: black; /* 縁取りの色を指定 */
+    stroke-width: 21px; /* 縁取りの幅を指定 */
+
+    width: 4rem;
+    height: 3.5rem;
+    margin-top: 1rem;
+    margin-right: 0;
+}
+
+#player_status_text {
+    display: inline-block;
+    position: relative;
+    top: -0.8rem;
+    right: 1.5rem;
+    margin-left: 1em;
+
+    color: #fff;
+    font-size: 2.5em;
+    font-family: sans-serif;
+    font-weight: bold;
+    -webkit-text-stroke: 1px black;
+    text-shadow:
+        2px 2px 0 #222,
+      -1px -1px 0 #222,  
+       1px -1px 0 #222,
+       -1px 1px 0 #222,
+        1px 1px 0 #222;
+}
+
 
 /* =============================================
                      grid2

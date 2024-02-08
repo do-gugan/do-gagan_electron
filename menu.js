@@ -93,11 +93,11 @@ const setTemplate = (lang='ja') => {
         {
             label: _.t('PLAYBACK-CONTROL'),
             submenu: [
-                {id:'PLAY-PAUSE', label: _.t('PLAY-PAUSE'), enabled: false, accelerator: 'Control+E', click: ()=>{
+                {id:'PLAY-PAUSE', label: _.t('PLAY-PAUSE'), enabled: false, accelerator: 'Control+W', click: ()=>{
                     //console.log('PLAY-PAUSE');
                     common.playPauseToPlayer();
                 }},
-                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, accelerator: 'Control+W', click: (event)=>{
+                {id:'JUMP_F', label: _.t('JUMP_F'), enabled: false, accelerator: 'Control+E', click: (event)=>{
                     //console.log('JUMP_F');
                     common.skipForwardToPlayer(event);
                 }},
