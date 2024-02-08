@@ -46,4 +46,5 @@ async function execute() {
     const before = document.getElementById('Txt_search').value;
     const after = document.getElementById('Txt_replace').value;
     window.api.executeRaplace(before,after);
+    wordChanged(); //置換後のヒット数を更新
 }
