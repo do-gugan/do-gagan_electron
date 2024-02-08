@@ -26,6 +26,7 @@ let currentMarkerTimer = null;
 let markedRowId = null;
 let scrollPositionOfFocusedRow = null;
 let isPreviousFrameIsBlank = false; //黒ゴマ検出で連続検出を抑止するフラグ
+let statusDisplayTimer = null; //ステータス表示を一定時間で消すためのタイマー
 
 //対応形式
 const validTypes = [
@@ -263,6 +264,9 @@ function updateJumpSecOptions(selected = '60') {
 * @param (string) icon 表示するアイコン名
 */
 function displayPlayerStatus(message,icon = "") {
+    //タイマーをクリア
+    clearTimeout(statusDisplayTimer);
+
     document.getElementById('player_status_text').innerText = message;
     //icon値が既知のものならSVGを表示、それ以外では消す
     switch (icon) {
@@ -317,7 +321,7 @@ function preparePlayerRateChangeListener() {
 function displayPlayerStatusForAWhile(message="", icon="", sec=0) {
     displayPlayerStatus(message, icon);
     if (sec != 0) {
-        setTimeout(() => {
+        statusDisplayTimer = setTimeout(() => {
             //再生速度に応じた表示に戻す
             if (player.playbackRate != 1.0) {
                 displayPlayerStatus('x' + player.playbackRate, '');
