@@ -12,7 +12,8 @@
   "YOURUBE_CHAPTER": "Youtube用チャプター",
   "SRT_FILE": "SRT形式キャプションファイル",
   "PREMIERE_MARKER_CSV": "Premiere Pro マーカーCSVファイル",
-
+  "MULTI_EXTENTIONS": "対応した全ログ形式",
+   
   "BUTTON-REBOOT": "再起動",
   "BUTTON-LATER": "あとで",
   "REBOOT_CONFIRM_TITLE": "再起動の確認",

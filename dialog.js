@@ -110,6 +110,7 @@ const openVideoDialog = function() {
     //message: "", //masOS only 
     properties: ['openFile'],
     filters: [
+      { name: _.t('MULTI_EXTENTIONS'), extensions: ['txt','csv','srt'] },
       { name: _.t('LOGFILES'), extensions: ['dggn.txt'] },
       { name: _.t('PREMIERE_TXT'), extensions: ['txt'] },
       { name: _.t('PREMIERE_MARKER_CSV'), extensions: ['csv'] },
