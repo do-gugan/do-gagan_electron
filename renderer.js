@@ -43,11 +43,13 @@ let currentPlaybackRate = 3; //上記配列の何番目を挿すか。
 
 //OS判定フラグ
 let isDarwin = '';
+//console.log("UserAgent:" + window.navigator.userAgent);
 if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     isDarwin = 'macOS';
 } else {
     isDarwin = 'not macOS';
 }
+//console.log("isDarwin:" + isDarwin);
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
@@ -89,6 +91,7 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     document.body.addEventListener('keydown', (event)=>{
         //console.log("Kaydown Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.key);
+        //console.log("isDarwin:" + isDarwin);
         if (event.shiftKey == true) {
             isShiftKeyPressing = true;
         }
@@ -98,7 +101,7 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
             playbackSpeedDown();
             event.preventDefault();
         }
-        //macOSでOSショートカットのCtr+Aを上書き
+        //macOSでOSショートカットのCtr+Dを上書き
         if (isDarwin == 'macOS' && event.ctrlKey && event.key==='d'){
             playbackSpeedUp();
             event.preventDefault();
@@ -115,11 +118,17 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     document.body.addEventListener('keyup', (event)=>{
         //console.log("Keyup Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.key);
+        //console.log("isDarwin:" + isDarwin);
         if (event.shiftKey == false) {
             isShiftKeyPressing = false;
         }
+        //WindowsでメニューアクセラレーターでCtr+Eが効かない問題の対応
+        if (isDarwin == 'not macOS' && event.ctrlKey && event.key==='w'){
+            togglePlayPause();
+            event.preventDefault();
+        }
 
-        //Shiftキー押してｎ倍ジャンプ
+        //Shiftキー押してn倍ジャンプ
         if ((event.ctrlKey && event.shiftKey) && event.key == 'E') {
             skipForwardBig();
         } else if ((event.ctrlKey && event.shiftKey) && event.key == 'Q') {
