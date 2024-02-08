@@ -191,16 +191,15 @@ app.on('window-all-closed', () => {
       switch (dialog.showConfirmation(options)) {
         case 0: //上書き保存して開く
           common.saveLog();
-          common.clearLog();
           break;
         case 1: //破棄して開く
-          common.clearLog();
           break;
         case 2: //キャンセル
           return;
       }
   
     }
+    common.clearLog();
     common.openMediaFile(mediaPath);
     //Macでドラッグ＆ドロップ時、フォーカスがFinderのままになるので明示的にフォアグラウンドフロントにする
     if (process.platform == 'darwin') {
