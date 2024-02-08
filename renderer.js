@@ -21,7 +21,7 @@ let autoLockOn= true;
 let multiPlyJumpIndex = 2;
 let multiPlyJumpTimes = 2;
 let lastMemoLength = 0; //メモを打ち始めかどうか判定するフラグ
-let isShiftKeyPressing = false;
+let isShiftKeyPressing = false; //GUIでスキップした時のShiftキー押下判定するフラグ
 let currentMarkerTimer = null;
 let markedRowId = null;
 let scrollPositionOfFocusedRow = null;
@@ -87,9 +87,9 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     //キーボードイベント
     //アプリ全体で効くコマンド
     document.body.addEventListener('keydown', (event)=>{
-        //console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
+        //console.log("Kaydown Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.key);
-        if (event.shiftKey) {
+        if (event.shiftKey == true) {
             isShiftKeyPressing = true;
         }
 
@@ -113,18 +113,17 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     });
 
     document.body.addEventListener('keyup', (event)=>{
-        //console.log("Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
+        //console.log("Keyup Ctrl:"+event.ctrlKey + " Alt:" + event.altKey + " Shift:"+ event.shiftKey);
         //console.log("Key:" + event.key);
-        if (event.shiftKey) {
+        if (event.shiftKey == false) {
             isShiftKeyPressing = false;
-            //console.log(`isShiftKeyPressing: ${isShiftKeyPressing}`);
         }
 
         //Shiftキー押してｎ倍ジャンプ
-        if ((event.ctrlKey && event.shiftKey) && event.key == 'W') {
+        if ((event.ctrlKey && event.shiftKey) && event.key == 'E') {
             skipForwardBig();
         } else if ((event.ctrlKey && event.shiftKey) && event.key == 'Q') {
-            skipBackward();
+            skipBackwardBig();
         }
 
         //Ctrl+LまたはAlt+Lでロックオン
@@ -250,19 +249,74 @@ function updateJumpSecOptions(selected = '60') {
     return options;
 }
 
-//プレーヤー右上の再生ステータス表示
-function displayPlayerStatus(message) {
-    document.getElementById('player_status').innerText = message;
+/* プレーヤー右上の再生ステータス表示
+* @param (string) message 表示するメッセージ
+* @param (string) icon 表示するアイコン名
+*/
+function displayPlayerStatus(message,icon = "") {
+    document.getElementById('player_status_text').innerText = message;
+    //icon値が既知のものならSVGを表示、それ以外では消す
+    switch (icon) {
+        case 'play':
+            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/play.svg#play"></use>';
+            break;
+        case 'pause':
+            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/pause.svg#pause"></use>';
+            break;
+        case 'forward':
+            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/forward.svg#forward"></use>';
+            break;
+        case 'backward':
+            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/backward.svg#backward"></use>';
+            break;
+        case 'camera':
+            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/camera.svg#camera"></use>';
+            break;
+        default:
+           document.getElementById('player_status_icon').innerHTML = '';
+            break;
+    }
+
 }
 
+/* プレーヤーの再生速度変更、状態を検知して表示を更新
+*/
 function preparePlayerRateChangeListener() {
     player.addEventListener('ratechange', (event) => {
+        //ステータスアイコンを消す
+        
         if (player.playbackRate != 1.0) {
-        displayPlayerStatus('x' + player.playbackRate);
+        displayPlayerStatus('x' + player.playbackRate, '');
         } else {
-            displayPlayerStatus('');
+            displayPlayerStatus('', '');
         }
     });
+
+    player.addEventListener('play', (event) => {
+        displayPlayerStatusForAWhile('', 'play',2);
+    });
+    player.addEventListener('pause', (event) => {
+        displayPlayerStatusForAWhile('', 'pause',0); //無限に表示
+    });
+}
+
+/* displayPlayerStatusを使ってメッセージを表示し、指定秒数後に元の表示に戻す
+* @param (string) message 表示するメッセージ
+* @param (string) icon 表示するアイコン名（play/pause/forward/backward/camera等。空ならアイコンを消す）
+* @param (number) sec 秒数(0の場合は戻さない)
+*/
+function displayPlayerStatusForAWhile(message="", icon="", sec=0) {
+    displayPlayerStatus(message, icon);
+    if (sec != 0) {
+        setTimeout(() => {
+            //再生速度に応じた表示に戻す
+            if (player.playbackRate != 1.0) {
+                displayPlayerStatus('x' + player.playbackRate, '');
+                } else {
+                    displayPlayerStatus('', '');
+                }
+        }, sec * 1000);
+    }
 }
 
 //--------------------------------
@@ -275,14 +329,14 @@ function escapeMediaPath(path) {
     return escapeMediaPath;
 }
 window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video><div id="player_status"></div>';
+    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
     playerBox.innerHTML = videotag;
     mediaOpened(path);
 
     preparePlayerRateChangeListener();
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio><div id="player_status"></div>';
+    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
     playerBox.innerHTML = audiotag;
     mediaOpened(path);
 
@@ -533,24 +587,51 @@ function togglePlayPause() {
 
 //前後ジャンプ
 function skipForward(event = null){
-    var sec = document.getElementById('Sel_ForwardSec').value;
-    if (isShiftKeyPressing == true) {
-        sec = sec * multiPlyJumpIndex
+    //console.log("skipForward");
+    //Shiftキーが押されていたらn倍（GUIボタンで呼ばれた時のみ。キーボードの場合はkeyUpイベントで判定）
+    if (isShiftKeyPressing) {
+        skipForwardBig(event);
+    } else {
+        var sec = document.getElementById('Sel_ForwardSec').value;
+        //Sel_ForwardSecの表示テキストを取得
+        let text = document.getElementById('Sel_ForwardSec').options[document.getElementById('Sel_ForwardSec').selectedIndex].text;
+
+        displayPlayerStatusForAWhile(text, "forward", 0.2);    //ステータス欄にジャンプ秒数を表示
+        jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec)); //ジャンプ実行
     }
-    jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec));
 }
 function skipBackward(event = null){
-    var sec = document.getElementById('Sel_BackwardSec').value;
-    jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
+    //console.log("skipBackward");
+    //Shiftキーが押されていたらn倍（GUIボタンで呼ばれた時のみ。キーボードの場合はkeyUpイベントで判定）
+    if (isShiftKeyPressing) {
+        skipBackwardBig(event);
+    } else {
+        var sec = document.getElementById('Sel_BackwardSec').value;
+        //Sel_ForwardSecの表示テキストを取得
+        let text = document.getElementById('Sel_ForwardSec').options[document.getElementById('Sel_ForwardSec').selectedIndex].text;
+
+        displayPlayerStatusForAWhile(text, "backward", 0.2);    //ステータス欄にジャンプ秒数を表示
+        jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec));
+    }
 }
 
 //Shiftキー押しながらジャンプ
 function skipForwardBig(event = null){
+    //console.log("skipForwardBig");
     var sec = document.getElementById('Sel_ForwardSec').value;
+    //Sel_ForwardSecの表示テキストを取得
+    let text = document.getElementById('Sel_ForwardSec').options[document.getElementById('Sel_ForwardSec').selectedIndex].text + "x2";
+
+    displayPlayerStatusForAWhile(text, "forward", 0.2);    //ステータス欄にジャンプ秒数を表示
     jumpToTimeIndex(parseFloat(player.currentTime) + parseFloat(sec　* multiPlyJumpIndex));
 }
 function skipBackwardBig(event = null){
+    //console.log("skipBackwardBig");
     var sec = document.getElementById('Sel_BackwardSec').value;
+    //Sel_ForwardSecの表示テキストを取得
+    let text = document.getElementById('Sel_ForwardSec').options[document.getElementById('Sel_ForwardSec').selectedIndex].text + "x2";
+
+    displayPlayerStatusForAWhile(text, "backward", 0.2);    //ステータス欄にジャンプ秒数を表示
     jumpToTimeIndex(parseFloat(player.currentTime) - parseFloat(sec　* multiPlyJumpIndex));
 }
 

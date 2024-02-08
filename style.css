@@ -126,11 +126,31 @@ body {
 #player_status {
     position: absolute;
     text-align: right;
-    width: 20rem;
+    width: 30rem;
     height: 4rem;
     top: 0;
     right: 0;
-    margin: 1rem;
+    z-index: 100;
+}
+
+#player_status_icon {
+    fill: white;
+    stroke: black; /* 縁取りの色を指定 */
+    stroke-width: 21px; /* 縁取りの幅を指定 */
+
+    width: 4rem;
+    height: 3.5rem;
+    margin-top: 1rem;
+    margin-right: 0;
+}
+
+#player_status_text {
+    display: inline-block;
+    position: relative;
+    top: -0.8rem;
+    right: 1.5rem;
+    margin-left: 1em;
+
     color: #fff;
     font-size: 2.5em;
     font-family: sans-serif;
@@ -142,8 +162,9 @@ body {
        1px -1px 0 #222,
        -1px 1px 0 #222,
         1px 1px 0 #222;
-    z-index: 100;
 }
+
+
 /* =============================================
                      grid2
     メディアプレーヤー下のコントローラーブロック
