@@ -1178,6 +1178,9 @@ async function addMemo() {
 
 //GUIからメインプロセスに動画の静止画キャプチャを送信
 function sendCapturetoMain() {
+    //ステータスアイコンを表示
+    displayPlayerStatusForAWhile("", "camera", 1);
+
     const canvas = document.createElement("canvas");
     //キャプチャするサイズ
     canvas.height = 720;
