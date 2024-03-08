@@ -58,19 +58,19 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
     document.getElementById('Txt_Search').placeholder = _.t('SEARCH_PLACEHOLDER',locale);
-    document.getElementById('Opt_Filter').innerHTML = _.t('FILTER',locale);
-    document.getElementById('Opt_Emphasise').innerHTML = _.t('EMPHASISE',locale);
-    playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
-    document.getElementById('Lbl_ShowHideNewMemo').innerHTML = _.t('NEW_MEMO_FIELD',locale);
-    document.getElementById('Lbl_AutoScroll').innerHTML = _.t('AUTO_SCROLL',locale);
-    document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions();
-    document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions();
+    document.getElementById('Opt_Filter').innerText = _.t('FILTER',locale);
+    document.getElementById('Opt_Emphasise').innerText = _.t('EMPHASISE',locale);
+    playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>'; //翻訳文内にHTMLタグがあるので、innerHTMLで代入
+    document.getElementById('Lbl_ShowHideNewMemo').innerText = _.t('NEW_MEMO_FIELD',locale);
+    document.getElementById('Lbl_AutoScroll').innerText = _.t('AUTO_SCROLL',locale);
+    document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions(); //HTMLで生成されるのでinnerHTMLで代入
+    document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions(); //HTMLで生成されるのでinnerHTMLで代入
 
-    document.getElementById('Lbl_lockedTimecode').innerHTML = _.t('TIMECODE',locale);
-    document.getElementById('Lbl_speaker').innerHTML = _.t('SPEAKER',locale);
-    document.getElementById('Lbl_memo').innerHTML = _.t('MEMO',locale);
+    document.getElementById('Lbl_lockedTimecode').innerText = _.t('TIMECODE',locale);
+    document.getElementById('Lbl_speaker').innerText = _.t('SPEAKER',locale);
+    document.getElementById('Lbl_memo').innerText = _.t('MEMO',locale);
 
-    document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
+    document.getElementById('Btn_add').innerText = _.t('ADD',locale);
 
     //UI要素にツールチップ（title属性）を付加
     document.getElementById('lockedTimecode').title = _.t('TIPS_LOCKED_TIMECODE', locale);
@@ -271,22 +271,23 @@ function displayPlayerStatus(message,icon = "") {
     //icon値が既知のものならSVGを表示、それ以外では消す
     switch (icon) {
         case 'play':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/play.svg#play"></use>';
+            document.getElementById('player_status_icon').innerHTML = '<use href="svg/play.svg#play"></use>';
+            //document.getElementById('player_status_icon').setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'svg/play.svg#play'); //この形式は動作せず
             break;
         case 'pause':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/pause.svg#pause"></use>';
+            document.getElementById('player_status_icon').innerHTML = '<use href="svg/pause.svg#pause"></use>';
             break;
         case 'forward':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/forward.svg#forward"></use>';
+            document.getElementById('player_status_icon').innerHTML = '<use href="svg/forward.svg#forward"></use>';
             break;
         case 'backward':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/backward.svg#backward"></use>';
+            document.getElementById('player_status_icon').innerHTML = '<use href="svg/backward.svg#backward"></use>';
             break;
         case 'camera':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/camera.svg#camera"></use>';
+            document.getElementById('player_status_icon').innerHTML = '<use href="svg/camera.svg#camera"></use>';
             break;
         default:
-           document.getElementById('player_status_icon').innerHTML = '';
+            document.getElementById('player_status_icon').innerHTML = '<use href=""></use>';
             break;
     }
 
