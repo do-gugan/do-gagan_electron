@@ -3,7 +3,7 @@
   "appId": "com.do-gugan.do-gagan",
   "productName": "動画眼3",
   "description": "動画眼 Electron Ver.",
-  "version": "2.12.1",
+  "version": "2.13.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
