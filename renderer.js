@@ -630,13 +630,16 @@ async function changeWindowTitle(path, isDirty = false) {
 * 新規メモ欄の表示／非表示を切り替え
 * （設定保存はメインプロセス呼んだ先で）
 */
+const gridTemplateRowsWhenNewMemoBlockShown = "2.5em 1fr 3em 6em";
+const gridTemplateRowsWhenNewMemoBlockHidden = "2.5em 1fr 3em 0.5em";
 const toglleNewMemoBlock = function () {
+    console.log('toggleNewMemoBlock from GUI');
     const checkbox = document.querySelector("#Chk_ShowHideNewMemo");
     if (checkbox.checked == true) {
-        document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 6em";
+        document.getElementById('main').style.gridTemplateRows = gridTemplateRowsWhenNewMemoBlockShown;
         window.api.toggleNewMemoBlockMenu(true);
     } else {
-        document.getElementById('main').style.gridTemplateRows = "2.5em 1fr 3em 0.5em";
+        document.getElementById('main').style.gridTemplateRows = gridTemplateRowsWhenNewMemoBlockHidden;
         window.api.toggleNewMemoBlockMenu(false);
     }
 }
@@ -649,12 +652,12 @@ window.api.toggleNewMemoBlockFromMenu((result)=>{
     const main = document.getElementById('main');
     if (result === true) {
         //非表示だったら表示
-        main.style.gridTemplateRows = "2.5em 1fr 3em 6em";
+        main.style.gridTemplateRows = gridTemplateRowsWhenNewMemoBlockShown;
         checkbox.checked = true;
         return true;
     } else {
         //表示だったら非表示
-        main.style.gridTemplateRows = "2.5em 1fr 3em 0em";
+        main.style.gridTemplateRows = gridTemplateRowsWhenNewMemoBlockHidden;
         checkbox.checked = false;
         return false;
     }
