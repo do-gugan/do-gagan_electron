@@ -299,7 +299,6 @@ function displayPlayerStatus(message,icon = "") {
 function preparePlayerRateChangeListener() {
     player.addEventListener('ratechange', (event) => {
         //ステータスアイコンを消す
-        
         if (player.playbackRate != 1.0) {
         displayPlayerStatus('x' + player.playbackRate, '');
         } else {
@@ -308,9 +307,13 @@ function preparePlayerRateChangeListener() {
     });
 
     player.addEventListener('play', (event) => {
-        displayPlayerStatusForAWhile('', 'play',2);
+        if (player.playbackRate != 1.0) {
+            displayPlayerStatus('x' + player.playbackRate, '');
+        } else {
+            displayPlayerStatusForAWhile('', 'play',2); //2秒で消す
+        }
     });
-    player.addEventListener('pause', (event) => {
+        player.addEventListener('pause', (event) => {
         displayPlayerStatusForAWhile('', 'pause',0); //無限に表示
     });
 }
