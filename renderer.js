@@ -36,7 +36,7 @@ const validTypes = [
     'audio/mpeg', //mp3
     'audio/wav',
     'audio/ogg'
-];           
+];
 
 //Premiere式再生速度制御の配列
 const playbackRates = [0.25, 0.5, 0.75, 1.0, 1.25, 1.5, 1.75, 2.0, 4.0, 8.0];
@@ -403,15 +403,17 @@ window.api.openAudio((event, path)=>{
     playerBox.appendChild(audio);
     playerBox.appendChild(playerStatus);
 
-    mediaOpened(path);
+    mediaOpened(path, true); //音声であることを第2引数trueで明示
 
     preparePlayerRateChangeListener();
 });
 
 
-//メディアを開いた時の共通処理
-function mediaOpened (path) {
-    //console.log('mediaOpened:'+path);
+/**メディアを開いた時の共通処理
+ * @param {string} path
+ * @param {boolean} isAudio //音声ファイルの時にスクショボタンを無効化するためのフラグ
+*/
+function mediaOpened (path, isAudio = false) {
     player = document.getElementById("player");            
 
     //ファイル名をウインドウタイトルに
@@ -425,7 +427,6 @@ function mediaOpened (path) {
     //player.addEventListener('timeupdate', (event) => AddChapeterForFrameBlank());
 
     //UIを有効化
-    document.getElementById('Btn_ScreenShot').disabled = false;
     document.getElementById('Btn_JumpBackward').disabled = false;
     document.getElementById('Btn_PlayPause').disabled = false;
     document.getElementById('Btn_JumpForward').disabled = false;
@@ -445,6 +446,9 @@ function mediaOpened (path) {
     document.getElementById('Btn_F3').disabled = false;
     document.getElementById('Btn_F4').disabled = false;
     document.getElementById('Btn_F5').disabled = false;
+
+    //動画か音声かでスクリーンショットボタンを切り替え
+    document.getElementById('Btn_ScreenShot').disabled = isAudio;
 }
 
 
