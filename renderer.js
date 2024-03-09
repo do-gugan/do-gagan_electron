@@ -58,19 +58,19 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
     document.getElementById('Txt_Search').placeholder = _.t('SEARCH_PLACEHOLDER',locale);
-    document.getElementById('Opt_Filter').innerHTML = _.t('FILTER',locale);
-    document.getElementById('Opt_Emphasise').innerHTML = _.t('EMPHASISE',locale);
-    playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>';
-    document.getElementById('Lbl_ShowHideNewMemo').innerHTML = _.t('NEW_MEMO_FIELD',locale);
-    document.getElementById('Lbl_AutoScroll').innerHTML = _.t('AUTO_SCROLL',locale);
-    document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions();
-    document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions();
+    document.getElementById('Opt_Filter').innerText = _.t('FILTER',locale);
+    document.getElementById('Opt_Emphasise').innerText = _.t('EMPHASISE',locale);
+    playerBox.setHTML('<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>'); //翻訳文内にHTMLタグがあるので、setHTMLで代入
+    document.getElementById('Lbl_ShowHideNewMemo').innerText = _.t('NEW_MEMO_FIELD',locale);
+    document.getElementById('Lbl_AutoScroll').innerText = _.t('AUTO_SCROLL',locale);
+    document.getElementById('Sel_BackwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
+    document.getElementById('Sel_ForwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
 
-    document.getElementById('Lbl_lockedTimecode').innerHTML = _.t('TIMECODE',locale);
-    document.getElementById('Lbl_speaker').innerHTML = _.t('SPEAKER',locale);
-    document.getElementById('Lbl_memo').innerHTML = _.t('MEMO',locale);
+    document.getElementById('Lbl_lockedTimecode').innerText = _.t('TIMECODE',locale);
+    document.getElementById('Lbl_speaker').innerText = _.t('SPEAKER',locale);
+    document.getElementById('Lbl_memo').innerText = _.t('MEMO',locale);
 
-    document.getElementById('Btn_add').innerHTML = _.t('ADD',locale);
+    document.getElementById('Btn_add').innerText = _.t('ADD',locale);
 
     //UI要素にツールチップ（title属性）を付加
     document.getElementById('lockedTimecode').title = _.t('TIPS_LOCKED_TIMECODE', locale);
@@ -269,27 +269,29 @@ function displayPlayerStatus(message,icon = "") {
 
     document.getElementById('player_status_text').innerText = message;
     //icon値が既知のものならSVGを表示、それ以外では消す
+    let iconSVG = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     switch (icon) {
         case 'play':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/play.svg#play"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/play.svg#play');
             break;
         case 'pause':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/pause.svg#pause"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/pause.svg#pause');
             break;
         case 'forward':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/forward.svg#forward"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/forward.svg#forward');
             break;
         case 'backward':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/backward.svg#backward"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/backward.svg#backward');
             break;
         case 'camera':
-            document.getElementById('player_status_icon').innerHTML = '<use xlink:href="svg/camera.svg#camera"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/camera.svg#camera');
             break;
         default:
-           document.getElementById('player_status_icon').innerHTML = '';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '');
             break;
     }
-
+    document.getElementById('player_status_icon').textContent = '';
+    document.getElementById('player_status_icon').appendChild(iconSVG);
 }
 
 /* プレーヤーの再生速度変更、状態を検知して表示を更新
@@ -341,16 +343,66 @@ function escapeMediaPath(path) {
     let escapeMediaPath = `file:///${path.replace(/#/g, '%23').replace(/\\/g, '/').replace(/ /g, '%20')}`;
     return escapeMediaPath;
 }
-window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
-    playerBox.innerHTML = videotag;
+window.api.openVideo((event, path)=>{
+    let video = document.createElement('video');
+    video.id = 'player';
+    video.autoplay = true;
+    video.controls = true;
+    video.onratechange = playbackRateChangedFromVideoElement;
+
+    let source = document.createElement('source');
+    source.src = escapeMediaPath(path);
+
+    video.appendChild(source);
+
+    let playerStatus = document.createElement('div');
+    playerStatus.id = 'player_status';
+
+    let playerStatusIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    playerStatusIcon.id = 'player_status_icon';
+
+    let playerStatusText = document.createElement('div');
+    playerStatusText.id = 'player_status_text';
+
+    playerStatus.appendChild(playerStatusIcon);
+    playerStatus.appendChild(playerStatusText);
+
+    playerBox.textContent = '';
+    playerBox.appendChild(video);
+    playerBox.appendChild(playerStatus);
+    
     mediaOpened(path);
 
     preparePlayerRateChangeListener();
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
-    playerBox.innerHTML = audiotag;
+    let audio = document.createElement('audio');
+    audio.id = 'player';
+    audio.autoplay = true;
+    audio.controls = true;
+    audio.onratechange = playbackRateChangedFromVideoElement;
+
+    let source = document.createElement('source');
+    source.src = escapeMediaPath(path);
+
+    audio.appendChild(source);
+
+    let playerStatus = document.createElement('div');
+    playerStatus.id = 'player_status';
+
+    let playerStatusIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    playerStatusIcon.id = 'player_status_icon';
+
+    let playerStatusText = document.createElement('div');
+    playerStatusText.id = 'player_status_text';
+
+    playerStatus.appendChild(playerStatusIcon);
+    playerStatus.appendChild(playerStatusText);
+
+    playerBox.textContent = '';
+    playerBox.appendChild(audio);
+    playerBox.appendChild(playerStatus);
+
     mediaOpened(path);
 
     preparePlayerRateChangeListener();
@@ -395,41 +447,75 @@ function mediaOpened (path) {
     document.getElementById('Btn_F5').disabled = false;
 }
 
-//メインプロセスから1件のレコードを表示
-window.api.addRecordToList((record) => {
-    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
-    memolist.innerHTML += html;
+
+//メモのテンプレートを作成
+const rowDiv = document.createElement('div');
+rowDiv.classList.add('row');
+
+const inTimeDiv = document.createElement('div');
+inTimeDiv.classList.add('inTime');
+
+const scriptDiv = document.createElement('div');
+scriptDiv.classList.add('script');
+
+const scriptTextarea = document.createElement('textarea');
+scriptTextarea.rows = 1;
+
+scriptDiv.appendChild(scriptTextarea);
+rowDiv.appendChild(inTimeDiv);
+rowDiv.appendChild(scriptDiv);
+
+// 新規レコードを作成
+function createNewRecord(id, inTime, speaker, script) {
+    const newRow = rowDiv.cloneNode(true);
+    //cloneNodeで複製されないイベントリスナーを登録
+    newRow.querySelector('.inTime').onclick = timeClicked;
+    newRow.querySelector('.inTime').oncontextmenu = openContextMenuOn;
+    newRow.querySelector('textarea').oninput = (event) => editTextarea(event.target);
+    newRow.querySelector('textarea').onkeyup = keyupTextarea;
+    newRow.querySelector('textarea').oncontextmenu = openContextMenuOnText;
+    newRow.querySelector('textarea').onfocus = cellFocused;
+    newRow.querySelector('textarea').onblur = cellBlured;
+
+    //動的要素をセット
+    newRow.id = id;
+    newRow.querySelector('.inTime').classList.add('speaker' + speaker);
+    newRow.querySelector('.inTime').innerText = secToMinSec(inTime);
+    newRow.querySelector('textarea').value = script;
+
+    return newRow;
+}
+/** メインプロセスから1件のレコードを表示
+ * @param {record} r
+**/
+window.api.addRecordToList((r) => {
+    //テンプレートを使って追加
+    memolist.appendChild(createNewRecord(r.id, r.inTime, r.speaker, r.script));
 
     //セルの高さを文字数にあわせて調整
-    const t = document.querySelector(`#${record.id} .script textarea`);
-    resizeTextarea(t);
+    resizeTextarea(newRow.querySelector('textarea'));
 });
 
 //まとまった数のレコードを一括で追加
 window.api.addRecordsToList((records) => {
-    let html = "";
     records.forEach(r => {
-        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${r.script}</textarea></div></div>`;
+        const newRecord = createNewRecord(r.id, r.inTime, r.speaker, r.script);
+        memolist.appendChild(newRecord);
     });
-    memolist.innerHTML = html;
 
-    //セルの高さを文字数にあわせて調整
+    //全セルのappendが終わってからまとめてリサイズ
     const textareas = document.querySelectorAll(`.script textarea`);
-    textareas.forEach(ta => resizeTextarea(ta));
+    textareas.forEach(ta => resizeTextarea(ta, true));
 });
 
 //指定したエレメントの後ろにレコードを追加
 window.api.insertRecordToList((newID, recJSON, targetId) => {
     //console.log("newID:" + newID + " recJSON:" + recJSON + " targetId:" + targetId);
     const record = JSON.parse(recJSON);
-    //console.log("record.script:" + record.script);
-    const html = `<div class="row" id="${newID}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
+    const newRow = createNewRecord(newID, record.inTime, record.speaker, record.script);
     const target = document.getElementById(targetId);
-    target.insertAdjacentHTML('afterend', html);
-
-    //セルの高さを文字数にあわせて調整
-    const t = document.querySelector(`#${record.id} .script textarea`);
-    resizeTextarea(t);
+    target.insertAdjacentElement('afterend', newRow);
+    resizeTextarea(newRow.querySelector('textarea')); //セルの高さを文字数にあわせて調整
 });
 
 //ファイルのドラッグ&ドロップを受け付ける
@@ -447,9 +533,9 @@ playerBox.ondragenter = document.ondrop = function (e) {
         if (e.dataTransfer.items.length > 1) {
             ph.innerText = _.t('DROP_ONLY_SINGLE_FILE',locale);
         } else if (!validTypes.includes(e.dataTransfer.items[0].type)) {
-            ph.innerHTML = _.t('INVALID_FILETYPE',locale);
+            ph.setHTML(_.t('INVALID_FILETYPE',locale));
         } else {
-            ph.innerHTML = _.t('DROP_AND_OPEN',locale);
+            ph.setHTML(_.t('DROP_AND_OPEN',locale));
         }
     }
 
@@ -459,7 +545,7 @@ playerBox.ondragleave = document.ondrop = function (e) {
     playerBox.classList.remove("dragging");
     const ph = document.getElementById("placeholderInPlayer");
     if (ph != undefined) {
-        ph.innerHTML = window.api.t('DROP_HERE',locale);
+        ph.setHTML(window.api.t('DROP_HERE',locale));
     }
 
 }
@@ -854,11 +940,21 @@ function editTextarea(textarea){
 }
 /**
  * ログが編集される時、文字数にあわせてセルの高さを調整する
+ * @param (textarea) textarea 対象のテキストエリア
+ * @param (bool) isInitialize 初期化時の呼び出しかどうか（初期化時は最低限の処理のみ）
  */
-function resizeTextarea(textarea) {
-    const initial_height = parseFloat(getComputedStyle(textarea).height)
-    textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
-    textarea.style.height = (textarea.scrollHeight -3 ) + "px";
+function resizeTextarea(textarea, isInitialize = false) {
+    //処理負荷軽減のために、必要な時だけ高さを変更する
+    if (isInitialize == true) {
+        //console.log("resizeTextarea - Initialize");
+        if (textarea.scrollHeight > textarea.offsetHeight) {
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+    } else {
+        //console.log("resizeTextarea - Not initialize.");
+        textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
+        textarea.style.height = textarea.scrollHeight + "px";
+    }
 }
 
 function keyupTextarea(event) {
@@ -887,9 +983,15 @@ function resizeAllTextArea() {
         resizeTextarea(ta);
     }
 }        
-window.addEventListener('resize',function(){
-    resizeAllTextArea();
-})
+
+//連続したリサイズイベントをまとめて処理する
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        resizeAllTextArea();
+    }, 200); // 200ミリ秒のデバウンス時間
+});
 
 //ログのタイムコード上の右クリックでコンテクストメニューを表示
 function openContextMenuOn(e) {
@@ -951,10 +1053,9 @@ window.api.deleteRow((id)=>{
 
 //メインプロセスから指定ID行のメモを更新
 window.api.updateRow((id, script)=>{
-    //console.log("updateRow:"+id+"to "+script);
-    const div = document.querySelector('#'+ id);
+    const div = document.getElementById(id);
     const ta = div.querySelector('textarea');
-    ta.innerText = script;
+    ta.value = script;
     //カーソルを最後の文字の後ろに移動
     ta.setSelectionRange(ta.value.length,ta.value.length);
     //テキストエリアの高さを更新
@@ -1028,6 +1129,7 @@ function EndDrag() {
     SetCursor("auto");
 }
 
+let debounceTimeout;
 function OnDrag(event) {
     if (isDragging){
         //console.log("Dragging");
@@ -1052,7 +1154,13 @@ function OnDrag(event) {
         if ( rightColWidthPx > 300 && leftColWidthPx > 232) {
             main.style.gridTemplateColumns = newColDef;
         }              
-        resizeAllTextArea(); //ログのセル高をリサイズする
+
+        //全セルのリサイズ呼び出しにデバウンス処理を追加
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function() {
+            resizeAllTextArea(); //ログのセル高をリサイズする
+        }, 200); // 200ミリ秒のデバウンス時間
+
         event.preventDefault()
     }
 }
@@ -1123,7 +1231,7 @@ function syncTimecode() {
     if (player != undefined) {
         document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
     } else {
-        console.log("not playing");
+        //console.log("not playing");
     }
 }
 
@@ -1275,7 +1383,7 @@ function isChapterAlreadyExistAt(currentTime) {
 
 //ログリストをクリア
 window.api.clearRecords(()=>{
-    memolist.innerHTML = "";
+    memolist.textContent = "";
 });
 
 //自動スクロールのチェックボックス状態を設定に保存

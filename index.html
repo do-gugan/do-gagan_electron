@@ -12,13 +12,13 @@
         <div id="main">
             <div id="player-box" class="grid1" id="drag" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
             <div id="player-controls"class="grid2" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled><svg class="control_svg"><use xlink:href="svg/camera.svg#camera"></use></svg></button>
+                <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled><svg class="control_svg"><use href="svg/camera.svg#camera"></use></svg></button>
                 <button id="Btn_JumpBackward" class="Btn_Jump" onclick="skipBackward()" disabled>
-                    <svg class="control_svg"><use xlink:href="svg/backward.svg#backward"></use></svg>
+                    <svg class="control_svg"><use href="svg/backward.svg#backward"></use></svg>
                     <select id="Sel_BackwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('backward');"></select>
                 </button>
                 <button id="Btn_PlayPause" disabled>
-                    <svg id="play" class="control_svg"><use xlink:href="svg/play.svg#play"></use></svg><svg id="slash" class="control_svg"><use xlink:href="svg/slash.svg#slash"></use></svg><svg id="pause" class="control_svg"><use xlink:href="svg/pause.svg#pause"></use></svg>
+                    <svg id="play" class="control_svg"><use href="svg/play.svg#play"></use></svg><svg id="slash" class="control_svg"><use href="svg/slash.svg#slash"></use></svg><svg id="pause" class="control_svg"><use href="svg/pause.svg#pause"></use></svg>
                     <select id="Sel_PlaybackRate" class="Sel_playbaclRate" " onclick="event.stopPropagation()" onchange="playbackRateChanged();">
                         <option value="0.25">x0.25</option>
                         <option value="0.5">x0.5</option>
@@ -33,7 +33,7 @@
                     </select>
                 </button>
                 <button id="Btn_JumpForward" class="Btn_Jump" onclick="skipForward()" disabled>
-                    <svg class="control_svg"><use xlink:href="svg/forward.svg#forward"></use></svg>
+                    <svg class="control_svg"><use href="svg/forward.svg#forward"></use></svg>
                     <select id="Sel_ForwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('forward');"></select>
                 </button>
             </div>
