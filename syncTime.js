@@ -13,10 +13,10 @@ let _ = null;
 
     //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
-    document.getElementById('Lbl_inputStartTime').innerHTML = _.t('INPUT_START_TIME',locale);
-    document.getElementById('Btn_getFileCreationTime').innerHTML = _.t('GET_FILE_CREATION_TIME',locale);
-    document.getElementById('Btn_getFileName').innerHTML = _.t('GUESS_FROM_FILE_NAME',locale);
-    document.getElementById('Btn_convert').innerHTML = _.t('CONVERT',locale);
+    document.getElementById('Lbl_inputStartTime').setHTML(_.t('INPUT_START_TIME',locale));
+    document.getElementById('Btn_getFileCreationTime').setHTML(_.t('GET_FILE_CREATION_TIME',locale));
+    document.getElementById('Btn_getFileName').setHTML(_.t('GUESS_FROM_FILE_NAME',locale));
+    document.getElementById('Btn_convert').setHTML(_.t('CONVERT',locale));
 
 })();
 

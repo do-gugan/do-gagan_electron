@@ -13,12 +13,12 @@ let _ = null;
 
     //locale = 'en'; //有効化で英語UIのテスト
     _ = window.api;
-    document.getElementById('Lbl_guide').innerHTML = _.t('REPLACE_GUIDE',locale);
-    document.getElementById('Lbl_search').innerHTML = _.t('REPLACE_SEARCH',locale);
-    document.getElementById('Lbl_replace').innerHTML = _.t('REPLACE_REPLACE',locale);
-    document.getElementById('Lbl_match').innerHTML = _.t('REPLACE_MATCHED',locale);
-    document.getElementById('Btn_cancel').innerHTML = _.t('REPLACE_CANCEL',locale);
-    document.getElementById('Btn_execute').innerHTML = _.t('REPLACE_EXECUTE',locale);
+    document.getElementById('Lbl_guide').setHTML(_.t('REPLACE_GUIDE',locale));
+    document.getElementById('Lbl_search').setHTML(_.t('REPLACE_SEARCH',locale));
+    document.getElementById('Lbl_replace').setHTML(_.t('REPLACE_REPLACE',locale));
+    document.getElementById('Lbl_match').setHTML(_.t('REPLACE_MATCHED',locale));
+    document.getElementById('Btn_cancel').setHTML(_.t('REPLACE_CANCEL',locale));
+    document.getElementById('Btn_execute').setHTML(_.t('REPLACE_EXECUTE',locale));
 
     document.getElementById('Txt_search').focus();
 
