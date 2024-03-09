@@ -60,11 +60,11 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     document.getElementById('Txt_Search').placeholder = _.t('SEARCH_PLACEHOLDER',locale);
     document.getElementById('Opt_Filter').innerText = _.t('FILTER',locale);
     document.getElementById('Opt_Emphasise').innerText = _.t('EMPHASISE',locale);
-    playerBox.innerHTML = '<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>'; //翻訳文内にHTMLタグがあるので、innerHTMLで代入
+    playerBox.setHTML('<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>'); //翻訳文内にHTMLタグがあるので、setHTMLで代入
     document.getElementById('Lbl_ShowHideNewMemo').innerText = _.t('NEW_MEMO_FIELD',locale);
     document.getElementById('Lbl_AutoScroll').innerText = _.t('AUTO_SCROLL',locale);
-    document.getElementById('Sel_BackwardSec').innerHTML = updateJumpSecOptions(); //HTMLで生成されるのでinnerHTMLで代入
-    document.getElementById('Sel_ForwardSec').innerHTML = updateJumpSecOptions(); //HTMLで生成されるのでinnerHTMLで代入
+    document.getElementById('Sel_BackwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
+    document.getElementById('Sel_ForwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
 
     document.getElementById('Lbl_lockedTimecode').innerText = _.t('TIMECODE',locale);
     document.getElementById('Lbl_speaker').innerText = _.t('SPEAKER',locale);
@@ -269,28 +269,29 @@ function displayPlayerStatus(message,icon = "") {
 
     document.getElementById('player_status_text').innerText = message;
     //icon値が既知のものならSVGを表示、それ以外では消す
+    let iconSVG = document.createElementNS('http://www.w3.org/2000/svg', 'use');
     switch (icon) {
         case 'play':
-            document.getElementById('player_status_icon').innerHTML = '<use href="svg/play.svg#play"></use>';
-            //document.getElementById('player_status_icon').setAttributeNS('http://www.w3.org/1999/xlink', 'href', 'svg/play.svg#play'); //この形式は動作せず
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/play.svg#play');
             break;
         case 'pause':
-            document.getElementById('player_status_icon').innerHTML = '<use href="svg/pause.svg#pause"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/pause.svg#pause');
             break;
         case 'forward':
-            document.getElementById('player_status_icon').innerHTML = '<use href="svg/forward.svg#forward"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/forward.svg#forward');
             break;
         case 'backward':
-            document.getElementById('player_status_icon').innerHTML = '<use href="svg/backward.svg#backward"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/backward.svg#backward');
             break;
         case 'camera':
-            document.getElementById('player_status_icon').innerHTML = '<use href="svg/camera.svg#camera"></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'svg/camera.svg#camera');
             break;
         default:
-            document.getElementById('player_status_icon').innerHTML = '<use href=""></use>';
+            iconSVG.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', '');
             break;
     }
-
+    document.getElementById('player_status_icon').textContent = '';
+    document.getElementById('player_status_icon').appendChild(iconSVG);
 }
 
 /* プレーヤーの再生速度変更、状態を検知して表示を更新
@@ -342,16 +343,66 @@ function escapeMediaPath(path) {
     let escapeMediaPath = `file:///${path.replace(/#/g, '%23').replace(/\\/g, '/').replace(/ /g, '%20')}`;
     return escapeMediaPath;
 }
-window.api.openVideo((event, path)=>{           
-    const videotag = '<video id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></video><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
-    playerBox.innerHTML = videotag;
+window.api.openVideo((event, path)=>{
+    let video = document.createElement('video');
+    video.id = 'player';
+    video.autoplay = true;
+    video.controls = true;
+    video.onratechange = playbackRateChangedFromVideoElement;
+
+    let source = document.createElement('source');
+    source.src = escapeMediaPath(path);
+
+    video.appendChild(source);
+
+    let playerStatus = document.createElement('div');
+    playerStatus.id = 'player_status';
+
+    let playerStatusIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    playerStatusIcon.id = 'player_status_icon';
+
+    let playerStatusText = document.createElement('div');
+    playerStatusText.id = 'player_status_text';
+
+    playerStatus.appendChild(playerStatusIcon);
+    playerStatus.appendChild(playerStatusText);
+
+    playerBox.textContent = '';
+    playerBox.appendChild(video);
+    playerBox.appendChild(playerStatus);
+    
     mediaOpened(path);
 
     preparePlayerRateChangeListener();
 });
 window.api.openAudio((event, path)=>{
-    const audiotag = '<audio id="player" onratechange="playbackRateChangedFromVideoElement();" autoplay controls><source src="' + escapeMediaPath(path) + '"></audio><div id="player_status"><svg id="player_status_icon"></svg><div id="player_status_text"></div></div>';
-    playerBox.innerHTML = audiotag;
+    let audio = document.createElement('audio');
+    audio.id = 'player';
+    audio.autoplay = true;
+    audio.controls = true;
+    audio.onratechange = playbackRateChangedFromVideoElement;
+
+    let source = document.createElement('source');
+    source.src = escapeMediaPath(path);
+
+    audio.appendChild(source);
+
+    let playerStatus = document.createElement('div');
+    playerStatus.id = 'player_status';
+
+    let playerStatusIcon = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    playerStatusIcon.id = 'player_status_icon';
+
+    let playerStatusText = document.createElement('div');
+    playerStatusText.id = 'player_status_text';
+
+    playerStatus.appendChild(playerStatusIcon);
+    playerStatus.appendChild(playerStatusText);
+
+    playerBox.textContent = '';
+    playerBox.appendChild(audio);
+    playerBox.appendChild(playerStatus);
+
     mediaOpened(path);
 
     preparePlayerRateChangeListener();
@@ -484,9 +535,9 @@ playerBox.ondragenter = document.ondrop = function (e) {
         if (e.dataTransfer.items.length > 1) {
             ph.innerText = _.t('DROP_ONLY_SINGLE_FILE',locale);
         } else if (!validTypes.includes(e.dataTransfer.items[0].type)) {
-            ph.innerHTML = _.t('INVALID_FILETYPE',locale);
+            ph.setHTML(_.t('INVALID_FILETYPE',locale));
         } else {
-            ph.innerHTML = _.t('DROP_AND_OPEN',locale);
+            ph.setHTML(_.t('DROP_AND_OPEN',locale));
         }
     }
 
@@ -496,7 +547,7 @@ playerBox.ondragleave = document.ondrop = function (e) {
     playerBox.classList.remove("dragging");
     const ph = document.getElementById("placeholderInPlayer");
     if (ph != undefined) {
-        ph.innerHTML = window.api.t('DROP_HERE',locale);
+        ph.setHTML(window.api.t('DROP_HERE',locale));
     }
 
 }
@@ -1010,9 +1061,7 @@ window.api.updateRow((id, script)=>{
     const div = document.getElementById(id);
     console.log(div);
     const ta = div.querySelector('textarea');
-    console.log("b:"+ta.innerHTML);
     ta.value = script;
-    console.log("a:"+ta.innerHTML);
     //カーソルを最後の文字の後ろに移動
     ta.setSelectionRange(ta.value.length,ta.value.length);
     //テキストエリアの高さを更新
@@ -1340,7 +1389,7 @@ function isChapterAlreadyExistAt(currentTime) {
 
 //ログリストをクリア
 window.api.clearRecords(()=>{
-    memolist.innerHTML = "";
+    memolist.textContent = "";
 });
 
 //自動スクロールのチェックボックス状態を設定に保存
