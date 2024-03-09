@@ -114,6 +114,10 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
             playbackSpeedDown();
             event.preventDefault();
         }
+        //WindowsでCtrl+Wが二重で効かないようにする
+        if (isDarwin == 'not macOS' && event.ctrlKey && event.key==='w'){
+            event.preventDefault();
+        }
     });
 
     document.body.addEventListener('keyup', (event)=>{
