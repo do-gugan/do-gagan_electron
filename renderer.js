@@ -396,41 +396,77 @@ function mediaOpened (path) {
     document.getElementById('Btn_F5').disabled = false;
 }
 
-//メインプロセスから1件のレコードを表示
-window.api.addRecordToList((record) => {
-    const html = `<div class="row" id="${record.id}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
-    memolist.innerHTML += html;
+
+//メモのテンプレートを作成
+const rowDiv = document.createElement('div');
+rowDiv.classList.add('row');
+
+const inTimeDiv = document.createElement('div');
+inTimeDiv.classList.add('inTime');
+
+const scriptDiv = document.createElement('div');
+scriptDiv.classList.add('script');
+
+const scriptTextarea = document.createElement('textarea');
+scriptTextarea.rows = 1;
+
+scriptDiv.appendChild(scriptTextarea);
+rowDiv.appendChild(inTimeDiv);
+rowDiv.appendChild(scriptDiv);
+
+// 新規レコードを作成
+function createNewRecord(id, inTime, speaker, script) {
+    const newRow = rowDiv.cloneNode(true);
+    //cloneNodeで複製されないイベントリスナーを登録
+    newRow.querySelector('.inTime').onclick = timeClicked;
+    newRow.querySelector('.inTime').oncontextmenu = openContextMenuOn;
+    newRow.querySelector('textarea').oninput = (event) => editTextarea(event.target);
+    newRow.querySelector('textarea').onkeyup = keyupTextarea;
+    newRow.querySelector('textarea').oncontextmenu = openContextMenuOnText;
+    newRow.querySelector('textarea').onfocus = cellFocused;
+    newRow.querySelector('textarea').onblur = cellBlured;
+
+    //動的要素をセット
+    newRow.id = id;
+    newRow.querySelector('.inTime').classList.add('speaker' + speaker);
+    newRow.querySelector('.inTime').innerText = secToMinSec(inTime);
+    newRow.querySelector('textarea').value = script;
+
+    return newRow;
+}
+/** メインプロセスから1件のレコードを表示
+ * @param {record} r
+**/
+window.api.addRecordToList((r) => {
+    //テンプレートを使って追加
+    memolist.appendChild(createNewRecord(r.id, r.inTime, r.speaker, r.script));
 
     //セルの高さを文字数にあわせて調整
-    const t = document.querySelector(`#${record.id} .script textarea`);
-    resizeTextarea(t);
+    resizeTextarea(newRow.querySelector('textarea'));
 });
 
 //まとまった数のレコードを一括で追加
 window.api.addRecordsToList((records) => {
-    let html = "";
+    console.time('addRecordsToList');
     records.forEach(r => {
-        html += `<div class="row" id="${r.id}"><div class="inTime speaker${r.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(r.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${r.script}</textarea></div></div>`;
+        const newRecord = createNewRecord(r.id, r.inTime, r.speaker, r.script);
+        memolist.appendChild(newRecord);
     });
-    memolist.innerHTML = html;
 
-    //セルの高さを文字数にあわせて調整
+    //全セルのappendが終わってからまとめてリサイズ
     const textareas = document.querySelectorAll(`.script textarea`);
-    textareas.forEach(ta => resizeTextarea(ta));
+    textareas.forEach(ta => resizeTextarea(ta, true));
+    console.timeEnd('addRecordsToList');
 });
 
 //指定したエレメントの後ろにレコードを追加
 window.api.insertRecordToList((newID, recJSON, targetId) => {
     //console.log("newID:" + newID + " recJSON:" + recJSON + " targetId:" + targetId);
     const record = JSON.parse(recJSON);
-    //console.log("record.script:" + record.script);
-    const html = `<div class="row" id="${newID}"><div class="inTime speaker${record.speaker}" onclick="timeClicked(event);" onContextmenu="openContextMenuOn(event)">${secToMinSec(record.inTime)}</div><div class="script"><textarea oninput="editTextarea(event.target);" onkeyup="keyupTextarea(event);" onContextmenu="openContextMenuOnText(event)" onfocus="cellFocused(event)" onblur="cellBlured(event)">${record.script}</textarea></div></div>`;
+    const newRow = createNewRecord(newID, record.inTime, record.speaker, record.script);
     const target = document.getElementById(targetId);
-    target.insertAdjacentHTML('afterend', html);
-
-    //セルの高さを文字数にあわせて調整
-    const t = document.querySelector(`#${record.id} .script textarea`);
-    resizeTextarea(t);
+    target.insertAdjacentElement('afterend', newRow);
+    resizeTextarea(newRow.querySelector('textarea')); //セルの高さを文字数にあわせて調整
 });
 
 //ファイルのドラッグ&ドロップを受け付ける
@@ -855,11 +891,21 @@ function editTextarea(textarea){
 }
 /**
  * ログが編集される時、文字数にあわせてセルの高さを調整する
+ * @param (textarea) textarea 対象のテキストエリア
+ * @param (bool) isInitialize 初期化時の呼び出しかどうか（初期化時は最低限の処理のみ）
  */
-function resizeTextarea(textarea) {
-    const initial_height = parseFloat(getComputedStyle(textarea).height)
-    textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
-    textarea.style.height = (textarea.scrollHeight -3 ) + "px";
+function resizeTextarea(textarea, isInitialize = false) {
+    //処理負荷軽減のために、必要な時だけ高さを変更する
+    if (isInitialize == true) {
+        console.log("resizeTextarea - Initialize");
+        if (textarea.scrollHeight > textarea.offsetHeight) {
+            textarea.style.height = textarea.scrollHeight + "px";
+        }
+    } else {
+        console.log("resizeTextarea - Not initialize.");
+        textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
+        textarea.style.height = textarea.scrollHeight + "px";
+    }
 }
 
 function keyupTextarea(event) {
@@ -887,10 +933,18 @@ function resizeAllTextArea() {
     for (const ta of rows) {
         resizeTextarea(ta);
     }
+    console.log("resizeAllTextArea done:" + rows.length);
 }        
-window.addEventListener('resize',function(){
-    resizeAllTextArea();
-})
+
+//連続したリサイズイベントをまとめて処理する
+let resizeTimeout;
+window.addEventListener('resize', function() {
+    clearTimeout(resizeTimeout);
+    resizeTimeout = setTimeout(function() {
+        console.log("resize event fired.");
+        resizeAllTextArea();
+    }, 200); // 200ミリ秒のデバウンス時間
+});
 
 //ログのタイムコード上の右クリックでコンテクストメニューを表示
 function openContextMenuOn(e) {
@@ -952,10 +1006,13 @@ window.api.deleteRow((id)=>{
 
 //メインプロセスから指定ID行のメモを更新
 window.api.updateRow((id, script)=>{
-    //console.log("updateRow:"+id+"to "+script);
-    const div = document.querySelector('#'+ id);
+    console.log("updateRow:"+id+" to "+script);
+    const div = document.getElementById(id);
+    console.log(div);
     const ta = div.querySelector('textarea');
+    console.log("b:"+ta.innerHTML);
     ta.innerText = script;
+    console.log("a:"+ta.innerHTML);
     //カーソルを最後の文字の後ろに移動
     ta.setSelectionRange(ta.value.length,ta.value.length);
     //テキストエリアの高さを更新
@@ -1029,6 +1086,7 @@ function EndDrag() {
     SetCursor("auto");
 }
 
+let debounceTimeout;
 function OnDrag(event) {
     if (isDragging){
         //console.log("Dragging");
@@ -1053,7 +1111,13 @@ function OnDrag(event) {
         if ( rightColWidthPx > 300 && leftColWidthPx > 232) {
             main.style.gridTemplateColumns = newColDef;
         }              
-        resizeAllTextArea(); //ログのセル高をリサイズする
+
+        //全セルのリサイズ呼び出しにデバウンス処理を追加
+        clearTimeout(debounceTimeout);
+        debounceTimeout = setTimeout(function() {
+            resizeAllTextArea(); //ログのセル高をリサイズする
+        }, 200); // 200ミリ秒のデバウンス時間
+
         event.preventDefault()
     }
 }
