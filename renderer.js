@@ -498,7 +498,6 @@ window.api.addRecordToList((r) => {
 
 //まとまった数のレコードを一括で追加
 window.api.addRecordsToList((records) => {
-    console.time('addRecordsToList');
     records.forEach(r => {
         const newRecord = createNewRecord(r.id, r.inTime, r.speaker, r.script);
         memolist.appendChild(newRecord);
@@ -507,7 +506,6 @@ window.api.addRecordsToList((records) => {
     //全セルのappendが終わってからまとめてリサイズ
     const textareas = document.querySelectorAll(`.script textarea`);
     textareas.forEach(ta => resizeTextarea(ta, true));
-    console.timeEnd('addRecordsToList');
 });
 
 //指定したエレメントの後ろにレコードを追加
@@ -948,12 +946,12 @@ function editTextarea(textarea){
 function resizeTextarea(textarea, isInitialize = false) {
     //処理負荷軽減のために、必要な時だけ高さを変更する
     if (isInitialize == true) {
-        console.log("resizeTextarea - Initialize");
+        //console.log("resizeTextarea - Initialize");
         if (textarea.scrollHeight > textarea.offsetHeight) {
             textarea.style.height = textarea.scrollHeight + "px";
         }
     } else {
-        console.log("resizeTextarea - Not initialize.");
+        //console.log("resizeTextarea - Not initialize.");
         textarea.style.height = "0px"; //一瞬高さ0にすることでscrollHeightがリセットされる。これがないと増えた高さが戻らなくなる。
         textarea.style.height = textarea.scrollHeight + "px";
     }
@@ -984,7 +982,6 @@ function resizeAllTextArea() {
     for (const ta of rows) {
         resizeTextarea(ta);
     }
-    console.log("resizeAllTextArea done:" + rows.length);
 }        
 
 //連続したリサイズイベントをまとめて処理する
@@ -992,7 +989,6 @@ let resizeTimeout;
 window.addEventListener('resize', function() {
     clearTimeout(resizeTimeout);
     resizeTimeout = setTimeout(function() {
-        console.log("resize event fired.");
         resizeAllTextArea();
     }, 200); // 200ミリ秒のデバウンス時間
 });
@@ -1057,9 +1053,7 @@ window.api.deleteRow((id)=>{
 
 //メインプロセスから指定ID行のメモを更新
 window.api.updateRow((id, script)=>{
-    console.log("updateRow:"+id+" to "+script);
     const div = document.getElementById(id);
-    console.log(div);
     const ta = div.querySelector('textarea');
     ta.value = script;
     //カーソルを最後の文字の後ろに移動
@@ -1237,7 +1231,7 @@ function syncTimecode() {
     if (player != undefined) {
         document.getElementById('Txt_lockedTimecode').value = secToMinSec(player.currentTime,3);
     } else {
-        console.log("not playing");
+        //console.log("not playing");
     }
 }
 
