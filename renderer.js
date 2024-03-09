@@ -1011,7 +1011,7 @@ window.api.updateRow((id, script)=>{
     console.log(div);
     const ta = div.querySelector('textarea');
     console.log("b:"+ta.innerHTML);
-    ta.innerText = script;
+    ta.value = script;
     console.log("a:"+ta.innerHTML);
     //カーソルを最後の文字の後ろに移動
     ta.setSelectionRange(ta.value.length,ta.value.length);
