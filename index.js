@@ -288,19 +288,18 @@ app.on('window-all-closed', () => {
   // #endregion
 
   //レンダラーからメニュー項目を有効化・無効化する
-  ipcMain.on('enableOrDisableMenuItemMerge', (event, arg) => {
-    const bool = JSON.parse(arg);
-    menu.enableOrDisableMenuItemMerge(bool.key);
+  ipcMain.on('enableOrDisableMenuItemMerge', (event, bool) => {
+    //IPCは構造化クローンで値を渡せるためJSON文字列化は不要
+    menu.enableOrDisableMenuItemMerge(bool);
   });
 
   //--------------------------------
   // 選択中のセルと次のセルを結合する（次のセルの中身を末尾に連結し、次のセルを削除）
   //--------------------------------
-  ipcMain.on('mergeCurrentAndNextCells',(event, arg) => {
+  ipcMain.on('mergeCurrentAndNextCells',(event, id) => {
     //実際の処理はレンダラー（renderer.js）側でtextareaのキーボードイベントから呼んで処理
-    const id = JSON.parse(arg);
-    //console.log("id:"+id.key);
-    common.mergeCurrentAndNextCells(id.key);
+    //IPCは構造化クローンで値を渡せるためJSON文字列化は不要
+    common.mergeCurrentAndNextCells(id);
   });
 
 

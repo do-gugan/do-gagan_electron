@@ -376,7 +376,7 @@ function escapeMediaPath(path) {
     let escapeMediaPath = `file:///${path.replace(/#/g, '%23').replace(/\\/g, '/').replace(/ /g, '%20')}`;
     return escapeMediaPath;
 }
-window.api.openVideo((event, path)=>{
+window.api.openVideo((path)=>{
     let video = document.createElement('video');
     video.id = 'player';
     video.autoplay = true;
@@ -408,7 +408,7 @@ window.api.openVideo((event, path)=>{
 
     preparePlayerRateChangeListener();
 });
-window.api.openAudio((event, path)=>{
+window.api.openAudio((path)=>{
     let audio = document.createElement('audio');
     audio.id = 'player';
     audio.autoplay = true;
@@ -1147,12 +1147,6 @@ function resetSearch() {
         row.querySelector('textarea').classList.remove('emphasised');
     })
 }
-
-//メインプロセス（メニュー）から置換ウインドウを開く
-window.api.openReplaceWindow(()=>{
-    const childWindow = window.open('replace.html');
-    //childWindow.document.write('<h1>Hello</h1>')
-});
 
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK
