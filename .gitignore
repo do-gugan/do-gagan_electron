@@ -1,8 +1,26 @@
-/dist/
-/exclude/
+# 依存パッケージ（package-lock.jsonから復元可能）
 node_modules/
-.DS_Store
 
-.env
+# Electron Forge / ビルド成果物
 out/
+dist/
+
+# 環境変数・署名関連の秘密情報
+.env
 private/
+
+# 作業用の退避ファイル
+/exclude/
+
+# OS が生成するファイル
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# エディタ設定
+.vscode/
+.idea/
+
+# ログ
+*.log
+npm-debug.log*
