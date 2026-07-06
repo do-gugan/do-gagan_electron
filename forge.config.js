@@ -1,5 +1,8 @@
+import fs from 'node:fs';
 import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+
+const pkg = JSON.parse(fs.readFileSync(new URL('./package.json', import.meta.url), 'utf8'));
 
 export default {
   packagerConfig: {
@@ -15,11 +18,17 @@ export default {
   makers: [
     {
       name: '@electron-forge/maker-squirrel',
-      config: {},
+      //成果物名: アプリ名-バージョン-OS-アーキテクチャ（GitHub Releasesの一覧でOSごとにまとまる）
+      config: (arch) => ({
+        setupExe: `do-gagan3-${pkg.version}-win-${arch}.Setup.exe`,
+      }),
     },
     {
       name: '@electron-forge/maker-dmg',
       platforms: ['darwin'],
+      config: (arch) => ({
+        name: `do-gagan3-${pkg.version}-mac-${arch}`,
+      }),
     },
     {
       name: '@electron-forge/maker-deb',
