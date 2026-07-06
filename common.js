@@ -551,7 +551,7 @@ handleUnsavedLog(event) {
    * 動画眼Lite形式のJSONファイルを出力
    * @returns 
    */
-  exportLite() {
+  async exportLite() {
     const _ = new i18n(lang, 'dialog');
     const jsonPath = this.mediaPath.replace(path.extname(this.mediaPath), '.json.js');
     let options = null;
@@ -609,29 +609,32 @@ handleUnsavedLog(event) {
     if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
     }
 
-    //サーバーからダウンロード
-    const {download} = require("electron-dl");
-    const dloptions = {
-      directory: path.dirname(htmlPath),
-      filename:path.basename(htmlPath),
-    }
-    download(this.mainWin, this.config.get('liteAutoDownloadURL'), dloptions).catch(err => {
+    //サーバーからダウンロード（Node.js組み込みのfetchを使用。リダイレクトも自動追跡）
+    const dlURL = this.config.get('liteAutoDownloadURL');
+    try {
+      const response = await fetch(dlURL, {
+        headers: { 'User-Agent': 'do-gagan3' },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} ${response.statusText} (${response.url})`);
+      }
+      const buffer = Buffer.from(await response.arrayBuffer());
+      fs.writeFileSync(htmlPath, buffer);
+    } catch (err) {
       //ダウンロードエラー時の処理
+      console.error(`動画眼Lite HTMLのダウンロードに失敗 (${dlURL}):`, err);
       options = {
         type: 'error',
         buttons: [_.t('LITE_DOWNLOAD_MANUAL'), _.t('LITE_CANCEL')],
         title: _.t('LITE_DOWNLOAD_FAIL_TITLE'),
-        message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(jsonPath)),
+        message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(htmlPath)),
         defaultId: 0,
         cancelId: 1,
-      }; 
+      };
       if (this.dialog.showConfirmation(options) == 1) return;
       //ダウンロードページを開く
       shell.openExternal(this.config.get('liteManualDownloadURL'));
-    })
-
-
-
+    }
 }
 
   // #endregion

@@ -282,7 +282,9 @@ svg#pause {
 }
 
 .focused {
-    border: 2px solid blue;
+    /* borderの太さを変えると中身がズレるので、レイアウトに影響しないoutlineで枠を描く */
+    outline: 2px solid blue;
+    outline-offset: -2px;
 }
 
 .inTime {
@@ -320,8 +322,8 @@ svg#pause {
 }
 
 div.current {
-    border: 3px solid blue;        
-    outline-offset: -14px;
+    outline: 3px solid blue;
+    outline-offset: -3px;
 }
 
 .script {
