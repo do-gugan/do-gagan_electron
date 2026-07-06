@@ -1434,3 +1434,56 @@ function toglleAutoScroll(){
     const result = document.getElementById("Chk_AutoScroll").checked;
     window.api.setConfig("autoScroll", result);
 }
+
+//----------------------------------------------------
+//#region UIイベントハンドラー登録
+// CSP強化（script-srcから'unsafe-inline'を排除）のため、
+// index.htmlのインライン記述からここへ移設
+//----------------------------------------------------
+{
+    //プレーヤー枠のドラッグリサイズ
+    const dragbar = document.querySelector('.dragbar');
+    dragbar.addEventListener('mousedown', StartDrag);
+    dragbar.addEventListener('mouseup', EndDrag);
+    for (const id of ['player-box', 'player-controls', 'search-box', 'scripts', 'right-bottom']) {
+        const el = document.getElementById(id);
+        el.addEventListener('mouseup', EndDrag);
+        el.addEventListener('mousemove', OnDrag);
+    }
+
+    //プレーヤー操作
+    document.getElementById('Btn_ScreenShot').addEventListener('click', () => sendCapturetoMain());
+    document.getElementById('Btn_JumpBackward').addEventListener('click', () => skipBackward());
+    document.getElementById('Btn_JumpForward').addEventListener('click', () => skipForward());
+
+    //ボタン内に埋め込まれたセレクター（クリックが親ボタンに伝播しないように止める）
+    document.getElementById('Sel_BackwardSec').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_BackwardSec').addEventListener('change', () => skipTimeChanged('backward'));
+    document.getElementById('Sel_ForwardSec').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_ForwardSec').addEventListener('change', () => skipTimeChanged('forward'));
+    document.getElementById('Sel_PlaybackRate').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_PlaybackRate').addEventListener('change', () => playbackRateChanged());
+
+    //検索欄
+    document.getElementById('Sel_SearchMethod').addEventListener('change', () => searchWordChanged());
+    document.getElementById('Txt_Search').addEventListener('input', () => searchWordChanged());
+    document.getElementById('Txt_Search').addEventListener('search', () => resetSearch());
+
+    //右下のチェックボックス
+    document.getElementById('Chk_AutoScroll').addEventListener('change', () => toglleAutoScroll());
+    document.getElementById('Chk_ShowHideNewMemo').addEventListener('change', () => toglleNewMemoBlock());
+
+    //新規ログ欄
+    document.getElementById('Btn_timecodeDecrement').addEventListener('click', () => decrementTimecode());
+    document.getElementById('Txt_lockedTimecode').addEventListener('click', () => lockedTimeClicked());
+    document.getElementById('Btn_timecodeIncrement').addEventListener('click', () => incrementTimecode());
+    document.getElementById('Btn_speakerDecrement').addEventListener('click', () => decrementSpeaker());
+    document.getElementById('Btn_speakerIncrement').addEventListener('click', () => incrementSpeaker());
+    document.getElementById('Btn_add').addEventListener('click', () => addMemo());
+
+    //ファンクションキーテンプレート
+    for (const key of ['F1', 'F2', 'F3', 'F4', 'F5']) {
+        document.getElementById('Btn_' + key).addEventListener('click', () => inputFromFunctionTemplate(key));
+    }
+}
+//#endregion

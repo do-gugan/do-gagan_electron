@@ -329,21 +329,27 @@ div.current {
 .script {
     background-color: #fff;
     flex-grow: 6;
-    padding: 0.2em;
+    /* 余白はtextarea側のpaddingに持たせ、強調背景やフォーカス枠がセル一杯に表示されるようにする */
+    padding: 0;
 }
 
 .script textarea {
-    width: 98%;
-    height: 90%;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    padding: 0.2em;
+    margin: 0;
     vertical-align: middle;
     line-height: 1.3em;
     resize: none;
     border:none;
 }
 
-/* .script textarea:focus {
-    box-shadow: 0 0 0 4px rgba(35, 167, 195, 0.3);
- } */
+/* 編集中のフォーカス枠をセルの内側に描く（隣の要素へのはみ出し防止） */
+.script textarea:focus {
+    outline-offset: -2px;
+}
 
 /* =============================================
                      grid5

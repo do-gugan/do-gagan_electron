@@ -65,3 +65,8 @@ const convertTC = ()=>{
     window.close();
 }
 
+//UIイベントハンドラー登録（CSP強化のためHTMLのインライン記述から移設）
+document.getElementById('Btn_getFileCreationTime').addEventListener('click', () => getFromCreationTime());
+document.getElementById('Btn_getFileName').addEventListener('click', () => GuessFromFileName());
+document.getElementById('Btn_convert').addEventListener('click', () => convertTC());
+
