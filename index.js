@@ -104,6 +104,21 @@ function createWindow() {
 }
 
 
+//------------------------------------
+// セキュリティ: 全ウインドウ共通のナビゲーション制御
+// 参考: https://www.electronjs.org/docs/latest/tutorial/security
+//------------------------------------
+app.on('web-contents-created', (event, contents) => {
+  // ページ遷移を全て拒否（本アプリはloadFileで読む静的ページのみで遷移しない）
+  contents.on('will-navigate', (e) => {
+    e.preventDefault();
+  });
+  // window.openによる新規ウインドウ生成を全て拒否
+  contents.setWindowOpenHandler(() => {
+    return { action: 'deny' };
+  });
+});
+
 app.whenReady().then(()=>{
   // 言語設定を取得する
   const locale = config.get('locale') || app.getLocale();

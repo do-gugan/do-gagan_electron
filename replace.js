@@ -5,6 +5,11 @@
 let locale = null;
 let _ = null;
 
+//Element.setHTML()（Sanitizer API）が未実装のChromiumでも動くようフォールバック
+if (!Element.prototype.setHTML) {
+    Element.prototype.setHTML = function (html) { this.innerHTML = html; };
+}
+
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{

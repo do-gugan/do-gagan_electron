@@ -1,6 +1,6 @@
 "use strict";
 
-const { contextBridge, ipcRenderer} = require("electron");
+const { contextBridge, ipcRenderer, webUtils } = require("electron");
 //const common = require('./common'); //異なるインスタンスがとれてしまう
 const i18n = require('./i18n');
 const dggRecord = require('./dggRecord').dggRecord;
@@ -98,6 +98,10 @@ contextBridge.exposeInMainWorld(
 
     //ドロップされたファイルを開く
     openDroppedFile: (path) => ipcRenderer.invoke('openDroppedFile', path),
+
+    //ドロップされたFileオブジェクトからOSのファイルパスを取得
+    //（File.pathはElectron 32で削除されたためwebUtilsを使用）
+    getPathForFile: (file) => webUtils.getPathForFile(file),
 
     toggleNewMemoBlockMenu : (result) => ipcRenderer.send('toggleNewMemoBlockMenu', result),
 

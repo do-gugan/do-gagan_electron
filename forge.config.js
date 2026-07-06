@@ -3,7 +3,7 @@ module.exports = {
     asar: true,
     osxSign: {},
     osxNotarize: {
-      tool: 'notarytool',
+      //@electron/notarize v2以降はnotarytool固定のためtoolオプションは廃止
       keychainProfile: 'do-gagan3_electron'
     },
     icon: "build/icon",

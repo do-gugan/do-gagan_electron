@@ -3,6 +3,12 @@
 */
 "use strict";
 
+//Element.setHTML()（Sanitizer API）が未実装のChromiumでも動くようフォールバック
+//（旧APIはChromium 119で削除、新仕様はChromium 146以降で再導入）
+if (!Element.prototype.setHTML) {
+    Element.prototype.setHTML = function (html) { this.innerHTML = html; };
+}
+
 //グローバルオブジェクト
 let locale;
 let _; //ローカライズ文字列取得用
@@ -531,12 +537,13 @@ window.api.insertRecordToList((newID, recJSON, targetId) => {
 
 //ファイルのドラッグ&ドロップを受け付ける
 //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
-//標準動作をキャンセル
-playerBox.ondragover = document.ondrop = function (e) {
+//標準動作（ドロップしたファイルが別ウインドウで開かれる）をキャンセル
+//Electron 27 (Chromium 118) 以降はdragover/drop両方でのpreventDefaultが必須
+document.addEventListener('dragover', (e) => {
     e.preventDefault();
-}
+});
 //dragEnterエフェクト開始
-playerBox.ondragenter = document.ondrop = function (e) {
+playerBox.addEventListener('dragenter', (e) => {
     const ph = document.getElementById("placeholderInPlayer");
     //既にメディアファイルを開いている場合はphが消滅しているのでundefinedになる
     if (ph != undefined) {
@@ -549,21 +556,22 @@ playerBox.ondragenter = document.ondrop = function (e) {
             ph.setHTML(_.t('DROP_AND_OPEN',locale));
         }
     }
-
-}
+});
 //dragLeaveでエフェクトを解除
-playerBox.ondragleave = document.ondrop = function (e) {
+playerBox.addEventListener('dragleave', (e) => {
     playerBox.classList.remove("dragging");
     const ph = document.getElementById("placeholderInPlayer");
     if (ph != undefined) {
         ph.setHTML(window.api.t('DROP_HERE',locale));
     }
-
-}
+});
 //ドロップされたファイルを開く
-document.body.addEventListener('drop', function (e) {
-    if (validTypes.includes(e.dataTransfer.items[0].type)) {
-        window.api.openDroppedFile(e.dataTransfer.files[0].path);
+document.addEventListener('drop', function (e) {
+    e.preventDefault();
+    playerBox.classList.remove("dragging");
+    if (e.dataTransfer.items.length > 0 && validTypes.includes(e.dataTransfer.items[0].type)) {
+        //File.pathはElectron 32で削除されたためpreload経由でパスを取得
+        window.api.openDroppedFile(window.api.getPathForFile(e.dataTransfer.files[0]));
     }
 });
 
