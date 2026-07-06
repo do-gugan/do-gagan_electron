@@ -92,4 +92,18 @@ module.exports = class i18n{
     }
     return(undefined)
   }
+
+  /**
+   * 辞書全体を返却（プレースホルダー置換済み）
+   * サンドボックス化されたpreloadへIPCで辞書を渡すために使用
+   *
+   * @return {Object}
+   */
+  getDictionary(){
+    const out = {};
+    for (const key in this._dic) {
+      out[key] = this._dic[key].replace('{{name}}', p.name);
+    }
+    return(out)
+  }
 }

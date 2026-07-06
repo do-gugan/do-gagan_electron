@@ -1,7 +1,21 @@
+/* ウインドウにぴったり収め、スクロールバーを出さない */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+/* #main（入力欄グリッド）と#bottom（ボタン行）を縦に並べる */
+body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    padding: 1em;
+    gap: 0.5em;
+}
 #main {
     display: grid;
-    height:100%;
-    margin: 1em;
+    flex: 1 1 auto;
+    min-height: 0;
 
     grid-template-columns: 4em auto;
     grid-template-rows: 1fr 1fr 1fr;

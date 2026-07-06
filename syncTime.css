@@ -1,7 +1,15 @@
+/* ウインドウにぴったり収め、スクロールバーを出さない */
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+}
 #main {
     display: flex;
+    box-sizing: border-box;
     height:100%;
-    margin: 1em;
+    margin: 0;
+    padding: 1em;
     font-size:0.9em;
 
     flex-direction: column;

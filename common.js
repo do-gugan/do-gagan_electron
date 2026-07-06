@@ -734,10 +734,8 @@ handleUnsavedLog(event) {
     show: false,
     title:_.t('SETTINGS'),
     webPreferences: {
-      worldSafeExecuteJavaScript: true,
       nodeIntegration: false,
-      sandbox: false, //Electron20への一時対処
-      enableRemoteModule: true,
+      sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
       contextIsolation: true,
       preload: path.join(__dirname, './preload_settings.js'),
       accessibleTitle: _.t('SETTINGS_ACCESSIBLETITLE')
@@ -784,10 +782,8 @@ handleUnsavedLog(event) {
       show: false,
       title:_.t('SYNCTIME'),
       webPreferences: {
-        worldSafeExecuteJavaScript: true,
         nodeIntegration: false,
-        sandbox: false, //Electron20への一時対処
-        enableRemoteModule: true,
+        sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
         contextIsolation: true,
         preload: path.join(__dirname, './preload_syncTime.js'),
         accessibleTitle: _.t('SYNCTIME_ACCESSIBLETITLE')
@@ -833,14 +829,11 @@ handleUnsavedLog(event) {
       show: false,
       title:_.t('REPLACE'),
       webPreferences: {
-        worldSafeExecuteJavaScript: true,
         nodeIntegration: false,
-        sandbox: false, //Electron20への一時対処
-        enableRemoteModule: true,
+        sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
         contextIsolation: true,
         preload: path.join(__dirname, './preload_replace.js'),
-      //nativeWindowOpen: true, //Electron 18で廃止
-      accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
+        accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
       }
     });
 

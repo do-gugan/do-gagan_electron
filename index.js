@@ -31,10 +31,9 @@ function createWindow() {
         height: config.get('windowSizeHeight'),
         backgroundColor: 'white',
         webPreferences: {
-            worldSafeExecuteJavaScript: true,
+            //worldSafeExecuteJavaScript, enableRemoteModuleはElectron 14で廃止済みのため削除
             nodeIntegration: false,
-            sandbox: false, //Electron20への一時対処
-            enableRemoteModule: true,
+            sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
             contextIsolation: true,
             preload: path.join(__dirname, './preload.js')
     }
@@ -181,6 +180,24 @@ app.on('window-all-closed', () => {
     //console.log(`setConfig: key:${key} value:${value}`);
     return( config.set(key, value) ); //boolean
     //return 'en'; //英語環境テスト用
+  });
+
+  //翻訳辞書をpreloadに渡す
+  //（サンドボックス化されたpreloadはi18n.jsをrequireできないため、
+  //  同期IPCで辞書ごと渡す。preload側で言語×名前空間ごとに初回のみ呼ばれる）
+  ipcMain.on('getLocaleDictionary', (event, lang, ns) => {
+    try {
+      const _ = new i18n(lang, ns);
+      event.returnValue = _.getDictionary();
+    } catch (e) {
+      console.error('getLocaleDictionary failed:', e);
+      event.returnValue = {};
+    }
+  });
+
+  //アプリのバージョンを返す（preload初期化時の1回のみ）
+  ipcMain.on('getAppVersion', (event) => {
+    event.returnValue = app.getVersion();
   });
 
   // 言語設定を保存

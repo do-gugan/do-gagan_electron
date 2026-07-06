@@ -1,9 +1,21 @@
 "use strict";
 
 const { contextBridge, ipcRenderer, webUtils } = require("electron");
-//const common = require('./common'); //異なるインスタンスがとれてしまう
-const i18n = require('./i18n');
-const dggRecord = require('./dggRecord').dggRecord;
+//サンドボックス化されたpreloadではローカルモジュール（./i18n等）をrequireできない。
+//翻訳辞書とバージョンはメインプロセスから同期IPCで取得する。
+
+//翻訳辞書のキャッシュ（言語×名前空間ごとに初回のみメインから取得）
+const dictionaries = {};
+function translate(label, lang, ns) {
+    const key = `${lang}:${ns}`;
+    if (!(key in dictionaries)) {
+        dictionaries[key] = ipcRenderer.sendSync('getLocaleDictionary', lang, ns);
+    }
+    return (dictionaries[key] || {})[label];
+}
+
+//アプリバージョン（起動時に1回だけ取得）
+const appVersion = ipcRenderer.sendSync('getAppVersion');
 
 contextBridge.exposeInMainWorld(
   "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"  
@@ -83,18 +95,11 @@ contextBridge.exposeInMainWorld(
     // 指定されたキーの設定を取得する
     getConfig:(key) => ipcRenderer.invoke('getConfig', key).then(result => result).catch(err => console.log(err)),
 
-    //レンダラーがi18nクラス経由でローカライズテキストを取得
-    t : (label, lang) => {
-        const _ = new i18n(lang, 'default');
-        return _.t(label);
-    },
+    //レンダラーがローカライズテキストを取得
+    t : (label, lang) => translate(label, lang, 'default'),
     setConfig: (key, value) => ipcRenderer.invoke("setConfig", key, value).then(result => result).catch(err => console.log(err)),
 
-    getAppVersion: () => {
-      //const _ = new i18n(this.lang, 'default');
-      const p = require('./package.json');
-      return p.version;
-    },
+    getAppVersion: () => appVersion,
 
     //ドロップされたファイルを開く
     openDroppedFile: (path) => ipcRenderer.invoke('openDroppedFile', path),

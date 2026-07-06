@@ -3,23 +3,24 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; media-src 'self' file: blob:; img-src 'self' file: data:;" />
         <link rel="stylesheet" href="style.css">
         <title></title>
      </head>
     <body>
         <!--#region body  -->
+        <!-- イベントハンドラーはCSP強化のためインライン記述をやめ、renderer.js末尾で登録している -->
         <div id="main">
-            <div id="player-box" class="grid1" id="drag" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
-            <div id="player-controls"class="grid2" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <button id="Btn_ScreenShot" onclick="sendCapturetoMain()" disabled><svg class="control_svg"><use href="svg/camera.svg#camera"></use></svg></button>
-                <button id="Btn_JumpBackward" class="Btn_Jump" onclick="skipBackward()" disabled>
+            <div id="player-box" class="grid1"></div>
+            <div id="player-controls" class="grid2">
+                <button id="Btn_ScreenShot" disabled><svg class="control_svg"><use href="svg/camera.svg#camera"></use></svg></button>
+                <button id="Btn_JumpBackward" class="Btn_Jump" disabled>
                     <svg class="control_svg"><use href="svg/backward.svg#backward"></use></svg>
-                    <select id="Sel_BackwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('backward');"></select>
+                    <select id="Sel_BackwardSec" class="Sel_jumpSec"></select>
                 </button>
                 <button id="Btn_PlayPause" disabled>
                     <svg id="play" class="control_svg"><use href="svg/play.svg#play"></use></svg><svg id="slash" class="control_svg"><use href="svg/slash.svg#slash"></use></svg><svg id="pause" class="control_svg"><use href="svg/pause.svg#pause"></use></svg>
-                    <select id="Sel_PlaybackRate" class="Sel_playbaclRate" " onclick="event.stopPropagation()" onchange="playbackRateChanged();">
+                    <select id="Sel_PlaybackRate" class="Sel_playbaclRate">
                         <option value="0.25">x0.25</option>
                         <option value="0.5">x0.5</option>
                         <option value="0.75">x0.75</option>
@@ -32,25 +33,25 @@
                         <option value="8">x8.0</option>
                     </select>
                 </button>
-                <button id="Btn_JumpForward" class="Btn_Jump" onclick="skipForward()" disabled>
+                <button id="Btn_JumpForward" class="Btn_Jump" disabled>
                     <svg class="control_svg"><use href="svg/forward.svg#forward"></use></svg>
-                    <select id="Sel_ForwardSec" class="Sel_jumpSec" onclick="event.stopPropagation()" onchange="skipTimeChanged('forward');"></select>
+                    <select id="Sel_ForwardSec" class="Sel_jumpSec"></select>
                 </button>
             </div>
-            <div class="dragbar" onmousedown="StartDrag()" onmouseup="EndDrag()"></div>
-            <div id="search-box" class="grid3" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
+            <div class="dragbar"></div>
+            <div id="search-box" class="grid3">
                 <div id="search-box1">
-                    <select id="Sel_SearchMethod" onChange="searchWordChanged();">
+                    <select id="Sel_SearchMethod">
                         <option value="filter" id="Opt_Filter"></option>
                         <option value="emphasise" id="Opt_Emphasise"></option>
                     </select>
                 </div>
-                <div id="search-box2"><input id="Txt_Search" name="Txt_Search" type="search" placeholder="" onInput="searchWordChanged();" onSearch="resetSearch();" /></div>
+                <div id="search-box2"><input id="Txt_Search" name="Txt_Search" type="search" placeholder="" /></div>
             </div>
-            <div id="scripts" class="grid4" onmouseup="EndDrag()" onmousemove="OnDrag(event)"></div>
-            <div id="right-bottom" class="grid5" onmouseup="EndDrag()" onmousemove="OnDrag(event)">
-                <label for="Lbl_AutoScroll" id="Label_AutoScroll"><input id="Chk_AutoScroll" name="AutoScroll" type="checkbox" onchange="toglleAutoScroll();" checked /><span id="Lbl_AutoScroll" class="label"></span></label>
-                <label for="Chk_ShowHideNewMemo" id="Label_ShowHideNewMemo"><input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" onchange="toglleNewMemoBlock();" checked /><span id="Lbl_ShowHideNewMemo" class="label"></span><label>
+            <div id="scripts" class="grid4"></div>
+            <div id="right-bottom" class="grid5">
+                <label for="Lbl_AutoScroll" id="Label_AutoScroll"><input id="Chk_AutoScroll" name="AutoScroll" type="checkbox" checked /><span id="Lbl_AutoScroll" class="label"></span></label>
+                <label for="Chk_ShowHideNewMemo" id="Label_ShowHideNewMemo"><input id="Chk_ShowHideNewMemo" name="ShowHideNewMemo" type="checkbox" checked /><span id="Lbl_ShowHideNewMemo" class="label"></span></label>
             </div>
             <div id="bottom" class="grid6 subgrid-container">
                 <div id="Lbl_lockedTimecode" class="subgrid row1 sg1-1"></div>
@@ -58,31 +59,30 @@
                 <div id="Lbl_memo" class="subgrid row1 sg1-3"></div>
 
                 <div id="lockedTimecode" class="subgrid row2 sg2-1">
-                    <button id="Btn_timecodeDecrement" onclick="decrementTimecode();" disabled><</button>
-                    <input type="text" id="Txt_lockedTimecode" value="000:00" onclick="lockedTimeClicked();" disabled/>
-                    <button id="Btn_timecodeIncrement" onclick="incrementTimecode()" disabled>></button>
+                    <button id="Btn_timecodeDecrement" disabled><</button>
+                    <input type="text" id="Txt_lockedTimecode" value="000:00" disabled/>
+                    <button id="Btn_timecodeIncrement" disabled>></button>
                 </div>
                 <div id="speaker" class="subgrid row2 sg2-2">
-                    <button id="Btn_speakerDecrement" onclick="decrementSpeaker();"><</button>
+                    <button id="Btn_speakerDecrement"><</button>
                     <input type="text" id="Txt_speaker" class="speaker0" value="0" />
-                    <button id="Btn_speakerIncrement" onclick="incrementSpeaker()">></button>
+                    <button id="Btn_speakerIncrement">></button>
                 </div>
                 <div id="memo" class="subgrid row2 sg2-3">
                     <input type="text" id="Txt_memo" disabled title=""/>
                 </div>
-                <button id="Btn_add" class="subgrid row2 sg2-4" onclick="addMemo();" disabled></button>
+                <button id="Btn_add" class="subgrid row2 sg2-4" disabled></button>
 
                 <div id="function_buttons" class="subgrid row3 sg3-1">
-                    <Button id="Btn_F1" onclick="inputFromFunctionTemplate('F1');" disabled>F1:</Button>
-                    <Button id="Btn_F2" onclick="inputFromFunctionTemplate('F2');" disabled>F2:</Button>
-                    <Button id="Btn_F3" onclick="inputFromFunctionTemplate('F3');" disabled>F3:</Button>
-                    <Button id="Btn_F4" onclick="inputFromFunctionTemplate('F4');" disabled>F4:</Button>
-                    <Button id="Btn_F5" onclick="inputFromFunctionTemplate('F5');" disabled>F5:</Button>    
+                    <Button id="Btn_F1" disabled>F1:</Button>
+                    <Button id="Btn_F2" disabled>F2:</Button>
+                    <Button id="Btn_F3" disabled>F3:</Button>
+                    <Button id="Btn_F4" disabled>F4:</Button>
+                    <Button id="Btn_F5" disabled>F5:</Button>
                 </div>
             </div>
         </div>
-        <!--#endregion-->    
+        <!--#endregion-->
     </body>
     <script src="renderer.js"></script>
 </html>
-
