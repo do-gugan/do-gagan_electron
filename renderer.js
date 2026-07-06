@@ -3,6 +3,24 @@
 */
 "use strict";
 
+//Element.setHTML()（Sanitizer API）が未実装のChromiumでも動くようフォールバック
+//（旧APIはChromium 119で削除、新仕様はChromium 146以降で再導入）
+if (!Element.prototype.setHTML) {
+    Element.prototype.setHTML = function (html) { this.innerHTML = html; };
+}
+
+/**
+ * 翻訳文（<br>を含み得るプレーンテキスト）を要素にセットする
+ * HTML文字列の挿入（setHTML/innerHTML）を使わないのでSanitizerの仕様変化に影響されない
+ * @param {HTMLElement} el 対象要素
+ * @param {string} text セットする文字列（<br>タグは改行に変換）
+ */
+function setTextWithLineBreaks(el, text) {
+    const parts = text.split(/<br\s*\/?>/i);
+    const nodes = parts.flatMap((line, i) => i > 0 ? [document.createElement('br'), line] : [line]);
+    el.replaceChildren(...nodes);
+}
+
 //グローバルオブジェクト
 let locale;
 let _; //ローカライズ文字列取得用
@@ -60,11 +78,20 @@ if (window.navigator.userAgent.indexOf('Mac') !== -1) {
     document.getElementById('Txt_Search').placeholder = _.t('SEARCH_PLACEHOLDER',locale);
     document.getElementById('Opt_Filter').innerText = _.t('FILTER',locale);
     document.getElementById('Opt_Emphasise').innerText = _.t('EMPHASISE',locale);
-    playerBox.setHTML('<div id="placeholderWrapper"><div id="placeholderInPlayer">' + _.t('DROP_HERE',locale) + '</div></div>'); //翻訳文内にHTMLタグがあるので、setHTMLで代入
+    //プレースホルダーをDOM APIで構築（翻訳文内の<br>はsetTextWithLineBreaksが処理）
+    {
+        const wrapper = document.createElement('div');
+        wrapper.id = 'placeholderWrapper';
+        const ph = document.createElement('div');
+        ph.id = 'placeholderInPlayer';
+        setTextWithLineBreaks(ph, _.t('DROP_HERE',locale));
+        wrapper.appendChild(ph);
+        playerBox.replaceChildren(wrapper);
+    }
     document.getElementById('Lbl_ShowHideNewMemo').innerText = _.t('NEW_MEMO_FIELD',locale);
     document.getElementById('Lbl_AutoScroll').innerText = _.t('AUTO_SCROLL',locale);
-    document.getElementById('Sel_BackwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
-    document.getElementById('Sel_ForwardSec').setHTML(updateJumpSecOptions()); //HTMLで生成されるのでsetHTMLで代入
+    updateJumpSecOptions(document.getElementById('Sel_BackwardSec'));
+    updateJumpSecOptions(document.getElementById('Sel_ForwardSec'));
 
     document.getElementById('Lbl_lockedTimecode').innerText = _.t('TIMECODE',locale);
     document.getElementById('Lbl_speaker').innerText = _.t('SPEAKER',locale);
@@ -245,22 +272,21 @@ function eliminateTemplateCode(str) {
 }
 
 /**
-* ジャンプ秒数セレクターの選択肢（optionタグ群）を生成
-* @param (string) sec
+* ジャンプ秒数セレクターの選択肢（optionタグ群）を生成してセット
+* （setHTML/innerHTMLを使わずDOM APIで構築。Sanitizer APIの仕様変化の影響を受けない）
+* @param {HTMLSelectElement} selectEl 対象のselect要素
+* @param {string} selected 初期選択する秒数
 */
-function updateJumpSecOptions(selected = '60') {
-    let options = "";
-    let sel = "";
+function updateJumpSecOptions(selectEl, selected = '60') {
     const secs = [3,5,10,15,30,60,120,180,300,600];
-    for (const sec of secs){
-        if (sec.toString() == selected) {
-            sel =" selected"
-        } else {
-            sel ="";
-        }
-        options += '<option value="' + sec.toString() + '"' + sel + '>' + _.t(sec.toString(), locale) + '</option>\r\n';
-    }
-    return options;
+    const options = secs.map((sec) => {
+        const opt = document.createElement('option');
+        opt.value = sec.toString();
+        opt.textContent = _.t(sec.toString(), locale);
+        opt.selected = (sec.toString() == selected);
+        return opt;
+    });
+    selectEl.replaceChildren(...options);
 }
 
 /* プレーヤー右上の再生ステータス表示
@@ -350,7 +376,7 @@ function escapeMediaPath(path) {
     let escapeMediaPath = `file:///${path.replace(/#/g, '%23').replace(/\\/g, '/').replace(/ /g, '%20')}`;
     return escapeMediaPath;
 }
-window.api.openVideo((event, path)=>{
+window.api.openVideo((path)=>{
     let video = document.createElement('video');
     video.id = 'player';
     video.autoplay = true;
@@ -382,7 +408,7 @@ window.api.openVideo((event, path)=>{
 
     preparePlayerRateChangeListener();
 });
-window.api.openAudio((event, path)=>{
+window.api.openAudio((path)=>{
     let audio = document.createElement('audio');
     audio.id = 'player';
     audio.autoplay = true;
@@ -501,7 +527,8 @@ function createNewRecord(id, inTime, speaker, script) {
 **/
 window.api.addRecordToList((r) => {
     //テンプレートを使って追加
-    memolist.appendChild(createNewRecord(r.id, r.inTime, r.speaker, r.script));
+    const newRow = createNewRecord(r.id, r.inTime, r.speaker, r.script);
+    memolist.appendChild(newRow);
 
     //セルの高さを文字数にあわせて調整
     resizeTextarea(newRow.querySelector('textarea'));
@@ -531,12 +558,13 @@ window.api.insertRecordToList((newID, recJSON, targetId) => {
 
 //ファイルのドラッグ&ドロップを受け付ける
 //参考元: https://archive.craftz.dog/blog.odoruinu.net/2016/09/01/get-files-via-drag-and-drop-from-desktop/index.html
-//標準動作をキャンセル
-playerBox.ondragover = document.ondrop = function (e) {
+//標準動作（ドロップしたファイルが別ウインドウで開かれる）をキャンセル
+//Electron 27 (Chromium 118) 以降はdragover/drop両方でのpreventDefaultが必須
+document.addEventListener('dragover', (e) => {
     e.preventDefault();
-}
+});
 //dragEnterエフェクト開始
-playerBox.ondragenter = document.ondrop = function (e) {
+playerBox.addEventListener('dragenter', (e) => {
     const ph = document.getElementById("placeholderInPlayer");
     //既にメディアファイルを開いている場合はphが消滅しているのでundefinedになる
     if (ph != undefined) {
@@ -544,26 +572,27 @@ playerBox.ondragenter = document.ondrop = function (e) {
         if (e.dataTransfer.items.length > 1) {
             ph.innerText = _.t('DROP_ONLY_SINGLE_FILE',locale);
         } else if (!validTypes.includes(e.dataTransfer.items[0].type)) {
-            ph.setHTML(_.t('INVALID_FILETYPE',locale));
+            setTextWithLineBreaks(ph, _.t('INVALID_FILETYPE',locale));
         } else {
-            ph.setHTML(_.t('DROP_AND_OPEN',locale));
+            setTextWithLineBreaks(ph, _.t('DROP_AND_OPEN',locale));
         }
     }
-
-}
+});
 //dragLeaveでエフェクトを解除
-playerBox.ondragleave = document.ondrop = function (e) {
+playerBox.addEventListener('dragleave', (e) => {
     playerBox.classList.remove("dragging");
     const ph = document.getElementById("placeholderInPlayer");
     if (ph != undefined) {
-        ph.setHTML(window.api.t('DROP_HERE',locale));
+        setTextWithLineBreaks(ph, window.api.t('DROP_HERE',locale));
     }
-
-}
+});
 //ドロップされたファイルを開く
-document.body.addEventListener('drop', function (e) {
-    if (validTypes.includes(e.dataTransfer.items[0].type)) {
-        window.api.openDroppedFile(e.dataTransfer.files[0].path);
+document.addEventListener('drop', function (e) {
+    e.preventDefault();
+    playerBox.classList.remove("dragging");
+    if (e.dataTransfer.items.length > 0 && validTypes.includes(e.dataTransfer.items[0].type)) {
+        //File.pathはElectron 32で削除されたためpreload経由でパスを取得
+        window.api.openDroppedFile(window.api.getPathForFile(e.dataTransfer.files[0]));
     }
 });
 
@@ -1119,12 +1148,6 @@ function resetSearch() {
     })
 }
 
-//メインプロセス（メニュー）から置換ウインドウを開く
-window.api.openReplaceWindow(()=>{
-    const childWindow = window.open('replace.html');
-    //childWindow.document.write('<h1>Hello</h1>')
-});
-
 /** #region フレームのドラッグリサイズ
 *  参考:https://codepen.io/lukerazor/pen/GVBMZK
 */
@@ -1405,3 +1428,56 @@ function toglleAutoScroll(){
     const result = document.getElementById("Chk_AutoScroll").checked;
     window.api.setConfig("autoScroll", result);
 }
+
+//----------------------------------------------------
+//#region UIイベントハンドラー登録
+// CSP強化（script-srcから'unsafe-inline'を排除）のため、
+// index.htmlのインライン記述からここへ移設
+//----------------------------------------------------
+{
+    //プレーヤー枠のドラッグリサイズ
+    const dragbar = document.querySelector('.dragbar');
+    dragbar.addEventListener('mousedown', StartDrag);
+    dragbar.addEventListener('mouseup', EndDrag);
+    for (const id of ['player-box', 'player-controls', 'search-box', 'scripts', 'right-bottom']) {
+        const el = document.getElementById(id);
+        el.addEventListener('mouseup', EndDrag);
+        el.addEventListener('mousemove', OnDrag);
+    }
+
+    //プレーヤー操作
+    document.getElementById('Btn_ScreenShot').addEventListener('click', () => sendCapturetoMain());
+    document.getElementById('Btn_JumpBackward').addEventListener('click', () => skipBackward());
+    document.getElementById('Btn_JumpForward').addEventListener('click', () => skipForward());
+
+    //ボタン内に埋め込まれたセレクター（クリックが親ボタンに伝播しないように止める）
+    document.getElementById('Sel_BackwardSec').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_BackwardSec').addEventListener('change', () => skipTimeChanged('backward'));
+    document.getElementById('Sel_ForwardSec').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_ForwardSec').addEventListener('change', () => skipTimeChanged('forward'));
+    document.getElementById('Sel_PlaybackRate').addEventListener('click', (e) => e.stopPropagation());
+    document.getElementById('Sel_PlaybackRate').addEventListener('change', () => playbackRateChanged());
+
+    //検索欄
+    document.getElementById('Sel_SearchMethod').addEventListener('change', () => searchWordChanged());
+    document.getElementById('Txt_Search').addEventListener('input', () => searchWordChanged());
+    document.getElementById('Txt_Search').addEventListener('search', () => resetSearch());
+
+    //右下のチェックボックス
+    document.getElementById('Chk_AutoScroll').addEventListener('change', () => toglleAutoScroll());
+    document.getElementById('Chk_ShowHideNewMemo').addEventListener('change', () => toglleNewMemoBlock());
+
+    //新規ログ欄
+    document.getElementById('Btn_timecodeDecrement').addEventListener('click', () => decrementTimecode());
+    document.getElementById('Txt_lockedTimecode').addEventListener('click', () => lockedTimeClicked());
+    document.getElementById('Btn_timecodeIncrement').addEventListener('click', () => incrementTimecode());
+    document.getElementById('Btn_speakerDecrement').addEventListener('click', () => decrementSpeaker());
+    document.getElementById('Btn_speakerIncrement').addEventListener('click', () => incrementSpeaker());
+    document.getElementById('Btn_add').addEventListener('click', () => addMemo());
+
+    //ファンクションキーテンプレート
+    for (const key of ['F1', 'F2', 'F3', 'F4', 'F5']) {
+        document.getElementById('Btn_' + key).addEventListener('click', () => inputFromFunctionTemplate(key));
+    }
+}
+//#endregion

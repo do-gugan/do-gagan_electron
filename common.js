@@ -3,16 +3,15 @@
 **/
 "use strict";
 
-const path = require('path');
-const fs = require('fs'); //ファイルアクセス
-const util = require("util");
-const readline = require("readline"); //1行ずつ読む
-const dggRecord = require("./dggRecord"); //レコードクラス
-const i18n = require("./i18n");
-const iconv = require("iconv-lite"); //ShiftJISを扱うライブラリ
-const { builtinModules } = require('module');
-const { common } = require('./dggTouchbar');
-const {shell} = require('electron');
+import path from 'node:path';
+import fs from 'node:fs';
+import util from 'node:util';
+import { shell } from 'electron';
+import dggRecord from './dggRecord.js'; //レコードクラス
+import i18n from './i18n.js';
+import iconv from 'iconv-lite'; //ShiftJISを扱うライブラリ
+import aboutWindowModule from 'about-window';
+//（未使用だったreadline, builtinModules, dggTouchbarの先行requireは削除）
 
 //グローバルオブジェクト
 const app = null;
@@ -45,7 +44,7 @@ class Common {
    * @example
    *   openMediaFile(path);
    */
-  openMediaFile(pth) {
+  async openMediaFile(pth) {
       const ext = path.extname(pth).toLowerCase();
       if (ext == '.mp4' || ext == '.webm' || ext == '.ogv') {
         //動画ファイル
@@ -64,9 +63,10 @@ class Common {
           //TouchBar表示（macOS）
       if (process.platform == 'darwin') {
         this.mainWin.setTouchBar(null); //既存オブジェクトをパージ
-        
+
         //console.log("new dggTouchbar");
-        this.dggTouchBar = require('./dggTouchbar');
+        //macOS以外では不要なので動的importで遅延読み込み
+        this.dggTouchBar = (await import('./dggTouchbar.js')).default;
         this.dggTouchBar.setCommon(this);
         this.mainWin.setTouchBar(this.dggTouchBar.getTouchBar());
       }
@@ -551,7 +551,7 @@ handleUnsavedLog(event) {
    * 動画眼Lite形式のJSONファイルを出力
    * @returns 
    */
-  exportLite() {
+  async exportLite() {
     const _ = new i18n(lang, 'dialog');
     const jsonPath = this.mediaPath.replace(path.extname(this.mediaPath), '.json.js');
     let options = null;
@@ -609,29 +609,32 @@ handleUnsavedLog(event) {
     if (this.dialog.showConfirmation(options) == 1) return; //上書き確認ダイアログでキャンセルを選んだら終了
     }
 
-    //サーバーからダウンロード
-    const {download} = require("electron-dl");
-    const dloptions = {
-      directory: path.dirname(htmlPath),
-      filename:path.basename(htmlPath),
-    }
-    download(this.mainWin, this.config.get('liteAutoDownloadURL'), dloptions).catch(err => {
+    //サーバーからダウンロード（Node.js組み込みのfetchを使用。リダイレクトも自動追跡）
+    const dlURL = this.config.get('liteAutoDownloadURL');
+    try {
+      const response = await fetch(dlURL, {
+        headers: { 'User-Agent': 'do-gagan3' },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} ${response.statusText} (${response.url})`);
+      }
+      const buffer = Buffer.from(await response.arrayBuffer());
+      fs.writeFileSync(htmlPath, buffer);
+    } catch (err) {
       //ダウンロードエラー時の処理
+      console.error(`動画眼Lite HTMLのダウンロードに失敗 (${dlURL}):`, err);
       options = {
         type: 'error',
         buttons: [_.t('LITE_DOWNLOAD_MANUAL'), _.t('LITE_CANCEL')],
         title: _.t('LITE_DOWNLOAD_FAIL_TITLE'),
-        message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(jsonPath)),
+        message: _.t('LITE_DOWNLAOD_FAIL_MESSAGE').replace('%1', path.basename(htmlPath)),
         defaultId: 0,
         cancelId: 1,
-      }; 
+      };
       if (this.dialog.showConfirmation(options) == 1) return;
       //ダウンロードページを開く
       shell.openExternal(this.config.get('liteManualDownloadURL'));
-    })
-
-
-
+    }
 }
 
   // #endregion
@@ -731,12 +734,10 @@ handleUnsavedLog(event) {
     show: false,
     title:_.t('SETTINGS'),
     webPreferences: {
-      worldSafeExecuteJavaScript: true,
       nodeIntegration: false,
-      sandbox: false, //Electron20への一時対処
-      enableRemoteModule: true,
+      sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
       contextIsolation: true,
-      preload: path.join(__dirname, './preload_settings.js'),
+      preload: path.join(import.meta.dirname, './preload_settings.js'),
       accessibleTitle: _.t('SETTINGS_ACCESSIBLETITLE')
     }
   });
@@ -781,12 +782,10 @@ handleUnsavedLog(event) {
       show: false,
       title:_.t('SYNCTIME'),
       webPreferences: {
-        worldSafeExecuteJavaScript: true,
         nodeIntegration: false,
-        sandbox: false, //Electron20への一時対処
-        enableRemoteModule: true,
+        sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
         contextIsolation: true,
-        preload: path.join(__dirname, './preload_syncTime.js'),
+        preload: path.join(import.meta.dirname, './preload_syncTime.js'),
         accessibleTitle: _.t('SYNCTIME_ACCESSIBLETITLE')
       }
     });
@@ -830,14 +829,11 @@ handleUnsavedLog(event) {
       show: false,
       title:_.t('REPLACE'),
       webPreferences: {
-        worldSafeExecuteJavaScript: true,
         nodeIntegration: false,
-        sandbox: false, //Electron20への一時対処
-        enableRemoteModule: true,
+        sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
         contextIsolation: true,
-        preload: path.join(__dirname, './preload_replace.js'),
-      //nativeWindowOpen: true, //Electron 18で廃止
-      accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
+        preload: path.join(import.meta.dirname, './preload_replace.js'),
+        accessibleTitle: _.t('REPLACE_ACCESSIBLETITLE')
       }
     });
 
@@ -1143,11 +1139,12 @@ handleUnsavedLog(event) {
   // #endregion
 
 showAbout = function() {
-  const openAboutWindow = require('about-window').default;
-  openAboutWindow({ 
-      icon_path: path.join(__dirname, 'build/icon.png'),
+  //CJSモジュールのdefaultエクスポート互換（環境により二重defaultになるため両対応）
+  const openAboutWindow = aboutWindowModule.default ?? aboutWindowModule;
+  openAboutWindow({
+      icon_path: path.join(import.meta.dirname, 'build/icon.png'),
       //copyright: 'Copyright (c) 2021 Kazuyoshi Furuta,Do-gagan',
-      package_json_dir: __dirname,
+      package_json_dir: import.meta.dirname,
       //BrowserWindow: this.mainWin,
   });
 }
@@ -1159,4 +1156,4 @@ closeWindow = function() {
 }
 
 
-module.exports = new Common();
+export default new Common();

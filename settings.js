@@ -111,3 +111,15 @@ function closeSettings() {
     //console.log("close");
     window.close();
 }
+
+//UIイベントハンドラー登録（CSP強化のためHTMLのインライン記述から移設）
+for (const key of ['F1', 'F2', 'F3', 'F4', 'F5']) {
+    document.getElementById('Txt_template' + key).addEventListener('change', () => changeSnippet(key));
+}
+document.getElementById('Btn_Reset').addEventListener('click', () => resetSnippets());
+document.getElementById('Txt_AutoSave').addEventListener('change', () => changeAutoSaveDur());
+for (const trigger of ['click', 'skip', 'type', 'speaker', 'snippets', 'addmemo']) {
+    document.getElementById('Chk_AutoLockOn_' + trigger).addEventListener('change', () => changeAutoLocSetting(trigger));
+}
+document.getElementById('Sel_MultiplySkipTime').addEventListener('change', () => changeMultiplyJumpSec());
+document.getElementById('Btn_Close').addEventListener('click', () => closeSettings());

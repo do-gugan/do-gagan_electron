@@ -47,4 +47,4 @@ class dggRecord {
 
 
 }
-module.exports = dggRecord;
+export default dggRecord;

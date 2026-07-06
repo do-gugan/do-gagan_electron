@@ -6,6 +6,11 @@
 let locale = null;
 let _ = null;
 
+//Element.setHTML()（Sanitizer API）が未実装のChromiumでも動くようフォールバック
+if (!Element.prototype.setHTML) {
+    Element.prototype.setHTML = function (html) { this.innerHTML = html; };
+}
+
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
     locale = await window.api.getConfig('locale');
@@ -59,4 +64,9 @@ const convertTC = ()=>{
     window.api.setTimeOffset(offset);
     window.close();
 }
+
+//UIイベントハンドラー登録（CSP強化のためHTMLのインライン記述から移設）
+document.getElementById('Btn_getFileCreationTime').addEventListener('click', () => getFromCreationTime());
+document.getElementById('Btn_getFileName').addEventListener('click', () => GuessFromFileName());
+document.getElementById('Btn_convert').addEventListener('click', () => convertTC());
 

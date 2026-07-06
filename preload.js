@@ -1,26 +1,33 @@
 "use strict";
 
-const { contextBridge, ipcRenderer} = require("electron");
-//const common = require('./common'); //異なるインスタンスがとれてしまう
-const i18n = require('./i18n');
-const dggRecord = require('./dggRecord').dggRecord;
+const { contextBridge, ipcRenderer, webUtils } = require("electron");
+//サンドボックス化されたpreloadではローカルモジュール（./i18n等）をrequireできない。
+//翻訳辞書とバージョンはメインプロセスから同期IPCで取得する。
+
+//翻訳辞書のキャッシュ（言語×名前空間ごとに初回のみメインから取得）
+const dictionaries = {};
+function translate(label, lang, ns) {
+    const key = `${lang}:${ns}`;
+    if (!(key in dictionaries)) {
+        dictionaries[key] = ipcRenderer.sendSync('getLocaleDictionary', lang, ns);
+    }
+    return (dictionaries[key] || {})[label];
+}
+
+//アプリバージョン（起動時に1回だけ取得）
+const appVersion = ipcRenderer.sendSync('getAppVersion');
 
 contextBridge.exposeInMainWorld(
-  "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"  
+  "api", {// <-- ここでつけた名前でひもづく。ここでは"window.api"
 
     // --------------------------------------------
     //          メインプロセス → レンダラー(HTML)
+    //  ipcRenderer.on: メインからのプッシュ通知を受け取る
+    //  （eventオブジェクトはレンダラーに渡さない）
     // --------------------------------------------
-    //サンプルAPI（非同期）
-    // receiveValue: (listener) => ipcRenderer.on("receive-value", (event, arg) => listener(arg)),
-    
-    //レンダラー側での受け取り例：
-    // window.api.receiveValue((value) => {
-    //    console.log(value);
-    // }
 
-    openVideo: (callback) => ipcRenderer.on("open-video", (event, argv)=>callback(event, argv)),
-    openAudio: (callback) => ipcRenderer.on("open-audio", (event, argv)=>callback(event, argv)),
+    openVideo: (callback) => ipcRenderer.on("open-video", (event, path)=>callback(path)),
+    openAudio: (callback) => ipcRenderer.on("open-audio", (event, path)=>callback(path)),
     toggleNewMemoBlockFromMenu: (callback) => ipcRenderer.on("toggle-new-memo-block", (event, argv)=>callback(argv)),
 
     togglePlayPause: (callback) => ipcRenderer.on("play-pause", ()=>callback()),
@@ -30,8 +37,6 @@ contextBridge.exposeInMainWorld(
     playbackSpeedUp: (callback) => ipcRenderer.on("playback-speed-up", ()=>callback()),
     playbackSpeedDown: (callback) => ipcRenderer.on("playback-speed-down", ()=>callback()),
     playbackSpeedReset: (callback) => ipcRenderer.on("playback-speed-reset", ()=>callback()),
-   
-    openReplaceWindow: (callback) => ipcRenderer.on("open-replace-window", ()=>callback()),
 
     //ログ1件の内容を受け取り、リストに追加する
     addRecordToList: (callback) => ipcRenderer.on("add-record-to-list", (event,record)=>callback(record)),
@@ -64,68 +69,56 @@ contextBridge.exposeInMainWorld(
 
     // --------------------------------------------
     //         レンダラー(HTML) → メインプロセス
+    //  結果が必要なもの: ipcRenderer.invoke（Promiseを返す）
+    //  通知のみのもの:   ipcRenderer.send
     // --------------------------------------------
-    //サンプルAPI（非同期）
-    //.send(ch, ...args)は非同期でメインにメッセージを送るのみ。index.js側でipcMain.on(ch,...)で受信
-    //sendMessageToMain: () => ipcRenderer.send("send-message-to-main"),
-    //.sendSyncなら同期だが特に利用する必要はない
-    //値はJSONに変換する必要がある。　JSON.stringgy'{key:true})
-    //受け取った側でJSON.parse(arg)する。
-
-    //結果を受け取りたい場合は.invoke
-    //getSomeInfoFromMain: () => ipcRenderer.invoke("getSomeInfoFromMain").then(result => result).catch(err => console.log(err)),
-    //レンダラーからの呼び出し例： console.log(window.api.getSomeInfoFromMain());
-    //非同期での結果受け取り: window.api.getSomeInfoFromMain().then((result)=>{ 処理...})}
 
     //GUIでスキップ秒数を変更したらメニューに反映
     setSkipTimeFromGUI:(direction, index) => ipcRenderer.send('setSkipTimeFromGUI', direction, index),
 
     // 指定されたキーの設定を取得する
-    getConfig:(key) => ipcRenderer.invoke('getConfig', key).then(result => result).catch(err => console.log(err)),
+    getConfig:(key) => ipcRenderer.invoke('getConfig', key),
 
-    //レンダラーがi18nクラス経由でローカライズテキストを取得
-    t : (label, lang) => {
-        const _ = new i18n(lang, 'default');
-        return _.t(label);
-    },
-    setConfig: (key, value) => ipcRenderer.invoke("setConfig", key, value).then(result => result).catch(err => console.log(err)),
+    //レンダラーがローカライズテキストを取得
+    t : (label, lang) => translate(label, lang, 'default'),
 
-    getAppVersion: () => {
-      //const _ = new i18n(this.lang, 'default');
-      const p = require('./package.json');
-      return p.version;
-    },
+    //設定を保存
+    setConfig: (key, value) => ipcRenderer.invoke("setConfig", key, value),
+
+    getAppVersion: () => appVersion,
 
     //ドロップされたファイルを開く
     openDroppedFile: (path) => ipcRenderer.invoke('openDroppedFile', path),
 
+    //ドロップされたFileオブジェクトからOSのファイルパスを取得
+    //（File.pathはElectron 32で削除されたためwebUtilsを使用）
+    getPathForFile: (file) => webUtils.getPathForFile(file),
+
     toggleNewMemoBlockMenu : (result) => ipcRenderer.send('toggleNewMemoBlockMenu', result),
 
-    //新しいメモ（dggRecordオブジェクト）をレンダラーからメインプロセスに
-    addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker).then(result => result).catch(err => console.log(err)),
+    //新しいメモの内容をレンダラーからメインプロセスに
+    addNewMemoFromGUI: (inTime, script, speaker) => ipcRenderer.invoke('addNewMemoFromGUI',inTime, script, speaker),
 
     //既存メモのテキストが更新された
     memoChanged:(id,script) => ipcRenderer.send('memoChanged', id, script),
-    //inTimeChanged:(id,inTime) => ipcRenderer.send('inTimeChanged', id, inTime),
-    //speakerChanged:(id,speaker)=>ipcRenderer.send('speakerChanged', id, speaker),
 
     //右クリックからコンテクストメニューを開く
-    openContextMenuOn:(event, id)=>ipcRenderer.send('openContextMenuOn', event, id), //ログのタイムコード上
-    openContextMenuOnText:(event, id, selectionStart, selectionEnd)=>ipcRenderer.send('openContextMenuOnText', event, id, selectionStart, selectionEnd), //ログのテキストエリア上
+    openContextMenuOn:(id)=>ipcRenderer.send('openContextMenuOn', id), //ログのタイムコード上
+    openContextMenuOnText:(id, selectionStart, selectionEnd)=>ipcRenderer.send('openContextMenuOnText', id, selectionStart, selectionEnd), //ログのテキストエリア上
 
     saveCapture:(dataURL, currentSec) => ipcRenderer.invoke('saveCapture', dataURL, currentSec),
 
     setMediaDuration : (duration) => ipcRenderer.invoke('setMediaDuration', duration),
 
-    getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position).then(result => result),
+    getCurrentRecordId: (position) => ipcRenderer.invoke('getCurrentRecordId', position),
 
     //メニューアイテムの有効化・無効化
-    enableOrDisableMenuItemMerge: (bool) => ipcRenderer.send('enableOrDisableMenuItemMerge', JSON.stringify({key:bool})),
+    enableOrDisableMenuItemMerge: (bool) => ipcRenderer.send('enableOrDisableMenuItemMerge', bool),
 
     //メモのセルをマージする
-    mergeCurrentAndNextCells: (id) => ipcRenderer.send('mergeCurrentAndNextCells', JSON.stringify({key:id})),
+    mergeCurrentAndNextCells: (id) => ipcRenderer.send('mergeCurrentAndNextCells', id),
 
     //OSがmacOSか調べる
-    isDarwin: () => ipcRenderer.invoke("isDarwin").then(result => result).catch(err => console.log(err)),
+    isDarwin: () => ipcRenderer.invoke("isDarwin"),
   }
 );

@@ -6,11 +6,11 @@
 //--------------------------------
 // モジュール
 //--------------------------------
-const { app, dialog, remote } = require('electron');
-const common = require('./common');
-const config = require('./config');
-const i18n = require('./i18n');
-const path = require('path');
+import { app, dialog } from 'electron';
+import path from 'node:path';
+import common from './common.js';
+import config from './config.js';
+import i18n from './i18n.js';
 
 //--------------------------------
 // グローバル変数
@@ -46,11 +46,10 @@ const reboot = function(win){
  * アバウト画面を表示
  */
 const openAboutDialog = function() {
-  p = require('./package.json');
   let re = dialog.showMessageBox(common.mainWin, {
     title:_.t('ABOUT'),
     message: _d.t('APPNAME') + '3' ,
-    detail: 'Ver.'+ p.version + '\r©' + _d.t('AUTHOR')
+    detail: 'Ver.'+ app.getVersion() + '\r©' + _d.t('AUTHOR')
   });
   //console.log(re);
 }
@@ -170,7 +169,7 @@ const showConfirmation = function(options) {
 //--------------------------------
 // exports
 //--------------------------------
-module.exports = {
+export default {
   reboot: reboot,
   openAboutDialog: openAboutDialog,
   openVideoDialog: openVideoDialog,

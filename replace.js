@@ -5,6 +5,11 @@
 let locale = null;
 let _ = null;
 
+//Element.setHTML()（Sanitizer API）が未実装のChromiumでも動くようフォールバック
+if (!Element.prototype.setHTML) {
+    Element.prototype.setHTML = function (html) { this.innerHTML = html; };
+}
+
 
 // メインプロセスから言語環境を取得し、ページに必要なテキストを表示
 (async ()=>{
@@ -48,3 +53,8 @@ async function execute() {
     window.api.executeRaplace(before,after);
     wordChanged(); //置換後のヒット数を更新
 }
+
+//UIイベントハンドラー登録（CSP強化のためHTMLのインライン記述から移設）
+document.getElementById('Txt_search').addEventListener('input', () => wordChanged());
+document.getElementById('Btn_cancel').addEventListener('click', () => cancel());
+document.getElementById('Btn_execute').addEventListener('click', () => execute());

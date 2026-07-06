@@ -63,7 +63,7 @@
   "LITE_SUCCESS_TITLE": "動画眼Liteのダウンロード確認",
   "LITE_SUCCESS_MESSAGE": "動画眼Lite用データファイル「%1」を動画と同じフォルダに保存しました。\n動画眼Liteの最新HTMLファイルをダウンロードして配置しますか？\n（インターネット接続が必要です）",
   "LITE_DOWNLOAD_FAIL_TITLE": "動画眼Liteのダウンロードエラー", 
-  "LITE_DOWNLAOD_FAIL_MESSAGE": "ダウンロードに失敗しました。\nOKでダウンロードページをブラウザで開きます。index.htmlをダウンロードし、動画ファイルと同じフォルダに拡張子違いの同名（%1）で保存してください。",
+  "LITE_DOWNLAOD_FAIL_MESSAGE": "ダウンロードに失敗しました。\n「手動ダウンロード」でダウンロードページをブラウザで開きます。index.htmlをダウンロードし、動画ファイルと同じフォルダに「%1」という名前で保存してください。",
   
   "UNSAVED_DATA_TITLE": "未保存データ確認",
   "UNSAVED_DATA_MESSAGE": "%1に保存されていないデータがあります。\n保存してから終了しますか？",

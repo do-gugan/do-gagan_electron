@@ -1,19 +1,25 @@
 "use strict";
 
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
-const common = require('./common');
-const menu = require('./menu');
-const config = require('./config');
-const dialog = require('./dialog');
-const path = require('path');
-const i18n = require('./i18n');
-const dggRecord = require('./dggRecord');
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import path from 'node:path';
+import started from 'electron-squirrel-startup';
+import common from './common.js';
+import menu from './menu.js';
+import config from './config.js';
+import dialog from './dialog.js';
+import i18n from './i18n.js';
 
 //------------------------------------
 // グローバル変数
 //------------------------------------
 // ウィンドウ管理用
 // ここではまだウインドウが初期化されていないのでオブジェクトをセットできない
+
+//Windows: Squirrelインストーラーがインストール/更新時にアプリを一瞬起動するため、
+//その場合はショートカット作成等の処理だけして即終了する
+if (started) {
+  app.quit();
+}
 
 common.app = app;
 common.browserWindow = BrowserWindow;
@@ -31,12 +37,11 @@ function createWindow() {
         height: config.get('windowSizeHeight'),
         backgroundColor: 'white',
         webPreferences: {
-            worldSafeExecuteJavaScript: true,
+            //worldSafeExecuteJavaScript, enableRemoteModuleはElectron 14で廃止済みのため削除
             nodeIntegration: false,
-            sandbox: false, //Electron20への一時対処
-            enableRemoteModule: true,
+            sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
             contextIsolation: true,
-            preload: path.join(__dirname, './preload.js')
+            preload: path.join(import.meta.dirname, './preload.js')
     }
     });
     mainWin.loadFile('./index.html');
@@ -104,6 +109,21 @@ function createWindow() {
 }
 
 
+//------------------------------------
+// セキュリティ: 全ウインドウ共通のナビゲーション制御
+// 参考: https://www.electronjs.org/docs/latest/tutorial/security
+//------------------------------------
+app.on('web-contents-created', (event, contents) => {
+  // ページ遷移を全て拒否（本アプリはloadFileで読む静的ページのみで遷移しない）
+  contents.on('will-navigate', (e) => {
+    e.preventDefault();
+  });
+  // window.openによる新規ウインドウ生成を全て拒否
+  contents.setWindowOpenHandler(() => {
+    return { action: 'deny' };
+  });
+});
+
 app.whenReady().then(()=>{
   // 言語設定を取得する
   const locale = config.get('locale') || app.getLocale();
@@ -166,6 +186,24 @@ app.on('window-all-closed', () => {
     //console.log(`setConfig: key:${key} value:${value}`);
     return( config.set(key, value) ); //boolean
     //return 'en'; //英語環境テスト用
+  });
+
+  //翻訳辞書をpreloadに渡す
+  //（サンドボックス化されたpreloadはi18n.jsをrequireできないため、
+  //  同期IPCで辞書ごと渡す。preload側で言語×名前空間ごとに初回のみ呼ばれる）
+  ipcMain.on('getLocaleDictionary', (event, lang, ns) => {
+    try {
+      const _ = new i18n(lang, ns);
+      event.returnValue = _.getDictionary();
+    } catch (e) {
+      console.error('getLocaleDictionary failed:', e);
+      event.returnValue = {};
+    }
+  });
+
+  //アプリのバージョンを返す（preload初期化時の1回のみ）
+  ipcMain.on('getAppVersion', (event) => {
+    event.returnValue = app.getVersion();
   });
 
   // 言語設定を保存
@@ -256,19 +294,18 @@ app.on('window-all-closed', () => {
   // #endregion
 
   //レンダラーからメニュー項目を有効化・無効化する
-  ipcMain.on('enableOrDisableMenuItemMerge', (event, arg) => {
-    const bool = JSON.parse(arg);
-    menu.enableOrDisableMenuItemMerge(bool.key);
+  ipcMain.on('enableOrDisableMenuItemMerge', (event, bool) => {
+    //IPCは構造化クローンで値を渡せるためJSON文字列化は不要
+    menu.enableOrDisableMenuItemMerge(bool);
   });
 
   //--------------------------------
   // 選択中のセルと次のセルを結合する（次のセルの中身を末尾に連結し、次のセルを削除）
   //--------------------------------
-  ipcMain.on('mergeCurrentAndNextCells',(event, arg) => {
+  ipcMain.on('mergeCurrentAndNextCells',(event, id) => {
     //実際の処理はレンダラー（renderer.js）側でtextareaのキーボードイベントから呼んで処理
-    const id = JSON.parse(arg);
-    //console.log("id:"+id.key);
-    common.mergeCurrentAndNextCells(id.key);
+    //IPCは構造化クローンで値を渡せるためJSON文字列化は不要
+    common.mergeCurrentAndNextCells(id);
   });
 
 

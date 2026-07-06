@@ -1,0 +1,18 @@
+# Dependabotによる依存パッケージの自動更新設定
+# 脆弱性修正やバージョン更新があると自動でPRが作成される
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # メジャーバージョン更新はElectron本体の破壊的変更を伴うことが多いので
+    # マイナー/パッチのみ自動PR対象とする（メジャーは手動判断）
+    ignore:
+      - dependency-name: "electron"
+        update-types: ["version-update:semver-major"]
+    groups:
+      # Forge関連はバージョンを揃えて更新する必要があるためまとめる
+      electron-forge:
+        patterns:
+          - "@electron-forge/*"
