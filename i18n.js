@@ -6,7 +6,17 @@
 //--------------------------------
 // モジュール
 //--------------------------------
-const p = require('./package.json')
+import fs from 'node:fs';
+import path from 'node:path';
+
+//JSONはBOM付きの可能性があるため除去してからパースする
+function readJson(filePath) {
+  let text = fs.readFileSync(filePath, 'utf8');
+  if (text.charCodeAt(0) === 0xFEFF) { text = text.slice(1); } //BOM除去
+  return JSON.parse(text);
+}
+
+const p = readJson(path.join(import.meta.dirname, 'package.json'));
 
 //--------------------------------
 // exports
@@ -15,11 +25,11 @@ const p = require('./package.json')
  * i18nクラス
  *
  * @example
- *   const i18n = require('./i18n')
+ *   import i18n from './i18n.js'
  *   const _ = new i18n('ja', 'page1')
  *   console.log( _.t('foo') );
  */
-module.exports = class i18n{
+export default class i18n{
   // 対応言語
   static SUPPORT_LANG = ['ja', 'en']
 
@@ -33,14 +43,14 @@ module.exports = class i18n{
    * @param {string} ns   ネームスペース
    * @param {string} dir  言語ファイルがあるディレクトリ
    */
-  constructor(lang=null, ns='default', dir='./locales'){
+  constructor(lang=null, ns='default', dir=null){
     if( lang === null || ! this.isSupport(lang) ){
       lang = i18n.DEFAULT_LANG
     }
 
     this._lang = lang   // 言語
     this._ns   = ns     // ネームスペース
-    this._dir  = dir    // 言語ファイルのディレクトリ
+    this._dir  = dir ?? path.join(import.meta.dirname, 'locales')   // 言語ファイルのディレクトリ
     this._dic  = null   // 翻訳データ入れ
 
     const ret = this.load()
@@ -60,7 +70,7 @@ module.exports = class i18n{
     const ns   = this._ns
 
     try{
-      this._dic = require(`${dir}/${lang}/${ns}.json`)
+      this._dic = readJson(path.join(dir, lang, `${ns}.json`))
       return(true)
     }
     catch(e){

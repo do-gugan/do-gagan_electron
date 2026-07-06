@@ -6,9 +6,9 @@
 //--------------------------------
 // モジュール
 //--------------------------------
-const { app } = require('electron');
-const Store = require('electron-store')
-const i18n = require('./i18n');
+import { app } from 'electron';
+import Store from 'electron-store';
+import i18n from './i18n.js';
 const lang = app.getLocale();
 const _ = new i18n(lang, 'default');
 
@@ -180,7 +180,7 @@ function set(key, value) {
 //--------------------------------
 // exports
 //--------------------------------
-module.exports = {
+export default {
   get: get,
   set: set
 }

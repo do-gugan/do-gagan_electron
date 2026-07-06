@@ -1,13 +1,12 @@
 "use strict";
 
-const { app, BrowserWindow, ipcMain, Menu } = require('electron');
-const common = require('./common');
-const menu = require('./menu');
-const config = require('./config');
-const dialog = require('./dialog');
-const path = require('path');
-const i18n = require('./i18n');
-const dggRecord = require('./dggRecord');
+import { app, BrowserWindow, ipcMain, Menu } from 'electron';
+import path from 'node:path';
+import common from './common.js';
+import menu from './menu.js';
+import config from './config.js';
+import dialog from './dialog.js';
+import i18n from './i18n.js';
 
 //------------------------------------
 // グローバル変数
@@ -35,7 +34,7 @@ function createWindow() {
             nodeIntegration: false,
             sandbox: true, //レンダラーをOSサンドボックスで隔離（公式推奨）
             contextIsolation: true,
-            preload: path.join(__dirname, './preload.js')
+            preload: path.join(import.meta.dirname, './preload.js')
     }
     });
     mainWin.loadFile('./index.html');

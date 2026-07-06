@@ -4,9 +4,9 @@
 "use strict";
 
 
-const {TouchBar} = require ('electron');
-const i18n = require('./i18n');
-const config = require('./config');
+import { TouchBar } from 'electron';
+import i18n from './i18n.js';
+import config from './config.js';
 const common = null;
 let touchBar = null;
 const slider = null;
@@ -75,4 +75,4 @@ class dggTouchbar {
     }
 }
 
-module.exports =  new dggTouchbar();
+export default new dggTouchbar();

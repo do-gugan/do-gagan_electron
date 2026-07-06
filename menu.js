@@ -1,9 +1,8 @@
-const { app, Menu } = require('electron');
-const common = require('./common');
-const i18n = require('./i18n')
-const dialog = require('./dialog');
-const config = require('./config');
-const path = require('path');
+import { app, Menu } from 'electron';
+import common from './common.js';
+import i18n from './i18n.js';
+import dialog from './dialog.js';
+import config from './config.js';
 
 // 実行環境がmacOSならtrue
 const isMac = (process.platform === 'darwin');  // 'darwin' === macOS
@@ -311,7 +310,7 @@ const enableOrDisableMenuItemMerge = function(bool) {
 //--------------------------------
 // exports
 //--------------------------------
-module.exports = {
+export default {
     setTemplate: setTemplate,
     toggleNewMemoBlockMenu : toggleNewMemoBlockMenu,
     enableMenuWhenMediaOpened : enableMenuWhenMediaOpened,

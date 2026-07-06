@@ -4,6 +4,7 @@
   "productName": "動画眼3",
   "description": "動画眼 Electron Ver.",
   "version": "2.13.0",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
