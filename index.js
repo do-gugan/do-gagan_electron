@@ -2,6 +2,7 @@
 
 import { app, BrowserWindow, ipcMain, Menu } from 'electron';
 import path from 'node:path';
+import started from 'electron-squirrel-startup';
 import common from './common.js';
 import menu from './menu.js';
 import config from './config.js';
@@ -13,6 +14,12 @@ import i18n from './i18n.js';
 //------------------------------------
 // ウィンドウ管理用
 // ここではまだウインドウが初期化されていないのでオブジェクトをセットできない
+
+//Windows: Squirrelインストーラーがインストール/更新時にアプリを一瞬起動するため、
+//その場合はショートカット作成等の処理だけして即終了する
+if (started) {
+  app.quit();
+}
 
 common.app = app;
 common.browserWindow = BrowserWindow;

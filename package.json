@@ -16,19 +16,10 @@
   "license": "MIT",
   "homepage": "https://github.com/do-gugan/do-gagan_electron",
   "dependencies": {
-    "@electron/osx-sign": "^1.0.5",
     "about-window": "^1.15.2",
-    "corepack": "^0.12.3",
-    "dotenv": "^16.0.1",
-    "electron-dl": "^3.3.1",
-    "electron-notarize": "^1.2.1",
-    "electron-osx-sign": "^0.6.0",
-    "electron-squirrel-startup": "^1.0.0",
-    "electron-store": "^8.1.0",
-    "http-cache-semantics": "^4.1.1",
-    "iconv-lite": "^0.6.3",
-    "npm": "^10.2.5",
-    "uuid": "^8.3.2"
+    "electron-squirrel-startup": "^1.0.1",
+    "electron-store": "^11.0.2",
+    "iconv-lite": "^0.6.3"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.11.2",
@@ -38,51 +29,9 @@
     "@electron-forge/maker-squirrel": "^7.11.2",
     "@electron-forge/maker-zip": "^7.11.2",
     "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
+    "@electron-forge/plugin-fuses": "^7.11.2",
+    "@electron/fuses": "^2.1.3",
     "@electron/notarize": "^2.5.0",
     "electron": "^42.5.2"
-  },
-  "build": {
-    "productName": "動画眼3",
-    "copyright": "Copyright © 2021 ${author}",
-    "appId": "com.do-gugan.do-gagan",
-    "afterSign": "scripts/notarize.js",
-    "extraFiles": [
-      {
-        "from": "build",
-        "to": "resources",
-        "filter": [
-          "**/*"
-        ]
-      }
-    ],
-    "mac": {
-      "icon": "build/icon.icns",
-      "hardenedRuntime": true,
-      "gatekeeperAssess": false,
-      "entitlements": "build/entitlements.mac.plist",
-      "entitlementsInherit": "build/entitlements.mac.plist"
-    },
-    "win": {
-      "icon": "build/icon.ico",
-      "target": {
-        "target": "nsis",
-        "arch": [
-          "x64",
-          "ia32"
-        ]
-      }
-    },
-    "nsis": {
-      "language": "0411",
-      "oneClick": false,
-      "allowToChangeInstallationDirectory": true,
-      "allowElevation": true,
-      "perMachine": false,
-      "runAfterFinish": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "menuCategory": "道具眼(do-gugan)",
-      "include": "build/installer.nsh"
-    }
   }
 }
